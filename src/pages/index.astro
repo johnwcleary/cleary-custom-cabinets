@@ -22,11 +22,13 @@ const h = home.data;
     <figure class="relative h-[68svh] min-h-[28rem] w-full md:h-[74svh]">
       <Image src={hero} alt={home.data.heroCaption ?? ''} widths={widthsFor(hero, [800, 1200, 1600, 2000])} sizes="100vw" class="photo absolute inset-0" loading="eager" fetchpriority="high" />
       <span class="absolute inset-0 bg-gradient-to-t from-walnut/85 via-walnut/30 to-walnut/5" aria-hidden="true"></span>
+      <!-- A soft pool of shade behind the title, so it reads clear of the photo. -->
+      <span class="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_18%_88%,rgb(46_31_27/0.6),transparent)]" aria-hidden="true"></span>
       <figcaption class="smallcaps absolute right-4 bottom-4 text-linen/85 md:right-8 md:bottom-6">{home.data.heroCaption}</figcaption>
     </figure>
-    <div class="wrap absolute inset-x-0 bottom-0 pb-12 text-linen md:pb-16">
-      <h1 id="home-title" class="hero-title max-w-[14ch]">{home.data.heroTitle}</h1>
-      <p class="serif mt-4 text-[clamp(1.375rem,2.4vw,2rem)] leading-tight italic text-linen/90">{home.data.heroSubtitle}</p>
+    <div class="wrap absolute inset-x-0 bottom-0 pb-12 text-linen [text-shadow:0_1px_18px_rgb(46_31_27/0.45)] md:pb-16">
+      <h1 id="home-title" class="hero-title !text-[clamp(1.375rem,7.2vw,5.5rem)]">{home.data.heroTitle}</h1>
+      <p class="serif mt-3 text-[clamp(1.0625rem,2.4vw,2rem)] md:mt-4 leading-tight italic text-linen/90">{home.data.heroSubtitle}</p>
     </div>
   </section>
 
