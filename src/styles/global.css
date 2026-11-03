@@ -218,6 +218,7 @@
   .hours-table > div {
     display: flex;
     justify-content: space-between;
+    align-items: baseline;
     gap: 1rem;
     padding-block: 0.55rem;
     border-bottom: 1px solid var(--color-line);
@@ -231,6 +232,8 @@
   }
   .hours-table dd {
     font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    text-align: right;
   }
   .on-dark .hours-table > div {
     border-color: rgb(241 233 221 / 0.2);
