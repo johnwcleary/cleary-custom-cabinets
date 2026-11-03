@@ -1,0 +1,30 @@
+---
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
+
+interface Props {
+  image: ImageMetadata;
+  caption: string;
+  /** Images sharing a group are stepped through together. */
+  group: string;
+  class?: string;
+  /** Extra label prefix, e.g. "Fig. 3". */
+  label?: string;
+}
+const { image, caption, group, class: className, label } = Astro.props;
+// data-astro-reload keeps Astro's view-transition router from treating the image link as a page.
+const full = await getImage({ src: image, width: Math.min(2000, image.width), format: 'webp' });
+---
+
+<a
+  href={full.src}
+  class={className}
+  data-lightbox={group}
+  data-astro-reload
+  data-caption={caption}
+  data-label={label}
+  data-width={full.attributes.width}
+  data-height={full.attributes.height}
+  aria-label={`${label ? `${label}: ` : ''}${caption} — open larger image`}
+  ><slot /></a
+>

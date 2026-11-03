@@ -1,0 +1,25 @@
+{
+  "name": "Cleary Custom Cabinets",
+  "tagline": "Cleary Custom Cabinets, for the quality and service you deserve.",
+  "email": "info@clearycustomcabinets.com",
+  "phone": "516.939.2475",
+  "phoneHref": "tel:+15169392475",
+  "address": { "street": "794 South Broadway", "city": "Hicksville", "state": "NY", "zip": "11801" },
+  "mapsUrl": "https://maps.google.com/?q=794+South+Broadway+Hicksville+NY+11801",
+  "hours": [
+    { "days": "Mon, Tue, Wed, Fri", "open": "8:00 AM", "close": "4:30 PM" },
+    { "days": "Thu", "open": "8:00 AM", "close": "8:00 PM" },
+    { "days": "Sat", "open": "10:00 AM", "close": "3:00 PM" },
+    { "days": "Sun", "closed": true }
+  ],
+  "serviceArea": "Nassau County, Suffolk County, New York City & beyond",
+  "announcement": "15% OFF KRAFTMAID VANTAGE CABINETS! CALL US TODAY FOR A SHOWROOM APPOINTMENT!",
+  "social": {
+    "instagram": "https://www.instagram.com/clearycustomcabinets/",
+    "facebook": "https://www.facebook.com/ClearyCustomCabinets",
+    "houzz": "https://www.houzz.com/pro/loracleary/cleary-custom-cabinets"
+  },
+  "services": ["Kitchen & Bath Design", "Site Measuring", "Custom Fabrication"],
+  "clients": ["Home Owners", "Contractors", "Designers and Architects"],
+  "metaDescription": "Custom & Stock Kitchen Cabinets, Bathroom Cabinets, Home & Office Cabinets, Medical Cabinets. Quartz Countertops, Solid Surface Countertops, Formica Countertops, Granite Countertops & Butcher Block Countertops. We can satisfy all of your cabinetry & countertop needs. We service Nassau County, Suffolk County, New York City & beyond. Cleary Custom Cabinets, for the quality & service you deserve."
+}

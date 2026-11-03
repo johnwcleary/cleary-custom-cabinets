@@ -1,0 +1,9 @@
+{
+  "service": "wall-units-furniture",
+  "order": 13,
+  "caption": "Custom Cherry Wood Bar Unit",
+  "image": "../../../assets/gallery/wall-units-furniture/13-custom-cherry-wood-bar-unit.jpg",
+  "width": 1800,
+  "height": 2400,
+  "featured": true
+}

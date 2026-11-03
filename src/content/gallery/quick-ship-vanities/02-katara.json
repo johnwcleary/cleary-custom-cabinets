@@ -1,0 +1,9 @@
+{
+  "service": "quick-ship-vanities",
+  "order": 2,
+  "caption": "Katara",
+  "image": "../../../assets/gallery/quick-ship-vanities/02-katara.jpg",
+  "width": 524,
+  "height": 350,
+  "featured": true
+}

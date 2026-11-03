@@ -1,0 +1,9 @@
+{
+  "service": "wall-units-furniture",
+  "order": 28,
+  "caption": "Unpainted Corner Wall Unit",
+  "image": "../../../assets/gallery/wall-units-furniture/28-unpainted-corner-wall-unit.jpg",
+  "width": 640,
+  "height": 480,
+  "featured": false
+}

@@ -1,0 +1,78 @@
+---
+interface Props {
+  helper?: string;
+  class?: string;
+}
+const { helper, class: className } = Astro.props;
+---
+
+<!--
+  The form posts nowhere yet. At launch it is wired to a backend (Cloudflare Pages Function + email,
+  or Formspree) — find it by data-form-backend. The honeypot field ("company") must stay empty.
+-->
+<form class:list={['hform', className]} action="#" method="post" data-form-backend="todo-phase-2" aria-describedby="form-helper">
+  <div class="grid grid-cols-1 gap-x-6 sm:grid-cols-2">
+    <p class="field">
+      <label for="cf-name" class="meta">Name</label>
+      <input id="cf-name" name="name" type="text" autocomplete="name" required />
+    </p>
+    <p class="field">
+      <label for="cf-email" class="meta">Email</label>
+      <input id="cf-email" name="email" type="email" autocomplete="email" required />
+    </p>
+    <p class="field sm:col-span-2">
+      <label for="cf-phone" class="meta">Telephone Number</label>
+      <input id="cf-phone" name="phone" type="tel" autocomplete="tel" />
+    </p>
+    <p class="field sm:col-span-2">
+      <label for="cf-message" class="meta">Please describe your project.</label>
+      <textarea id="cf-message" name="message" rows="6" required></textarea>
+    </p>
+  </div>
+  <p class="sr-only-baseline" aria-hidden="true">
+    <label for="cf-company">Leave this field empty</label>
+    <input id="cf-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+  </p>
+  <div class="mt-8 flex flex-wrap items-center justify-between gap-4">
+    <p id="form-helper" class="smallcaps text-muted">{helper}</p>
+    <button type="submit" class="btn">Send</button>
+  </div>
+</form>
+
+<style>
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0 0 1.75rem;
+  }
+  .field label {
+    color: var(--color-muted);
+  }
+  .field input,
+  .field textarea {
+    width: 100%;
+    background: var(--color-linen);
+    border: 1px solid var(--color-line);
+    border-radius: 2px;
+    padding: 0.85rem 1rem;
+    font-family: var(--font-serif);
+    font-size: 1.375rem;
+    line-height: 1.2;
+    color: var(--color-ink);
+  }
+  .field textarea {
+    resize: vertical;
+    min-height: 9rem;
+  }
+  .field input:hover,
+  .field textarea:hover {
+    border-color: rgb(42 32 28 / 0.4);
+  }
+  .field input:focus-visible,
+  .field textarea:focus-visible {
+    outline: 2px solid var(--color-cherry);
+    outline-offset: 1px;
+    border-color: transparent;
+  }
+</style>

@@ -1,0 +1,9 @@
+{
+  "service": "wall-units-furniture",
+  "order": 24,
+  "caption": "Custom Laminate Dresser",
+  "image": "../../../assets/gallery/wall-units-furniture/24-custom-laminate-dresser.jpg",
+  "width": 640,
+  "height": 640,
+  "featured": false
+}

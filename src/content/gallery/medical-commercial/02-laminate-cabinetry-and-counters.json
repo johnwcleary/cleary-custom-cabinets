@@ -1,0 +1,9 @@
+{
+  "service": "medical-commercial",
+  "order": 2,
+  "caption": "Laminate Cabinetry & Counters",
+  "image": "../../../assets/gallery/medical-commercial/02-laminate-cabinetry-and-counters.jpg",
+  "width": 640,
+  "height": 480,
+  "featured": false
+}

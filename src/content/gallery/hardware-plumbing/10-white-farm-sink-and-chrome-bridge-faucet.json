@@ -1,0 +1,9 @@
+{
+  "service": "hardware-plumbing",
+  "order": 10,
+  "caption": "White Farm Sink and Chrome Bridge Faucet",
+  "image": "../../../assets/gallery/hardware-plumbing/10-white-farm-sink-and-chrome-bridge-faucet.jpg",
+  "width": 480,
+  "height": 640,
+  "featured": false
+}

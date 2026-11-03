@@ -1,0 +1,9 @@
+{
+  "service": "stock-kitchens-baths",
+  "order": 6,
+  "caption": "Semi Custom Kitchen Cabinets",
+  "image": "../../../assets/gallery/stock-kitchens-baths/06-semi-custom-kitchen-cabinets.jpg",
+  "width": 1800,
+  "height": 2400,
+  "featured": false
+}

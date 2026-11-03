@@ -1,0 +1,102 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Fig from '../components/hearth/Fig.astro';
+import Hours from '../components/Hours.astro';
+import { getPage, getBrandGroups } from '../lib/content';
+import { site } from '../lib/site';
+
+const about = await getPage('about');
+const { Content } = await render(about);
+const brands = await getBrandGroups();
+const photos = about.data.photos ?? [];
+const exterior = photos.find((p) => p.caption.startsWith('Our Small Business'));
+const showrooms = photos.filter((p) => p.caption.startsWith('Our Showroom'));
+const shop = photos.find((p) => p.caption.startsWith('Our Shop'));
+// First screen: exterior, two showroom views and the shop. The other showroom views sit with the hours.
+const strip = [showrooms[0], showrooms[1], shop].filter((p) => !!p);
+const withHours = showrooms.slice(2);
+---
+
+<BaseLayout title={about.data.seoTitle} image={exterior?.image}>
+  <!-- Everything here is sized to sit inside the first screen on a laptop. -->
+  <section class="wrap py-10 md:py-14" aria-labelledby="page-title">
+    <div class="grid grid-cols-1 items-start gap-10 lg:grid-cols-12 lg:gap-12">
+      <div class="lg:col-span-6">
+        <p class="meta mb-4 text-muted">About</p>
+        <h1 id="page-title" class="title mb-6 !text-[clamp(2.25rem,4vw,3.5rem)]">About {site.name}</h1>
+        <div class="about-copy max-w-[56ch] text-[1.125rem] leading-[1.7] md:text-[1.1875rem]"><Content /></div>
+        <p class="mt-8 flex flex-wrap gap-3">
+          <a href="/contact" class="btn">Make a showroom appointment</a>
+          <a href={site.phoneHref} class="btn btn-ghost hover:!border-ink hover:!bg-ink hover:!text-linen">{site.phone}</a>
+        </p>
+      </div>
+      <div class="flex flex-col gap-4 lg:col-span-6">
+        {exterior && <Fig image={exterior.image} caption={exterior.caption} ratio="16 / 9" group="about" eager sizes="(min-width: 1024px) 45vw, 92vw" class="w-full !max-w-none [&_figcaption]:mt-2 [&_figcaption]:text-[0.8125rem]" />}
+        <div class="grid grid-cols-3 gap-3">
+          {strip.map((p) => <Fig image={p!.image} caption={p!.caption} ratio="4 / 5" group="about" sizes="(min-width: 1024px) 15vw, 30vw" class="[&_figcaption]:mt-2 [&_figcaption]:text-[0.75rem] [&_figcaption]:leading-tight" />)}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-oat band" aria-label="Services and clients">
+    <div class="wrap grid grid-cols-1 gap-10 sm:grid-cols-2">
+      <div>
+        <h2 class="serif mb-5 border-b border-line pb-3 text-[clamp(2rem,3vw,2.75rem)] leading-none">Services</h2>
+        <ul class="space-y-2 text-xl">{site.services.map((x) => <li>{x}</li>)}</ul>
+      </div>
+      <div>
+        <h2 class="serif mb-5 border-b border-line pb-3 text-[clamp(2rem,3vw,2.75rem)] leading-none">Clients</h2>
+        <ul class="space-y-2 text-xl">{site.clients.map((x) => <li>{x}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="hours-title">
+    <div class="wrap grid grid-cols-1 items-center gap-10 md:grid-cols-12">
+      <div class="md:col-span-5">
+        <h2 id="hours-title" class="serif mb-5 text-[clamp(2rem,3vw,2.75rem)] leading-none">Showroom hours</h2>
+        <Hours class="hours-table mb-6 text-lg" />
+        <p class="mb-6 text-lg">
+          <a href={site.mapsUrl} rel="noopener" class="ulink">{site.address.street}, {site.address.city}, {site.address.state} {site.address.zip}</a>
+        </p>
+        <a href="/contact" class="btn">Make a showroom appointment</a>
+      </div>
+      <div class="grid grid-cols-2 gap-3 md:col-span-6 md:col-start-7">
+        {withHours.map((p) => <Fig image={p.image} caption={p.caption} ratio="4 / 5" group="about" sizes="(min-width: 768px) 24vw, 45vw" class="[&_figcaption]:text-[0.8125rem]" />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="on-dark band bg-walnut text-linen" aria-labelledby="lines-title">
+    <div class="wrap">
+      <h2 id="lines-title" class="serif mb-10 text-[clamp(2.25rem,3.5vw,3.25rem)] leading-none">Lines we distribute</h2>
+      <div class="grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          brands.map((g) => (
+            <section aria-label={g.data.label}>
+              <h3 class="meta mb-3 border-b border-linen/20 pb-2 text-sand">{g.data.label}</h3>
+              <ul class="space-y-1 text-lg leading-snug">
+                {g.data.items.map((b) => (
+                  <li>{b.url ? <a href={b.url} rel="noopener" class="hover:underline hover:underline-offset-4">{b.name}</a> : <span>{b.name}</span>}</li>
+                ))}
+              </ul>
+            </section>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-copy :global(p) {
+    text-wrap: pretty;
+  }
+  /* Keep the client's emphasis, but as weight rather than display-serif italics. */
+  .about-copy :global(strong) {
+    font-style: normal;
+    font-weight: 600;
+  }
+</style>

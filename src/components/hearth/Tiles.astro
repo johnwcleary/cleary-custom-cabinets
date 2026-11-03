@@ -1,0 +1,68 @@
+---
+import { Image } from 'astro:assets';
+import { getServices, serviceHref, heroCaption, getAllGallery } from '../../lib/content';
+import { widthsFor } from '../../lib/img';
+
+const services = await getServices();
+const gallery = await getAllGallery();
+// 2 / 3 / 2 rows rather than a uniform grid.
+const rows = [services.slice(0, 2), services.slice(2, 5), services.slice(5, 7)];
+---
+
+<div class="flex flex-col gap-3 md:gap-4">
+  {
+    rows.map((row, r) => (
+      <ul class:list={['grid grid-cols-1 gap-3 md:gap-4', row.length === 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2']}>
+        {row.map((s) => (
+          <li>
+            <a href={serviceHref(s.data.slug)} class="tile group relative block overflow-hidden">
+              <span class:list={['block', row.length === 3 ? 'aspect-[4/5]' : r === 0 ? 'aspect-[4/3]' : 'aspect-[16/10]']}>
+                <Image
+                  src={s.data.heroImage}
+                  alt={heroCaption(s, gallery)}
+                  widths={widthsFor(s.data.heroImage, [480, 800, 1200, 1600])}
+                  sizes={row.length === 3 ? '(min-width: 640px) 32vw, 100vw' : '(min-width: 640px) 48vw, 100vw'}
+                  class="photo tile__img"
+                />
+              </span>
+              <span class="tile__scrim absolute inset-0" aria-hidden="true" />
+              <span class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center text-linen">
+                <span class="serif text-5xl leading-none md:text-6xl">{s.data.shortName ?? s.data.title}</span>
+                <span class="meta mt-3 opacity-90">{s.data.title}</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    ))
+  }
+</div>
+
+<style>
+  .tile__scrim {
+    background: radial-gradient(ellipse 70% 55% at center, rgb(46 31 27 / 0.5), rgb(46 31 27 / 0.22) 70%, rgb(46 31 27 / 0.3));
+  }
+  .tile:hover .tile__scrim,
+  .tile:focus-visible .tile__scrim {
+    background: radial-gradient(ellipse 70% 55% at center, rgb(46 31 27 / 0.62), rgb(46 31 27 / 0.4) 70%, rgb(46 31 27 / 0.45));
+  }
+  .tile .serif,
+  .tile .meta {
+    text-shadow: 0 1px 18px rgb(46 31 27 / 0.45);
+  }
+  .tile:focus-visible {
+    outline-offset: 4px;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .tile__img {
+      transition: transform 1.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .tile__scrim {
+      transition: background 0.5s;
+    }
+    .tile:hover .tile__img,
+    .tile:focus-visible .tile__img {
+      transform: scale(1.04);
+    }
+  }
+</style>

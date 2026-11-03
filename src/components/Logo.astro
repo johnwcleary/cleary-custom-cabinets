@@ -1,0 +1,18 @@
+---
+import LogoColor from '../assets/brand/logo.svg';
+import LogoReverse from '../assets/brand/logo-reverse.svg';
+import LogoMono from '../assets/brand/logo-mono.svg';
+
+interface Props {
+  class?: string;
+  width?: number;
+  /** color: ink wordmark + plum mark · reverse: white wordmark (dark grounds) · mono: currentColor */
+  variant?: 'color' | 'reverse' | 'mono';
+  /** Decorative when it sits inside a link that already names the site. */
+  decorative?: boolean;
+}
+const { class: className, width = 220, variant = 'color', decorative = true } = Astro.props;
+const Svg = { color: LogoColor, reverse: LogoReverse, mono: LogoMono }[variant];
+---
+
+<Svg class={className} width={width} aria-hidden={decorative ? 'true' : undefined} focusable="false" />

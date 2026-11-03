@@ -1,0 +1,9 @@
+{
+  "service": "wall-units-furniture",
+  "order": 27,
+  "caption": "Acrylic Gloss Bar",
+  "image": "../../../assets/gallery/wall-units-furniture/27-acrylic-gloss-bar.jpg",
+  "width": 480,
+  "height": 640,
+  "featured": false
+}

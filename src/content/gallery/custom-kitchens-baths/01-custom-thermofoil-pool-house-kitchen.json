@@ -1,0 +1,9 @@
+{
+  "service": "custom-kitchens-baths",
+  "order": 1,
+  "caption": "Custom Thermofoil Pool House Kitchen",
+  "image": "../../../assets/gallery/custom-kitchens-baths/01-custom-thermofoil-pool-house-kitchen.jpg",
+  "width": 750,
+  "height": 530,
+  "featured": true
+}

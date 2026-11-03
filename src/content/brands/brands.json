@@ -1,0 +1,79 @@
+{
+  "cabinetry": {
+    "label": "Cabinetry",
+    "order": 1,
+    "items": [
+      { "name": "Kraftmaid Vantage Cabinetry", "url": "https://www.kraftmaid.com/" },
+      { "name": "Merillat Cabinets", "url": "https://www.merillat.com/merillat-classic-collection/" },
+      { "name": "Tedd Wood Cabintery" },
+      { "name": "Wolf Classic Cabinets", "url": "https://www.wolfhomeproducts.com/wolfclassic" }
+    ]
+  },
+  "wood": {
+    "label": "Wood",
+    "order": 2,
+    "items": [
+      { "name": "Meridian", "url": "https://www.meridianproduct.com/" },
+      { "name": "Conestoga", "url": "https://www.conestogawood.com/" }
+    ]
+  },
+  "thermofoil": {
+    "label": "Thermofoil",
+    "order": 3,
+    "items": [
+      { "name": "Northern Contours", "url": "https://www.northerncontours.com/" },
+      { "name": "Premoule", "url": "https://premoule.com/en" }
+    ]
+  },
+  "hpl": {
+    "label": "HPL",
+    "order": 4,
+    "items": [
+      { "name": "Wilsonart", "url": "https://www.wilsonart.com/laminate-surfaces" },
+      { "name": "Formica", "url": "https://www.formica.com/en-us/products/lamhome" },
+      { "name": "Pionite", "url": "https://panolam.com/pionite/" },
+      { "name": "Abet Laminati", "url": "https://abetlaminati.com/en/" },
+      { "name": "Lab Design", "url": "https://www.labdesignlaminate.com/" },
+      { "name": "Arborite", "url": "https://www.arborite.com/" }
+    ]
+  },
+  "quartz": {
+    "label": "Quartz",
+    "order": 5,
+    "items": [
+      { "name": "Caesarstone", "url": "http://www.caesarstoneus.com/" },
+      { "name": "Cambria", "url": "https://www.cambriausa.com/" },
+      { "name": "Corian Quartz", "url": "https://www.corianquartz.com" },
+      { "name": "Emerstone", "url": "https://emerstone.com/" },
+      { "name": "MSI Quartz", "url": "https://www.msisurfaces.com/quartz-countertops/" },
+      { "name": "Pental", "url": "http://pentalquartz.com/" },
+      { "name": "Silestone", "url": "https://www.cosentino.com/silestone/" },
+      { "name": "Spectrum", "url": "https://www.spectrumquartz.com/" },
+      { "name": "Wilsonart Quartz", "url": "https://www.wilsonart.com/quartz" }
+    ]
+  },
+  "solidSurface": {
+    "label": "Solid Surface",
+    "order": 6,
+    "items": [
+      { "name": "Corian", "url": "http://www2.dupont.com/Surfaces/en_US/products/corian/index.html" },
+      { "name": "Durasein", "url": "https://durasein.com/us/what-is-solid-surface-countertop-made-of/" },
+      { "name": "Formica Group", "url": "https://www.formica.com/en-us/products/solidsurf" },
+      { "name": "HI-MACS", "url": "https://www.lxhausys.com/us/products/himacs-solid-surface" },
+      { "name": "Meganite", "url": "https://www.meganite.com/en/na" },
+      { "name": "Staron", "url": "https://www.staron.com/intro/us" },
+      { "name": "Wilsonart Int'l", "url": "https://www.wilsonart.com/solid-surfaces" }
+    ]
+  },
+  "hardware": {
+    "label": "Hardware",
+    "order": 7,
+    "items": [
+      { "name": "Richelieu Hardware", "url": "http://www.richelieu.com/en/" },
+      { "name": "Hafele", "url": "https://www.hafele.com/us/en/" },
+      { "name": "Hardware Resources", "url": "https://www.hardwareresources.com" },
+      { "name": "Amerock", "url": "https://www.amerock.com/" },
+      { "name": "Belwith Keeler", "url": "https://www.belwith.com/" }
+    ]
+  }
+}

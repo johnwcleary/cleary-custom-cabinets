@@ -1,0 +1,9 @@
+{
+  "service": "wall-units-furniture",
+  "order": 19,
+  "caption": "Custom Maple Wall Unit",
+  "image": "../../../assets/gallery/wall-units-furniture/19-custom-maple-wall-unit.jpg",
+  "width": 1026,
+  "height": 766,
+  "featured": false
+}

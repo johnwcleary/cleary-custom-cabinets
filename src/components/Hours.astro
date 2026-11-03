@@ -1,0 +1,19 @@
+---
+import { site, formatHours } from '../lib/site';
+
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<dl class={className} data-hours>
+  {
+    site.hours.map((h) => (
+      <div>
+        <dt>{h.days}</dt>
+        <dd>{formatHours(h)}</dd>
+      </div>
+    ))
+  }
+</dl>

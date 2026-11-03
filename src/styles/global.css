@@ -1,0 +1,302 @@
+@import "tailwindcss";
+@import "@fontsource-variable/newsreader/opsz.css";
+@import "@fontsource-variable/newsreader/opsz-italic.css";
+@import "@fontsource-variable/public-sans";
+
+/*
+ * Palette and type. Colours are taken from the materials in the photographs (linen quartz, walnut,
+ * cherry), with text colours checked for contrast. Newsreader for headings, Public Sans for everything else.
+ */
+@theme {
+  --color-linen: #f1e9dd;
+  --color-oat: #e6d9c6;
+  --color-sand: #d9c7ad;
+  --color-ink: #2a201c; /* 13.9:1 on linen */
+  --color-muted: #66564b; /* 6.0:1 on linen */
+  --color-cherry: #8f4f25; /* 5.6:1 on linen */
+  --color-walnut: #2e1f1b; /* deep section ground */
+  --color-walnut-soft: #3d2b25;
+  --color-cream: #f1e9dd;
+  --color-line: rgb(42 32 28 / 0.18);
+
+  --font-serif: "Newsreader Variable", ui-serif, Georgia, serif;
+  --font-sans: "Public Sans Variable", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    background: var(--color-linen);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    background: var(--color-linen);
+  }
+  ::selection {
+    background: var(--color-cherry);
+    color: var(--color-linen);
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  img {
+    height: auto;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-cherry);
+    outline-offset: 3px;
+  }
+  .on-dark :focus-visible {
+    outline-color: var(--color-linen);
+  }
+  strong {
+    font-weight: inherit;
+    font-style: italic;
+  }
+}
+
+@layer components {
+  .wrap {
+    width: 100%;
+    max-width: 90rem;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 3.5vw, 3rem);
+  }
+  .band {
+    padding-block: clamp(3rem, 6vw, 5.5rem);
+  }
+
+  /* Small uppercase labels with dot separators. */
+  .meta {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    line-height: 1.6;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .dots > * + *::before {
+    content: "●";
+    font-size: 0.55em;
+    vertical-align: 0.25em;
+    margin-inline: 0.85em;
+    opacity: 0.8;
+  }
+
+  .serif {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  .hero-title {
+    font-family: var(--font-serif);
+    font-size: clamp(2.75rem, 7.5vw, 7rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  .title {
+    font-family: var(--font-serif);
+    font-size: clamp(2.5rem, 5.5vw, 5rem);
+    line-height: 1;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+  .say {
+    font-family: var(--font-serif);
+    font-size: clamp(1.75rem, 3.6vw, 3.25rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    text-wrap: pretty;
+  }
+  .say-sm {
+    font-family: var(--font-serif);
+    font-size: clamp(1.5rem, 2.4vw, 2.125rem);
+    line-height: 1.15;
+    text-wrap: pretty;
+  }
+  /* Figure captions in small caps. */
+  .smallcaps {
+    font-variant-caps: all-small-caps;
+    letter-spacing: 0.08em;
+    font-size: 0.9375rem;
+    line-height: 1.35;
+  }
+
+  /* One warm grade on every photograph, plus a very soft vignette on framed images. */
+  .photo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: saturate(0.88) sepia(0.12) contrast(1.03) brightness(0.99);
+    background: var(--color-oat);
+  }
+  .vignette {
+    position: relative;
+    overflow: hidden;
+  }
+  .vignette::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 62%, rgb(46 31 27 / 0.16) 100%);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.95rem 1.5rem;
+    border-radius: 999px;
+    background: var(--color-ink);
+    color: var(--color-linen);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .btn:hover {
+    background: var(--color-cherry);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: inherit;
+    border: 1px solid currentColor;
+  }
+  .btn-ghost:hover {
+    background: var(--color-linen);
+    color: var(--color-ink);
+    border-color: var(--color-linen);
+  }
+  .ulink {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.25em;
+  }
+  .ulink:hover {
+    color: var(--color-cherry);
+  }
+  .on-dark .ulink:hover {
+    color: var(--color-sand);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .btn,
+    .ulink {
+      transition: background-color 0.25s, color 0.25s, border-color 0.25s;
+    }
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -10rem;
+    z-index: 100;
+    padding: 0.75rem 1rem;
+    background: var(--color-ink);
+    color: var(--color-linen);
+    font-size: 0.875rem;
+    border-radius: 999px;
+  }
+  .skip-link:focus {
+    top: 1rem;
+  }
+  .sr-only-baseline {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .hours-table > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.55rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .hours-table > div:first-child {
+    border-top: 1px solid var(--color-line);
+  }
+  .hours-table dt {
+    font-variant-caps: all-small-caps;
+    letter-spacing: 0.08em;
+  }
+  .hours-table dd {
+    font-variant-numeric: tabular-nums;
+  }
+  .on-dark .hours-table > div {
+    border-color: rgb(241 233 221 / 0.2);
+  }
+  .social-list a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  /* Lightbox, restyled warm. */
+  .lightbox {
+    background: rgb(36 25 22 / 0.97);
+    color: var(--color-linen);
+  }
+  .lightbox::backdrop {
+    background: rgb(36 25 22 / 0.7);
+  }
+  .lightbox__img {
+    filter: saturate(0.88) sepia(0.12) contrast(1.03) brightness(0.99);
+  }
+  .lightbox__caption {
+    font-variant-caps: all-small-caps;
+    letter-spacing: 0.08em;
+    font-size: 1.0625rem;
+  }
+  .lightbox__btn {
+    border-radius: 999px;
+    border-color: rgb(241 233 221 / 0.35);
+  }
+  .lightbox__btn:focus-visible {
+    outline-color: var(--color-linen);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .lightbox[open] {
+      animation: lb-in 0.3s ease-out;
+    }
+    @keyframes lb-in {
+      from {
+        opacity: 0;
+      }
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/*
+ * Display sizes were designed around a narrower face. Newsreader is scaled with font-size-adjust
+ * (calibrated in the browser: halfway between matching the old x-height and the old line width)
+ * so headlines keep their size and wrapping. Browsers without support render it ~16% larger.
+ */
+.serif,
+.hero-title,
+.title,
+.say,
+.say-sm {
+  font-size-adjust: 0.441;
+  letter-spacing: -0.02em;
+}

@@ -1,0 +1,9 @@
+{
+  "service": "wall-units-furniture",
+  "order": 26,
+  "caption": "Home Office",
+  "image": "../../../assets/gallery/wall-units-furniture/26-home-office.jpg",
+  "width": 640,
+  "height": 480,
+  "featured": false
+}

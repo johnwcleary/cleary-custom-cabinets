@@ -1,0 +1,46 @@
+---
+import Logo from './Logo.astro';
+import Hours from './Hours.astro';
+import SocialLinks from './SocialLinks.astro';
+import { site } from '../lib/site';
+import { getServices, serviceHref } from '../lib/content';
+
+const services = await getServices();
+// The tagline stays italic, but the business name inside it is set upright.
+const [before, after] = site.tagline.includes(site.name) ? site.tagline.split(site.name, 2) : [site.tagline, null];
+---
+
+<footer class="on-dark bg-walnut text-linen">
+  <div class="wrap grid grid-cols-1 gap-12 py-16 md:grid-cols-12 lg:py-24">
+    <div class="md:col-span-12 lg:col-span-4">
+      <Logo variant="reverse" width={190} class="mb-10 h-auto w-44" />
+      <p class="serif max-w-[18ch] text-4xl leading-[1.05] italic md:text-5xl">{before}{after !== null && <><span class="not-italic">{site.name}</span>{after}</>}</p>
+    </div>
+    <div class="md:col-span-4 lg:col-span-3">
+      <h2 class="meta mb-4 text-sand">Visit</h2>
+      <address class="not-italic leading-relaxed">
+        <a href={site.mapsUrl} rel="noopener" class="ulink">{site.address.street}<br />{site.address.city}, {site.address.state} {site.address.zip}</a>
+      </address>
+      <h2 class="meta mt-8 mb-4 text-sand">Call &amp; write</h2>
+      <p class="leading-relaxed">
+        <a href={site.phoneHref} class="ulink tabular-nums">{site.phone}</a><br />
+        <a href={`mailto:${site.email}`} class="ulink break-all">{site.email}</a>
+      </p>
+    </div>
+    <div class="md:col-span-5 lg:col-span-3">
+      <h2 class="meta mb-4 text-sand">Showroom hours</h2>
+      <Hours class="hours-table" />
+    </div>
+    <div class="md:col-span-3 lg:col-span-2">
+      <h2 class="meta mb-4 text-sand">Follow</h2>
+      <SocialLinks labels class="social-list flex flex-col gap-2" />
+    </div>
+  </div>
+  <div class="border-t border-linen/15">
+    <nav aria-label="Cabinets and products" class="wrap py-6">
+      <ul class="meta dots flex flex-wrap justify-center gap-y-2 text-linen/80">
+        {services.map((s) => <li><a href={serviceHref(s.data.slug)} class="hover:text-linen">{s.data.title}</a></li>)}
+      </ul>
+    </nav>
+  </div>
+</footer>

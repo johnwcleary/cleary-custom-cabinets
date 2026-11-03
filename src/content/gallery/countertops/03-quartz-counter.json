@@ -1,0 +1,9 @@
+{
+  "service": "countertops",
+  "order": 3,
+  "caption": "Quartz Counter",
+  "image": "../../../assets/gallery/countertops/03-quartz-counter.jpg",
+  "width": 1536,
+  "height": 2048,
+  "featured": false
+}

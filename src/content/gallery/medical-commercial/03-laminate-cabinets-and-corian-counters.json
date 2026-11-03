@@ -1,0 +1,9 @@
+{
+  "service": "medical-commercial",
+  "order": 3,
+  "caption": "Laminate Cabinets & Corian Counters",
+  "image": "../../../assets/gallery/medical-commercial/03-laminate-cabinets-and-corian-counters.jpg",
+  "width": 2400,
+  "height": 1800,
+  "featured": true
+}

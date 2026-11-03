@@ -1,0 +1,9 @@
+{
+  "service": "wall-units-furniture",
+  "order": 14,
+  "caption": "Custom Laminate Desk",
+  "image": "../../../assets/gallery/wall-units-furniture/14-custom-laminate-desk.jpg",
+  "width": 640,
+  "height": 480,
+  "featured": false
+}

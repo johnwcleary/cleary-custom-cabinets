@@ -1,0 +1,9 @@
+{
+  "service": "quick-ship-vanities",
+  "order": 6,
+  "caption": "Theodora",
+  "image": "../../../assets/gallery/quick-ship-vanities/06-theodora.jpg",
+  "width": 524,
+  "height": 350,
+  "featured": true
+}

@@ -1,0 +1,9 @@
+{
+  "service": "wall-units-furniture",
+  "order": 16,
+  "caption": "Custom Thermofoil Wall Unit",
+  "image": "../../../assets/gallery/wall-units-furniture/16-custom-thermofoil-wall-unit.jpg",
+  "width": 640,
+  "height": 480,
+  "featured": false
+}

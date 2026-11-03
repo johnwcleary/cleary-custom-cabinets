@@ -1,0 +1,9 @@
+{
+  "service": "quick-ship-vanities",
+  "order": 1,
+  "caption": "Cade",
+  "image": "../../../assets/gallery/quick-ship-vanities/01-cade.jpg",
+  "width": 526,
+  "height": 352,
+  "featured": true
+}

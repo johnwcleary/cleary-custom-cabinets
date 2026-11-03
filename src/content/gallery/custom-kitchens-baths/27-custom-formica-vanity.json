@@ -1,0 +1,9 @@
+{
+  "service": "custom-kitchens-baths",
+  "order": 27,
+  "caption": "Custom Formica Vanity",
+  "image": "../../../assets/gallery/custom-kitchens-baths/27-custom-formica-vanity.jpg",
+  "width": 2400,
+  "height": 1800,
+  "featured": false
+}

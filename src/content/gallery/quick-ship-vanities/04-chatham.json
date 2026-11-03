@@ -1,0 +1,9 @@
+{
+  "service": "quick-ship-vanities",
+  "order": 4,
+  "caption": "Chatham",
+  "image": "../../../assets/gallery/quick-ship-vanities/04-chatham.jpg",
+  "width": 526,
+  "height": 352,
+  "featured": true
+}

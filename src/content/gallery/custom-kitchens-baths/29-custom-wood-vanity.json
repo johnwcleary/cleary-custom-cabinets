@@ -1,0 +1,9 @@
+{
+  "service": "custom-kitchens-baths",
+  "order": 29,
+  "caption": "Custom Wood Vanity",
+  "image": "../../../assets/gallery/custom-kitchens-baths/29-custom-wood-vanity.jpg",
+  "width": 2400,
+  "height": 1800,
+  "featured": true
+}

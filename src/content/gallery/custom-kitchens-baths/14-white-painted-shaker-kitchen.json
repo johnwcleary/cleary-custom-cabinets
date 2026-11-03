@@ -1,0 +1,9 @@
+{
+  "service": "custom-kitchens-baths",
+  "order": 14,
+  "caption": "White Painted Shaker Kitchen",
+  "image": "../../../assets/gallery/custom-kitchens-baths/14-white-painted-shaker-kitchen.jpg",
+  "width": 2400,
+  "height": 1800,
+  "featured": true
+}

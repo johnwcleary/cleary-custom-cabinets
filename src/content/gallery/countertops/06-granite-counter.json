@@ -1,0 +1,9 @@
+{
+  "service": "countertops",
+  "order": 6,
+  "caption": "Granite Counter",
+  "image": "../../../assets/gallery/countertops/06-granite-counter.jpg",
+  "width": 600,
+  "height": 800,
+  "featured": false
+}

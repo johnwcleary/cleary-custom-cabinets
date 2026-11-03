@@ -1,0 +1,9 @@
+{
+  "service": "wall-units-furniture",
+  "order": 10,
+  "caption": "Customized Stock Cabinetry Drop Zone",
+  "image": "../../../assets/gallery/wall-units-furniture/10-customized-stock-cabinetry-drop-zone.jpg",
+  "width": 720,
+  "height": 720,
+  "featured": false
+}
