@@ -1,0 +1,16 @@
+---
+interface Props {
+  /** Sheet number, e.g. "01". */
+  no: string;
+  id?: string;
+  /** Short note at the far right of the strip. */
+  note?: string;
+}
+const { no, id, note } = Astro.props;
+---
+
+<div class="flex items-stretch border-b border-line">
+  <p class="mono flex shrink-0 items-center border-r border-line px-3 text-muted sm:px-4">Sheet {no}</p>
+  <h2 id={id} class="caps min-w-0 flex-1 px-3 py-2.5 text-[1.625rem] sm:px-4 lg:text-[1.875rem]"><slot /></h2>
+  {note && <p class="mono hidden items-center border-l border-line px-4 text-muted md:flex">{note}</p>}
+</div>

@@ -1,0 +1,46 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import LightboxLink from '../LightboxLink.astro';
+import { widthsFor } from '../../lib/img';
+
+interface Props {
+  image: ImageMetadata;
+  caption: string;
+  /** Figure number, shown beside the caption and in the lightbox. */
+  no?: number;
+  ratio?: string;
+  sizes?: string;
+  group?: string;
+  eager?: boolean;
+  class?: string;
+}
+const { image, caption, no, ratio = '4 / 3', sizes = '(min-width: 1024px) 30vw, (min-width: 640px) 46vw, 92vw', group, eager = false, class: className } = Astro.props;
+const maxWidth = image.width < 1600 ? `max-width: ${Math.round(image.width * 1.35)}px` : undefined;
+const style = `aspect-ratio: ${ratio === 'auto' ? `${image.width} / ${image.height}` : ratio}`;
+const label = no ? `Fig. ${no}` : undefined;
+---
+
+<figure class={className} style={maxWidth}>
+  {
+    group ? (
+      <LightboxLink image={image} caption={caption} group={group} label={label} class="block">
+        <span class="ticked">
+          <span class="block" style={style}>
+            <Image src={image} alt={caption} widths={widthsFor(image)} sizes={sizes} class="photo" loading={eager ? 'eager' : 'lazy'} />
+          </span>
+        </span>
+      </LightboxLink>
+    ) : (
+      <span class="ticked">
+        <span class="block" style={style}>
+          <Image src={image} alt={caption} widths={widthsFor(image)} sizes={sizes} class="photo" loading={eager ? 'eager' : 'lazy'} />
+        </span>
+      </span>
+    )
+  }
+  <figcaption class="mono mt-1.5 flex flex-wrap gap-x-2.5 px-2 text-muted">
+    {label && <span class="shrink-0 text-ink">{label}</span>}
+    <span class="min-w-0 flex-[1_1_12rem] [overflow-wrap:anywhere]">{caption}</span>
+  </figcaption>
+</figure>

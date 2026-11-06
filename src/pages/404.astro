@@ -1,15 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Tiles from '../components/hearth/Tiles.astro';
+import Products from '../components/sheet/Products.astro';
 ---
 
 <BaseLayout title="Page not found">
-  <section class="band text-center" aria-labelledby="page-title">
-    <div class="wrap">
-      <p class="meta mb-6 text-muted">404</p>
-      <h1 id="page-title" class="title mb-10">Page not found</h1>
-      <a href="/" class="btn">Go to the home page</a>
-    </div>
-  </section>
-  <section class="wrap pb-24"><Tiles /></section>
+  <div class="frame">
+    <section class="wrap py-8 lg:py-12" aria-labelledby="page-title">
+      <p class="mono mb-3 text-muted">404</p>
+      <h1 id="page-title" class="page-title mb-6">Page not found</h1>
+      <a href="/" class="btn">Go to the home page <span aria-hidden="true">→</span></a>
+    </section>
+    <section class="sheet" aria-label="Cabinets and products"><Products /></section>
+  </div>
 </BaseLayout>

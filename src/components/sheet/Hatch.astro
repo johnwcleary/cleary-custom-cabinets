@@ -1,0 +1,35 @@
+---
+/**
+ * A material legend swatch, in the manner of the hatches on a drawing. Each material the client
+ * names gets its own hatch; anything added later in the CMS falls back to a plain diagonal.
+ */
+interface Props {
+  material: string;
+  /** Makes the pattern id unique when a material appears in both lists. */
+  uid: string;
+}
+const { material, uid } = Astro.props;
+const id = `hatch-${uid}`;
+type Pattern = { w: number; h: number; d?: string; dots?: [number, number, number][] };
+const patterns: Record<string, Pattern> = {
+  wood: { w: 40, h: 14, d: 'M0 3c10 -3 20 3 40 0M0 10c12 3 26 -3 40 0' },
+  thermofoil: { w: 5, h: 5, d: 'M0 5 5 0' },
+  formica: { w: 8, h: 8, d: 'M0 4H8M4 0V8' },
+  quartz: { w: 16, h: 16, dots: [[3, 4, 0.9], [11, 2, 0.6], [7, 10, 1.1], [14, 12, 0.7], [2, 14, 0.6]] },
+  corian: { w: 10, h: 10, d: 'M0 5H10' },
+  granite: { w: 22, h: 22, d: 'M3 5 8 3 7 8ZM15 3 19 7 14 8ZM6 15 11 13 11 19ZM16 14 20 18 15 19Z' },
+  marble: { w: 60, h: 60, d: 'M-5 18C10 14 14 30 30 24S48 8 65 12M-5 48C12 42 20 54 34 50S52 36 65 40M30 24C34 34 30 40 34 50' },
+  'butcher block': { w: 24, h: 16, d: 'M0 0H24M0 8H24M6 0V8M18 8V16' },
+};
+const p = patterns[material.toLowerCase()] ?? { w: 9, h: 9, d: 'M0 9 9 0' };
+---
+
+<svg viewBox="0 0 96 72" preserveAspectRatio="xMidYMid slice" class="block h-full w-full" aria-hidden="true" focusable="false">
+  <defs>
+    <pattern id={id} width={p.w} height={p.h} patternUnits="userSpaceOnUse">
+      {p.d && <path d={p.d} fill="none" stroke="#23262b" stroke-width="0.8" />}
+      {p.dots?.map(([cx, cy, r]) => <circle cx={cx} cy={cy} r={r} fill="#23262b" />)}
+    </pattern>
+  </defs>
+  <rect width="96" height="72" fill={`url(#${id})`} />
+</svg>

@@ -1,0 +1,60 @@
+---
+import { Image } from 'astro:assets';
+import { getServices, serviceHref, heroCaption, getAllGallery, getPage } from '../../lib/content';
+import { site } from '../../lib/site';
+import { pad2, widthsFor } from '../../lib/img';
+
+const services = await getServices();
+const gallery = await getAllGallery();
+const h = (await getPage('home')).data;
+---
+
+<!-- One large detail and six small ones, with the appointment in the last two cells. -->
+<ul class="ruled grid grid-cols-2 lg:grid-cols-4">
+  {
+    services.map((s, i) => (
+      <li class:list={[i === 0 && 'col-span-2 lg:row-span-2']}>
+        <a href={serviceHref(s.data.slug)} class="prod flex h-full flex-col p-3 lg:p-4">
+          <span class="mono mb-2 flex justify-between text-muted">
+            <span class="prod__no">{pad2(s.data.order)}</span>
+            <span class="prod__arrow" aria-hidden="true">→</span>
+          </span>
+          <span class:list={['relative block aspect-[4/3] overflow-hidden', i === 0 && 'lg:aspect-auto lg:flex-1']}>
+            <Image
+              src={s.data.heroImage}
+              alt={heroCaption(s, gallery)}
+              widths={widthsFor(s.data.heroImage, [320, 480, 800, 1200])}
+              sizes={i === 0 ? '(min-width: 1024px) 48vw, 100vw' : '(min-width: 1024px) 23vw, 48vw'}
+              class="photo absolute inset-0"
+            />
+          </span>
+          <span class:list={['caps mt-3 block', i === 0 ? 'text-[2.25rem] lg:text-[2.75rem]' : 'text-[1.5rem] lg:text-[1.75rem]']}>{s.data.shortName ?? s.data.title}</span>
+          <span class="mono mt-1 block text-muted">{s.data.title}</span>
+        </a>
+      </li>
+    ))
+  }
+  <li class="col-span-2">
+    <div class="flex h-full flex-col justify-between gap-6 p-3 lg:p-4">
+      <p class="lead max-w-[26ch]">{site.serviceArea}</p>
+      <p class="flex flex-wrap gap-2">
+        {h.showroomButton && <a href="/#appointment" class="btn">{h.showroomButton} <span aria-hidden="true">→</span></a>}
+        <a href={site.phoneHref} class="btn btn-ghost tabular-nums">{site.phone}</a>
+      </p>
+    </div>
+  </li>
+</ul>
+
+<style>
+  .prod:hover .prod__no,
+  .prod:focus-visible .prod__no,
+  .prod:hover .prod__arrow,
+  .prod:focus-visible .prod__arrow,
+  .prod:hover .caps,
+  .prod:focus-visible .caps {
+    color: var(--color-pencil);
+  }
+  .prod:focus-visible {
+    outline-offset: -3px;
+  }
+</style>

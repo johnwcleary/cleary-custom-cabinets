@@ -1,12 +1,16 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Tiles from '../components/hearth/Tiles.astro';
-import Fig from '../components/hearth/Fig.astro';
+import ContactForm from '../components/ContactForm.astro';
 import Hours from '../components/Hours.astro';
+import Products from '../components/sheet/Products.astro';
+import SheetHead from '../components/sheet/SheetHead.astro';
+import Drawing from '../components/sheet/Drawing.astro';
+import Hatch from '../components/sheet/Hatch.astro';
+import Fig from '../components/sheet/Fig.astro';
 import { getPage } from '../lib/content';
 import { site } from '../lib/site';
-import { widthsFor } from '../lib/img';
+import { pad2, widthsFor } from '../lib/img';
 
 const home = await getPage('home');
 const about = await getPage('about');
@@ -15,89 +19,128 @@ const shop = (about.data.photos ?? []).find((p) => p.caption.startsWith('Our Sho
 const hero = home.data.heroImage!;
 // Every section's text is edited on the Home page in Storyblok (pages/home.md).
 const h = home.data;
+const drawings = ['elevation', 'plan', 'door'] as const;
+const legend = [
+  { heading: h.cabinetryHeading, code: 'A', items: h.cabinetryMaterials ?? [] },
+  { heading: h.countertopsHeading, code: 'B', items: h.countertopsMaterials ?? [] },
+];
 ---
 
 <BaseLayout title={home.data.seoTitle}>
-  <section class="relative isolate" aria-labelledby="home-title">
-    <figure class="relative h-[68svh] min-h-[28rem] w-full md:h-[74svh]">
-      <Image src={hero} alt={home.data.heroCaption ?? ''} widths={widthsFor(hero, [800, 1200, 1600, 2000])} sizes="100vw" class="photo absolute inset-0" loading="eager" fetchpriority="high" />
-      <span class="absolute inset-0 bg-gradient-to-t from-walnut/85 via-walnut/30 to-walnut/5" aria-hidden="true"></span>
-      <!-- A soft pool of shade behind the title, so it reads clear of the photo. -->
-      <span class="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_18%_88%,rgb(46_31_27/0.6),transparent)]" aria-hidden="true"></span>
-      <figcaption class="smallcaps absolute right-4 bottom-4 text-linen/85 md:right-8 md:bottom-6">{home.data.heroCaption}</figcaption>
-    </figure>
-    <div class="wrap absolute inset-x-0 bottom-0 pb-12 text-linen [text-shadow:0_1px_18px_rgb(46_31_27/0.45)] md:pb-16">
-      <h1 id="home-title" class="hero-title !text-[clamp(1.375rem,7.2vw,5.5rem)]">{home.data.heroTitle}</h1>
-      <p class="serif mt-3 text-[clamp(1.0625rem,2.4vw,2rem)] md:mt-4 leading-tight italic text-linen/90">{home.data.heroSubtitle}</p>
-    </div>
-  </section>
-
-  <section class="band" aria-labelledby="about-title">
-    <div class="wrap grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-10">
-      <h2 id="about-title" class="meta pt-2 text-muted md:col-span-3">{h.aboutLabel}</h2>
-      <div class="md:col-span-8">
-        {h.aboutHeading && <p class="say-sm mb-5 max-w-[34ch]">{h.aboutHeading}</p>}
-        {h.aboutText && <p class="max-w-[52ch] text-lg leading-relaxed text-muted">{h.aboutText}</p>}
-        {h.aboutButton && <p class="mt-7"><a href="/about" class="btn">{h.aboutButton}</a></p>}
-      </div>
-    </div>
-  </section>
-
-  <section id="services" class="pb-[clamp(3rem,6vw,5.5rem)]" aria-labelledby="services-title">
-    <div class="wrap">
-      <div class="mb-8 flex flex-wrap items-baseline justify-between gap-4">
-        <h2 id="services-title" class="meta">{h.cabinetsLabel}</h2>
-        <p class="meta text-muted">{site.serviceArea}</p>
-      </div>
-      <Tiles />
-    </div>
-  </section>
-
-  <section class="on-dark band bg-walnut text-linen" aria-labelledby="materials-title">
-    <div class="wrap grid grid-cols-1 gap-10 md:grid-cols-12">
-      <h2 id="materials-title" class="meta pt-3 text-sand md:col-span-3">{h.materialsLabel}</h2>
-      <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 md:col-span-9">
-        <div>
-          <h3 class="serif mb-4 border-b border-linen/20 pb-3 text-[clamp(1.75rem,2.6vw,2.5rem)] leading-none">{h.cabinetryHeading}</h3>
-          <ul class="space-y-1.5 text-xl">{(h.cabinetryMaterials ?? []).map((m) => <li>{m}</li>)}</ul>
-        </div>
-        <div>
-          <h3 class="serif mb-4 border-b border-linen/20 pb-3 text-[clamp(1.75rem,2.6vw,2.5rem)] leading-none">{h.countertopsHeading}</h3>
-          <ul class="grid grid-cols-2 gap-x-6 gap-y-1.5 text-xl">{(h.countertopsMaterials ?? []).map((m) => <li>{m}</li>)}</ul>
+  <div class="frame">
+    <section aria-labelledby="home-title">
+      <div class="wrap pt-3 pb-2.5 lg:pt-4">
+        <h1 id="home-title" class="hero-title">{h.heroTitle}</h1>
+        <div class="mt-1.5 flex flex-wrap items-center gap-x-6 gap-y-1">
+          <p class="display text-[1.3125rem] lg:text-[1.5rem]">{h.heroSubtitle}</p>
+          <p class="dim mono hidden flex-1 lg:flex"><span class="shrink-0">{site.serviceArea}</span></p>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section class="band" aria-labelledby="showroom-title">
-    <div class="wrap grid grid-cols-1 items-center gap-10 md:grid-cols-12">
-      <div class="grid grid-cols-5 items-end gap-3 md:col-span-6">
-        <Fig image={showroom.image} caption={showroom.caption} ratio="3 / 4" group="home-visit" sizes="(min-width: 768px) 28vw, 58vw" class="col-span-3" />
-        <Fig image={shop.image} caption={shop.caption} ratio="3 / 4" group="home-visit" sizes="(min-width: 768px) 18vw, 38vw" class="col-span-2 mb-10" />
+      <div class="hero-row grid grid-cols-1 border-t border-ink lg:grid-cols-[minmax(0,1fr)_31rem]">
+        <figure class="flex min-w-0 flex-col p-3 lg:p-4">
+          <span class="ticked min-h-0 flex-1">
+            <span class="relative block aspect-[16/9] h-full w-full lg:aspect-auto">
+              <Image src={hero} alt={h.heroCaption ?? ''} widths={widthsFor(hero, [800, 1200, 1600, 2000])} sizes="(min-width: 1024px) 66vw, 100vw" class="photo absolute inset-0" loading="eager" fetchpriority="high" />
+            </span>
+          </span>
+          <figcaption class="mono mt-1.5 flex gap-2.5 px-2 text-muted"><span class="text-ink">Fig. 1</span><span>{h.heroCaption}</span></figcaption>
+        </figure>
+        <div id="appointment" class="border-t border-ink lg:border-t-0 lg:border-l">
+          <ContactForm label={h.contactLabel} heading={h.contactHeading} button={h.showroomButton} />
+        </div>
       </div>
-      <div class="md:col-span-5 md:col-start-8">
-        <h2 id="showroom-title" class="meta mb-6 text-muted">{h.showroomLabel}</h2>
-        {h.showroomText && <p class="say-sm mb-6">{h.showroomText}</p>}
-        <p class="mb-8 text-muted">
-          <a href={site.mapsUrl} rel="noopener" class="ulink">{site.address.street}, {site.address.city}, {site.address.state} {site.address.zip}</a>
-        </p>
-        <Hours class="hours-table mb-10" />
-        <p class="flex flex-wrap gap-3">
-          {h.showroomButton && <a href="/contact" class="btn">{h.showroomButton}</a>}
-          <a href={site.phoneHref} class="btn btn-ghost hover:!border-ink hover:!bg-ink hover:!text-linen">{site.phone}</a>
-        </p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="bg-oat band text-center" aria-labelledby="cta-title">
-    <div class="wrap">
-      {h.contactLabel && <p class="meta mb-6 text-muted">{h.contactLabel}</p>}
-      <h2 id="cta-title" class="title mx-auto mb-8 max-w-[18ch]">{h.contactHeading}</h2>
-      <p class="flex flex-wrap justify-center gap-3">
-        {h.contactButton && <a href="/contact" class="btn">{h.contactButton}</a>}
-        <a href={`mailto:${site.email}`} class="btn btn-ghost hover:!border-ink hover:!bg-ink hover:!text-linen">{site.email}</a>
-      </p>
-    </div>
-  </section>
+    <section id="services" class="sheet" aria-labelledby="services-title">
+      <SheetHead no="01" id="services-title">{h.cabinetsLabel}</SheetHead>
+      <Products />
+    </section>
+
+    <section class="sheet" aria-labelledby="about-title">
+      <SheetHead no="02" id="about-title">{h.aboutLabel}</SheetHead>
+      <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,5fr)_minmax(0,9fr)]">
+        <div class="wrap py-6 lg:py-8">
+          {h.aboutHeading && <p class="lead mb-4 max-w-[30ch]">{h.aboutHeading}</p>}
+          {h.aboutText && <p class="mb-6 max-w-[46ch] text-muted">{h.aboutText}</p>}
+          {h.aboutButton && <p><a href="/about" class="btn btn-ghost">{h.aboutButton} <span aria-hidden="true">→</span></a></p>}
+        </div>
+        <ol class="ruled grid grid-cols-1 border-t border-line sm:grid-cols-3 lg:border-t-0 lg:border-l">
+          {
+            site.services.map((name, i) => (
+              <li class="grid grid-cols-[minmax(0,5fr)_minmax(0,6fr)] items-center gap-x-4 p-3 sm:flex sm:flex-col sm:items-stretch lg:p-4">
+                {drawings[i] && <Drawing kind={drawings[i]} class="row-span-2 sm:order-2 sm:mt-auto sm:mb-4" />}
+                <span class="mono self-end text-muted sm:order-1 sm:mb-3 sm:flex sm:self-auto">
+                  <span>{pad2(i + 1)}</span>
+                  {i < site.services.length - 1 && <span class="ml-auto hidden sm:inline" aria-hidden="true">→</span>}
+                </span>
+                <span class="caps self-start text-[1.5rem] sm:order-3 lg:text-[1.75rem]">{name}</span>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <section class="sheet" aria-labelledby="materials-title">
+      <SheetHead no="03" id="materials-title">{h.materialsLabel}</SheetHead>
+      <div class="grid grid-cols-1 lg:grid-cols-[3fr_7fr]">
+        {
+          legend.map((group, g) => (
+            <div class:list={[g === 1 && 'border-t border-line lg:border-t-0 lg:border-l']}>
+              <h3 class="caps border-b border-line px-3 py-2 text-[1.375rem] sm:px-4">{group.heading}</h3>
+              <ul class:list={['ruled grid', g === 1 ? 'grid-cols-4 sm:grid-cols-7' : 'grid-cols-3']}>
+                {group.items.map((m, i) => (
+                  <li class="p-2.5 lg:p-3">
+                    <span class="mb-1.5 block aspect-[3/2] border border-line sm:mb-2 sm:aspect-[4/3]">
+                      <Hatch material={m} uid={`${group.code}${i}`} />
+                    </span>
+                    <span class="mono block text-muted">{group.code}{i + 1}</span>
+                    <span class="block text-[0.9375rem] leading-snug">{m}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="sheet" aria-labelledby="showroom-title">
+      <SheetHead no="04" id="showroom-title">{h.showroomLabel}</SheetHead>
+      <div class="grid grid-cols-1 lg:grid-cols-2">
+        <div class="grid grid-cols-5 items-start gap-3 p-3 lg:gap-4 lg:p-4">
+          <Fig image={showroom.image} caption={showroom.caption} no={2} ratio="4 / 5" group="home-visit" sizes="(min-width: 1024px) 28vw, 58vw" class="col-span-3" />
+          <Fig image={shop.image} caption={shop.caption} no={3} ratio="4 / 5" group="home-visit" sizes="(min-width: 1024px) 18vw, 38vw" class="col-span-2" />
+        </div>
+        <div class="wrap border-t border-line py-6 lg:border-t-0 lg:border-l lg:py-8">
+          {h.showroomText && <p class="lead mb-6 max-w-[30ch]">{h.showroomText}</p>}
+          <dl class="mb-7 grid gap-6 sm:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+            <div>
+              <dt class="mono mb-2 text-muted">Visit</dt>
+              <dd class="mb-4"><a href={site.mapsUrl} rel="noopener" class="ulink">{site.address.street}<br />{site.address.city}, {site.address.state} {site.address.zip}</a></dd>
+              <dt class="mono mb-1 text-muted">Call</dt>
+              <dd><a href={site.phoneHref} class="caps text-[1.75rem] tabular-nums hover:text-pencil">{site.phone}</a></dd>
+            </div>
+            <div>
+              <dt class="mono mb-2 text-muted">Showroom hours</dt>
+              <dd><Hours class="hours-table" /></dd>
+            </div>
+          </dl>
+          <p class="flex flex-wrap gap-2">
+            {h.showroomButton && <a href="#appointment" class="btn">{h.showroomButton} <span aria-hidden="true">→</span></a>}
+            {h.contactButton && <a href="/contact" class="btn btn-ghost">{h.contactButton}</a>}
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
 </BaseLayout>
+
+<style>
+  @media (min-width: 64rem) {
+    /* Photo and ticket together fill the rest of the first screen. */
+    .hero-row {
+      min-height: min(calc(100svh - 18.75rem), 46rem);
+    }
+  }
+</style>

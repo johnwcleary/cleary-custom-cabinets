@@ -1,0 +1,127 @@
+---
+/**
+ * Three small line drawings for the three services: a front elevation (design), a measured plan
+ * (site measuring) and an exploded frame-and-panel door (fabrication). Dimension lines carry no
+ * figures on purpose; nothing here is a real job.
+ */
+interface Props {
+  kind: 'elevation' | 'plan' | 'door';
+  class?: string;
+}
+const { kind, class: className } = Astro.props;
+const slash = (x: number, y: number) => `M${x - 3} ${y + 3}l6 -6`;
+---
+
+<svg viewBox="0 0 320 210" class={className} aria-hidden="true" focusable="false">
+  {
+    kind === 'elevation' && (
+      <g>
+        <path class="l" d="M12 192H308" />
+        <path class="l" d="M34 180V192M286 180V192" />
+        <rect class="l" x="26" y="108" width="268" height="8" />
+        <path class="l" d="M30 116V180H290V116M95 116V180M160 116V180M225 116V180" />
+        <rect class="l" x="33" y="119" width="29" height="58" />
+        <rect class="l" x="63" y="119" width="29" height="58" />
+        <path class="l d" d="M62 119 33 148 62 177M63 119 92 148 63 177" />
+        <rect class="l" x="98" y="119" width="59" height="16" />
+        <rect class="l" x="98" y="137" width="59" height="19" />
+        <rect class="l" x="98" y="158" width="59" height="19" />
+        <path class="l" d="M120 127h15M120 146h15M120 167h15" />
+        <rect class="l" x="163" y="119" width="29" height="58" />
+        <rect class="l" x="193" y="119" width="29" height="58" />
+        <path class="l d" d="M192 119 163 148 192 177M193 119 222 148 193 177" />
+        <rect class="l" x="228" y="119" width="59" height="58" />
+        <path class="l d" d="M287 119 228 148 287 177" />
+        <rect class="l" x="30" y="28" width="65" height="56" />
+        <rect class="l" x="95" y="28" width="65" height="56" />
+        <rect class="l" x="225" y="28" width="65" height="56" />
+        <path class="l" d="M62.5 28V84M127.5 28V84M257.5 28V84" />
+        <path class="l d" d="M62 28 33 56 62 84M63 28 92 56 63 84M127 28 98 56 127 84M128 28 157 56 128 84M257 28 228 56 257 84M258 28 287 56 258 84" />
+        <path class="l" d="M170 84H215L206 60V28H179V60Z" />
+        <path class="p" d="M30 6V22M95 8V22M160 8V22M225 8V22M290 6V22M30 14H290" />
+        <path class="p" d={[30, 95, 160, 225, 290].map((x) => slash(x, 14)).join('')} />
+        <path class="p" d="M298 28h12M298 180h12M304 28V180" />
+        <path class="p" d={[28, 180].map((y) => slash(304, y)).join('')} />
+      </g>
+    )
+  }
+  {
+    kind === 'plan' && (
+      <g>
+        <path class="w" fill-rule="evenodd" d="M44 38H286V178H240V172H280V44H50V172H200V178H44Z" />
+        <path class="l" d="M44 38H286V178H240V172H280V44H50V172H200V178H44Z" />
+        <rect class="v" x="110" y="38" width="80" height="6" />
+        <path class="l" d="M110 41H190" />
+        <path class="l" d="M200 172V132" />
+        <path class="l d" d="M200 132A40 40 0 0 1 240 172" />
+        <path class="l" d="M50 68H280M74 68V172" />
+        <rect class="l" x="138" y="49" width="44" height="14" rx="2" />
+        <rect class="l" x="124" y="100" width="76" height="34" />
+        <path class="l d" d="M124 106H200" />
+        <path class="p" d="M44 12V32M110 12V32M190 12V32M286 12V32M44 18H286" />
+        <path class="p" d={[44, 110, 190, 286].map((x) => slash(x, 18)).join('')} />
+        <path class="p" d="M16 38H38M16 178H38M22 38V178" />
+        <path class="p" d={[38, 178].map((y) => slash(22, y)).join('')} />
+        <path class="p" d="M44 184V204M200 184V204M240 184V204M286 184V204M44 198H286" />
+        <path class="p" d={[44, 200, 240, 286].map((x) => slash(x, 198)).join('')} />
+      </g>
+    )
+  }
+  {
+    kind === 'door' && (
+      <g>
+        <path class="c" d="M160 6V204" />
+        <rect class="l" x="70" y="16" width="20" height="178" />
+        <rect class="l" x="230" y="16" width="20" height="178" />
+        <rect class="l d" x="85" y="32" width="5" height="10" />
+        <rect class="l d" x="85" y="168" width="5" height="10" />
+        <rect class="l d" x="230" y="32" width="5" height="10" />
+        <rect class="l d" x="230" y="168" width="5" height="10" />
+        <path class="l d" d="M85 42V168M235 42V168" />
+        <rect class="l" x="112" y="26" width="96" height="22" />
+        <rect class="l" x="112" y="162" width="96" height="22" />
+        <path class="l" d="M112 32H100V42H112M208 32H220V42H208M112 168H100V178H112M208 168H220V178H208" />
+        <path class="l d" d="M112 43H208M112 167H208" />
+        <rect class="l" x="130" y="70" width="60" height="70" />
+        <rect class="l" x="138" y="78" width="44" height="54" />
+        <path class="l" d="M130 70 138 78M190 70 182 78M130 140 138 132M190 140 182 132" />
+        <path class="p d" d="M90 37H100M220 37H230M90 173H100M220 173H230M150 48V70M170 48V70M150 140V162M170 140V162" />
+      </g>
+    )
+  }
+</svg>
+
+<style>
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .l,
+  .p,
+  .c {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+  .p {
+    stroke: var(--color-pencil);
+  }
+  .c {
+    stroke: var(--color-muted);
+    stroke-dasharray: 10 3 2 3;
+  }
+  .d {
+    stroke-dasharray: 3 3;
+  }
+  .w {
+    fill: var(--color-ink);
+    fill-opacity: 0.16;
+  }
+  .v {
+    fill: var(--color-paper);
+    stroke: var(--color-ink);
+    vector-effect: non-scaling-stroke;
+  }
+</style>

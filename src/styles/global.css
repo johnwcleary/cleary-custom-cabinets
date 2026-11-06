@@ -1,42 +1,47 @@
 @import "tailwindcss";
-@import "@fontsource-variable/newsreader/opsz.css";
-@import "@fontsource-variable/newsreader/opsz-italic.css";
-@import "@fontsource-variable/public-sans";
+@import "@fontsource/barlow-condensed/400.css";
+@import "@fontsource/barlow-condensed/500.css";
+@import "@fontsource/barlow-condensed/600.css";
+@import "@fontsource-variable/spline-sans-mono";
+@import "@fontsource-variable/instrument-sans";
 
 /*
- * Palette and type. Colours are taken from the materials in the photographs (linen quartz, walnut,
- * cherry), with text colours checked for contrast. Newsreader for headings, Public Sans for everything else.
+ * Palette and type for the shop drawing direction: drafting paper, graphite and one red pencil (the
+ * logo's plum). Barlow Condensed for titles, Spline Sans Mono for labels, Instrument Sans for reading.
  */
 @theme {
-  --color-linen: #f1e9dd;
-  --color-oat: #e6d9c6;
-  --color-sand: #d9c7ad;
-  --color-ink: #2a201c; /* 13.9:1 on linen */
-  --color-muted: #66564b; /* 6.0:1 on linen */
-  --color-cherry: #8f4f25; /* 5.6:1 on linen */
-  --color-walnut: #2e1f1b; /* deep section ground */
-  --color-walnut-soft: #3d2b25;
-  --color-cream: #f1e9dd;
-  --color-line: rgb(42 32 28 / 0.18);
+  --color-paper: #f3efe6;
+  --color-sheet: #faf8f2; /* the ticket, one shade brighter than the paper */
+  --color-ink: #23262b; /* 13.3:1 on paper */
+  --color-muted: #55585c; /* 6.2:1 on paper */
+  --color-pencil: #682c43; /* 8.6:1 on paper */
+  --color-line: rgb(35 38 43 / 0.32);
 
-  --font-serif: "Newsreader Variable", ui-serif, Georgia, serif;
-  --font-sans: "Public Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Barlow Condensed", ui-sans-serif, "Arial Narrow", sans-serif;
+  --font-mono: "Spline Sans Mono Variable", ui-monospace, Menlo, monospace;
+  --font-sans: "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
   html {
     font-family: var(--font-sans);
     color: var(--color-ink);
-    background: var(--color-linen);
+    background: var(--color-paper);
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
+    scroll-padding-top: 5rem;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
   body {
-    background: var(--color-linen);
+    background: var(--color-paper);
   }
   ::selection {
-    background: var(--color-cherry);
-    color: var(--color-linen);
+    background: var(--color-pencil);
+    color: var(--color-paper);
   }
   a {
     color: inherit;
@@ -46,133 +51,189 @@
     height: auto;
   }
   :focus-visible {
-    outline: 2px solid var(--color-cherry);
-    outline-offset: 3px;
+    outline: 2px solid var(--color-pencil);
+    outline-offset: 2px;
   }
   .on-dark :focus-visible {
-    outline-color: var(--color-linen);
+    outline-color: var(--color-paper);
   }
   strong {
-    font-weight: inherit;
-    font-style: italic;
+    font-weight: 600;
   }
 }
 
 @layer components {
-  .wrap {
-    width: 100%;
-    max-width: 90rem;
+  /* The drawing sheet: a margin of paper, then one continuous hairline border down every page. */
+  .frame {
+    --sheet-margin: 0rem;
+    width: min(100% - 2 * var(--sheet-margin), 94rem);
     margin-inline: auto;
-    padding-inline: clamp(1rem, 3.5vw, 3rem);
   }
-  .band {
-    padding-block: clamp(3rem, 6vw, 5.5rem);
+  @media (min-width: 40rem) {
+    .frame {
+      --sheet-margin: 0.75rem;
+      border-inline: 1px solid var(--color-line);
+    }
+  }
+  @media (min-width: 64rem) {
+    .frame {
+      --sheet-margin: 1.25rem;
+    }
+  }
+  .wrap {
+    padding-inline: clamp(1rem, 2vw, 1.75rem);
   }
 
-  /* Small uppercase labels with dot separators. */
-  .meta {
-    font-family: var(--font-sans);
+  /* Labels, set as lettering on a drawing. */
+  .mono {
+    font-family: var(--font-mono);
     font-size: 0.6875rem;
-    letter-spacing: 0.14em;
-    line-height: 1.6;
+    font-weight: 450;
+    letter-spacing: 0.06em;
+    line-height: 1.45;
     text-transform: uppercase;
+  }
+  .display {
+    font-family: var(--font-display);
     font-weight: 500;
+    line-height: 1.02;
   }
-  .dots > * + *::before {
-    content: "●";
-    font-size: 0.55em;
-    vertical-align: 0.25em;
-    margin-inline: 0.85em;
-    opacity: 0.8;
-  }
-
-  .serif {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    letter-spacing: -0.01em;
+  .caps {
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0.015em;
+    text-transform: uppercase;
   }
   .hero-title {
-    font-family: var(--font-serif);
-    font-size: clamp(2.75rem, 7.5vw, 7rem);
-    line-height: 0.95;
-    letter-spacing: -0.02em;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: min(8.8vw, 8rem);
+    line-height: 0.98;
+    letter-spacing: 0.005em;
+    text-transform: uppercase;
     text-wrap: balance;
   }
-  .title {
-    font-family: var(--font-serif);
-    font-size: clamp(2.5rem, 5.5vw, 5rem);
-    line-height: 1;
-    letter-spacing: -0.015em;
+  .page-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(2.5rem, 5.4vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: 0.005em;
+    text-transform: uppercase;
     text-wrap: balance;
   }
-  .say {
-    font-family: var(--font-serif);
-    font-size: clamp(1.75rem, 3.6vw, 3.25rem);
+  .lead {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.625rem, 2.5vw, 2.25rem);
     line-height: 1.1;
-    letter-spacing: -0.01em;
     text-wrap: pretty;
-  }
-  .say-sm {
-    font-family: var(--font-serif);
-    font-size: clamp(1.5rem, 2.4vw, 2.125rem);
-    line-height: 1.15;
-    text-wrap: pretty;
-  }
-  /* Figure captions in small caps. */
-  .smallcaps {
-    font-variant-caps: all-small-caps;
-    letter-spacing: 0.08em;
-    font-size: 0.9375rem;
-    line-height: 1.35;
   }
 
-  /* One warm grade on every photograph, plus a very soft vignette on framed images. */
+  /* Every section opens with a ruled title strip that runs edge to edge of the sheet. */
+  .sheet {
+    border-top: 1px solid var(--color-ink);
+  }
+
+  /* Hairline cells: works at any column count, and an unfilled last row stays clean. */
+  .ruled {
+    overflow: hidden;
+  }
+  .ruled > * {
+    box-shadow: 1px 0 0 var(--color-line), 0 1px 0 var(--color-line), 1px 1px 0 var(--color-line);
+  }
+  /* Drafting's sign for "nothing here". */
+  .hatch {
+    background: repeating-linear-gradient(135deg, transparent 0 7px, var(--color-line) 7px 8px);
+  }
+
   .photo {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
-    filter: saturate(0.88) sepia(0.12) contrast(1.03) brightness(0.99);
-    background: var(--color-oat);
+    filter: saturate(0.92) contrast(1.02);
+    background: #e4dfd3;
   }
-  .vignette {
+  /* Four crop marks, just outside the corners of a framed photograph. */
+  .ticked {
+    --t: 0.875rem;
+    --c: var(--color-ink);
     position: relative;
-    overflow: hidden;
+    display: block;
+    padding: 0.5rem;
+    background:
+      linear-gradient(var(--c), var(--c)) 0 0 / var(--t) 1px no-repeat,
+      linear-gradient(var(--c), var(--c)) 0 0 / 1px var(--t) no-repeat,
+      linear-gradient(var(--c), var(--c)) 100% 0 / var(--t) 1px no-repeat,
+      linear-gradient(var(--c), var(--c)) 100% 0 / 1px var(--t) no-repeat,
+      linear-gradient(var(--c), var(--c)) 0 100% / var(--t) 1px no-repeat,
+      linear-gradient(var(--c), var(--c)) 0 100% / 1px var(--t) no-repeat,
+      linear-gradient(var(--c), var(--c)) 100% 100% / var(--t) 1px no-repeat,
+      linear-gradient(var(--c), var(--c)) 100% 100% / 1px var(--t) no-repeat;
   }
-  .vignette::after {
+  a:hover > .ticked,
+  a:focus-visible > .ticked {
+    --c: var(--color-pencil);
+  }
+
+  /* A dimension line: extension ticks and arrowheads, with the "measurement" written on it. */
+  .dim {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+  }
+  .dim::before,
+  .dim::after {
     content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: radial-gradient(ellipse at center, transparent 62%, rgb(46 31 27 / 0.16) 100%);
+    flex: 1;
+    min-width: 1.5rem;
+    height: 0.75rem;
+    border-inline: 0 solid var(--color-ink);
+  }
+  .dim::before {
+    border-left-width: 1px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='7'%3E%3Cpath d='M0 3.5 9 0v7z' fill='%2323262b'/%3E%3C/svg%3E") left center / 9px 7px no-repeat,
+      linear-gradient(var(--color-ink), var(--color-ink)) center / 100% 1px no-repeat;
+  }
+  .dim::after {
+    border-right-width: 1px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='7'%3E%3Cpath d='M9 3.5 0 0v7z' fill='%2323262b'/%3E%3C/svg%3E") right center / 9px 7px no-repeat,
+      linear-gradient(var(--color-ink), var(--color-ink)) center / 100% 1px no-repeat;
   }
 
   .btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
-    padding: 0.95rem 1.5rem;
-    border-radius: 999px;
-    background: var(--color-ink);
-    color: var(--color-linen);
-    font-size: 0.75rem;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding: 0.8rem 1.1rem;
+    background: var(--color-pencil);
+    color: var(--color-paper);
+    font-family: var(--font-display);
+    font-size: 1.1875rem;
     font-weight: 500;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.03em;
+    line-height: 1.1;
     text-transform: uppercase;
+    cursor: pointer;
   }
   .btn:hover {
-    background: var(--color-cherry);
+    background: var(--color-ink);
   }
   .btn-ghost {
     background: transparent;
-    color: inherit;
-    border: 1px solid currentColor;
+    color: var(--color-ink);
+    box-shadow: inset 0 0 0 1px var(--color-ink);
   }
   .btn-ghost:hover {
-    background: var(--color-linen);
-    color: var(--color-ink);
-    border-color: var(--color-linen);
+    background: var(--color-ink);
+    color: var(--color-paper);
   }
   .ulink {
     text-decoration: underline;
@@ -180,15 +241,12 @@
     text-underline-offset: 0.25em;
   }
   .ulink:hover {
-    color: var(--color-cherry);
-  }
-  .on-dark .ulink:hover {
-    color: var(--color-sand);
+    color: var(--color-pencil);
   }
   @media (prefers-reduced-motion: no-preference) {
     .btn,
     .ulink {
-      transition: background-color 0.25s, color 0.25s, border-color 0.25s;
+      transition: background-color 0.15s, color 0.15s;
     }
   }
 
@@ -199,9 +257,8 @@
     z-index: 100;
     padding: 0.75rem 1rem;
     background: var(--color-ink);
-    color: var(--color-linen);
+    color: var(--color-paper);
     font-size: 0.875rem;
-    border-radius: 999px;
   }
   .skip-link:focus {
     top: 1rem;
@@ -220,62 +277,30 @@
     justify-content: space-between;
     align-items: baseline;
     gap: 1rem;
-    padding-block: 0.55rem;
+    padding-block: 0.45rem;
     border-bottom: 1px solid var(--color-line);
   }
   .hours-table > div:first-child {
     border-top: 1px solid var(--color-line);
   }
   .hours-table dt {
-    font-variant-caps: all-small-caps;
-    letter-spacing: 0.08em;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
   .hours-table dd {
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
     text-align: right;
   }
-  .on-dark .hours-table > div {
-    border-color: rgb(241 233 221 / 0.2);
-  }
   .social-list a {
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
   }
-
-  /* Lightbox, restyled warm. */
-  .lightbox {
-    background: rgb(36 25 22 / 0.97);
-    color: var(--color-linen);
-  }
-  .lightbox::backdrop {
-    background: rgb(36 25 22 / 0.7);
-  }
-  .lightbox__img {
-    filter: saturate(0.88) sepia(0.12) contrast(1.03) brightness(0.99);
-  }
-  .lightbox__caption {
-    font-variant-caps: all-small-caps;
-    letter-spacing: 0.08em;
-    font-size: 1.0625rem;
-  }
-  .lightbox__btn {
-    border-radius: 999px;
-    border-color: rgb(241 233 221 / 0.35);
-  }
-  .lightbox__btn:focus-visible {
-    outline-color: var(--color-linen);
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .lightbox[open] {
-      animation: lb-in 0.3s ease-out;
-    }
-    @keyframes lb-in {
-      from {
-        opacity: 0;
-      }
-    }
+  .social-list a:hover {
+    color: var(--color-pencil);
   }
 }
 
@@ -288,18 +313,4 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-}
-
-/*
- * Display sizes were designed around a narrower face. Newsreader is scaled with font-size-adjust
- * (calibrated in the browser: halfway between matching the old x-height and the old line width)
- * so headlines keep their size and wrapping. Browsers without support render it ~16% larger.
- */
-.serif,
-.hero-title,
-.title,
-.say,
-.say-sm {
-  font-size-adjust: 0.441;
-  letter-spacing: -0.02em;
 }
