@@ -1,103 +1,108 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Tiles from '../components/hearth/Tiles.astro';
-import Fig from '../components/hearth/Fig.astro';
-import Hours from '../components/Hours.astro';
+import ContactForm from '../components/ContactForm.astro';
+import Products from '../components/sheet/Products.astro';
+import Slideshow from '../components/sheet/Slideshow.astro';
+import Fig from '../components/sheet/Fig.astro';
+import Drawing from '../components/sheet/Drawing.astro';
 import { getPage } from '../lib/content';
 import { site } from '../lib/site';
 import { widthsFor } from '../lib/img';
+import { swatch } from '../lib/materials';
 
 const home = await getPage('home');
 const about = await getPage('about');
 const showroom = (about.data.photos ?? []).find((p) => p.caption.startsWith('Our Showroom'))!;
 const shop = (about.data.photos ?? []).find((p) => p.caption.startsWith('Our Shop'))!;
-const hero = home.data.heroImage!;
 // Every section's text is edited on the Home page in Storyblok (pages/home.md).
 const h = home.data;
+const drawings = ['elevation', 'commercial', 'cabinet'] as const;
+const groups = [
+  { heading: h.cabinetryHeading, group: 'cabinet' as const, items: h.cabinetryMaterials ?? [], cols: 'grid-cols-3' },
+  { heading: h.countertopsHeading, group: 'counter' as const, items: h.countertopsMaterials ?? [], cols: 'grid-cols-3 sm:grid-cols-4 lg:grid-cols-7' },
+];
 ---
 
 <BaseLayout title={home.data.seoTitle}>
-  <section class="relative isolate" aria-labelledby="home-title">
-    <figure class="relative h-[68svh] min-h-[28rem] w-full md:h-[74svh]">
-      <Image src={hero} alt={home.data.heroCaption ?? ''} widths={widthsFor(hero, [800, 1200, 1600, 2000])} sizes="100vw" class="photo absolute inset-0" loading="eager" fetchpriority="high" />
-      <span class="absolute inset-0 bg-gradient-to-t from-walnut/85 via-walnut/30 to-walnut/5" aria-hidden="true"></span>
-      <!-- A soft pool of shade behind the title, so it reads clear of the photo. -->
-      <span class="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_18%_88%,rgb(46_31_27/0.6),transparent)]" aria-hidden="true"></span>
-      <figcaption class="smallcaps absolute right-4 bottom-4 text-linen/85 md:right-8 md:bottom-6">{home.data.heroCaption}</figcaption>
-    </figure>
-    <div class="wrap absolute inset-x-0 bottom-0 pb-12 text-linen [text-shadow:0_1px_18px_rgb(46_31_27/0.45)] md:pb-16">
-      <h1 id="home-title" class="hero-title !text-[clamp(1.375rem,7.2vw,5.5rem)]">{home.data.heroTitle}</h1>
-      <p class="serif mt-3 text-[clamp(1.0625rem,2.4vw,2rem)] md:mt-4 leading-tight italic text-linen/90">{home.data.heroSubtitle}</p>
-    </div>
-  </section>
-
-  <section class="band" aria-labelledby="about-title">
-    <div class="wrap grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-10">
-      <h2 id="about-title" class="meta pt-2 text-muted md:col-span-3">{h.aboutLabel}</h2>
-      <div class="md:col-span-8">
-        {h.aboutHeading && <p class="say-sm mb-5 max-w-[34ch]">{h.aboutHeading}</p>}
-        {h.aboutText && <p class="max-w-[52ch] text-lg leading-relaxed text-muted">{h.aboutText}</p>}
-        {h.aboutButton && <p class="mt-7"><a href="/about" class="btn">{h.aboutButton}</a></p>}
-      </div>
-    </div>
-  </section>
-
-  <section id="services" class="pb-[clamp(3rem,6vw,5.5rem)]" aria-labelledby="services-title">
-    <div class="wrap">
-      <div class="mb-8 flex flex-wrap items-baseline justify-between gap-4">
-        <h2 id="services-title" class="meta">{h.cabinetsLabel}</h2>
-        <p class="meta text-muted">{site.serviceArea}</p>
-      </div>
-      <Tiles />
-    </div>
-  </section>
-
-  <section class="on-dark band bg-walnut text-linen" aria-labelledby="materials-title">
-    <div class="wrap grid grid-cols-1 gap-10 md:grid-cols-12">
-      <h2 id="materials-title" class="meta pt-3 text-sand md:col-span-3">{h.materialsLabel}</h2>
-      <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 md:col-span-9">
-        <div>
-          <h3 class="serif mb-4 border-b border-linen/20 pb-3 text-[clamp(1.75rem,2.6vw,2.5rem)] leading-none">{h.cabinetryHeading}</h3>
-          <ul class="space-y-1.5 text-xl">{(h.cabinetryMaterials ?? []).map((m) => <li>{m}</li>)}</ul>
-        </div>
-        <div>
-          <h3 class="serif mb-4 border-b border-linen/20 pb-3 text-[clamp(1.75rem,2.6vw,2.5rem)] leading-none">{h.countertopsHeading}</h3>
-          <ul class="grid grid-cols-2 gap-x-6 gap-y-1.5 text-xl">{(h.countertopsMaterials ?? []).map((m) => <li>{m}</li>)}</ul>
+  <section class="frame pt-3 pb-[clamp(1rem,2vw,1.75rem)] lg:pt-4" aria-labelledby="home-title">
+    <div class="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_26rem] lg:gap-5 xl:grid-cols-[minmax(0,1fr)_27rem]">
+      <div class="hero-col relative min-w-0">
+        <Slideshow />
+        <!-- The title sits on the photo; clicks and hovers pass through to the slideshow. -->
+        <div class="hero-overlay pointer-events-none absolute inset-x-0 bottom-0 rounded-b-[6px] px-4 pt-16 pb-4 text-paper lg:px-6 lg:pb-5">
+          <h1 id="home-title" class="hero-title">{h.heroTitle}</h1>
+          <p class="lead mt-1 italic !text-[min(4.6cqw,1.5rem)]">{h.heroSubtitle}</p>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section class="band" aria-labelledby="showroom-title">
-    <div class="wrap grid grid-cols-1 items-center gap-10 md:grid-cols-12">
-      <div class="grid grid-cols-5 items-end gap-3 md:col-span-6">
-        <Fig image={showroom.image} caption={showroom.caption} ratio="3 / 4" group="home-visit" sizes="(min-width: 768px) 28vw, 58vw" class="col-span-3" />
-        <Fig image={shop.image} caption={shop.caption} ratio="3 / 4" group="home-visit" sizes="(min-width: 768px) 18vw, 38vw" class="col-span-2 mb-10" />
-      </div>
-      <div class="md:col-span-5 md:col-start-8">
-        <h2 id="showroom-title" class="meta mb-6 text-muted">{h.showroomLabel}</h2>
-        {h.showroomText && <p class="say-sm mb-6">{h.showroomText}</p>}
-        <p class="mb-8 text-muted">
-          <a href={site.mapsUrl} rel="noopener" class="ulink">{site.address.street}, {site.address.city}, {site.address.state} {site.address.zip}</a>
-        </p>
-        <Hours class="hours-table mb-10" />
-        <p class="flex flex-wrap gap-3">
-          {h.showroomButton && <a href="/contact" class="btn">{h.showroomButton}</a>}
-          <a href={site.phoneHref} class="btn btn-ghost hover:!border-ink hover:!bg-ink hover:!text-linen">{site.phone}</a>
-        </p>
+      <div id="appointment">
+        <ContactForm heading={h.contactHeading} />
       </div>
     </div>
   </section>
 
-  <section class="bg-oat band text-center" aria-labelledby="cta-title">
-    <div class="wrap">
-      {h.contactLabel && <p class="meta mb-6 text-muted">{h.contactLabel}</p>}
-      <h2 id="cta-title" class="title mx-auto mb-8 max-w-[18ch]">{h.contactHeading}</h2>
-      <p class="flex flex-wrap justify-center gap-3">
-        {h.contactButton && <a href="/contact" class="btn">{h.contactButton}</a>}
-        <a href={`mailto:${site.email}`} class="btn btn-ghost hover:!border-ink hover:!bg-ink hover:!text-linen">{site.email}</a>
-      </p>
+  <section id="services" class="frame section" aria-labelledby="services-title">
+    <h2 id="services-title" class="heading mb-3">{h.cabinetsLabel}</h2>
+    <Products />
+  </section>
+
+  <section class="frame section grid grid-cols-1 items-center gap-5 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-10" aria-labelledby="about-title">
+    <div>
+      <h2 id="about-title" class="heading mb-3">{h.aboutLabel}</h2>
+      {h.aboutHeading && <p class="lead mb-2.5">{h.aboutHeading}</p>}
+      {h.aboutText && <p class="mb-3 max-w-[52ch] text-muted">{h.aboutText}</p>}
+      {h.aboutButton && <p><a href="/about" class="ulink">{h.aboutButton}</a></p>}
+    </div>
+    <ul class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-5">
+      {
+        site.services.map((name, i) => (
+          <li class="svc grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-4 sm:block">
+            {drawings[i] && <Drawing kind={drawings[i]} class="sm:mb-2" />}
+            <span class="caps block text-[1.375rem] lg:text-[1.625rem]">{name}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="frame section" aria-labelledby="materials-title">
+    <h2 id="materials-title" class="heading mb-3">{h.materialsLabel}</h2>
+    <div class="grid grid-cols-1 gap-5 lg:grid-cols-[3fr_7fr] lg:gap-4">
+      {
+        groups.map((g) => (
+          <div>
+            <h3 class="mb-2 text-[1.125rem] font-semibold">{g.heading}</h3>
+            <ul class:list={['grid gap-2', g.cols]}>
+              {g.items.map((m) => {
+                const img = swatch(m, g.group);
+                return (
+                  <li>
+                    {img && (
+                      <span class="swatch mb-1 block aspect-square overflow-hidden rounded-[4px]">
+                        <Image src={img} alt={`${m} ${g.heading?.toLowerCase() ?? ''}`.trim()} widths={widthsFor(img, [240, 400, 600])} sizes="(min-width: 1024px) 12vw, 30vw" class="photo" />
+                      </span>
+                    )}
+                    <span class="block leading-snug">{m}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="frame section grid grid-cols-1 items-center gap-5 lg:grid-cols-2 lg:gap-10" aria-labelledby="showroom-title">
+    <div class="grid grid-cols-2 items-start gap-3">
+      <Fig image={showroom.image} caption={showroom.caption} ratio="4 / 5" group="home-visit" sizes="(min-width: 1024px) 24vw, 46vw" />
+      <Fig image={shop.image} caption={shop.caption} ratio="4 / 5" group="home-visit" sizes="(min-width: 1024px) 24vw, 46vw" />
+    </div>
+    <div>
+      <h2 id="showroom-title" class="heading mb-3">{h.showroomLabel}</h2>
+      {h.showroomText && <p class="lead mb-3">{h.showroomText}</p>}
+      <p class="mb-4"><a href={site.mapsUrl} rel="noopener" class="ulink">{site.address.street}, {site.address.city}, {site.address.state} {site.address.zip}</a></p>
+      {h.showroomButton && <a href="#appointment" class="btn">{h.showroomButton}</a>}
     </div>
   </section>
 </BaseLayout>

@@ -1,46 +1,61 @@
 ---
-import Logo from './Logo.astro';
 import Hours from './Hours.astro';
 import SocialLinks from './SocialLinks.astro';
+import Stamp from './sheet/Stamp.astro';
 import { site } from '../lib/site';
-import { getServices, serviceHref } from '../lib/content';
 
-const services = await getServices();
-// The tagline stays italic, but the business name inside it is set upright.
-const [before, after] = site.tagline.includes(site.name) ? site.tagline.split(site.name, 2) : [site.tagline, null];
+// The name on one line, set upright; the rest of the tagline smaller and italic on the next.
+const rest = site.tagline.startsWith(site.name) ? site.tagline.slice(site.name.length).replace(/^[,\s]+/, '') : null;
 ---
 
-<footer class="on-dark bg-walnut text-linen">
-  <div class="wrap grid grid-cols-1 gap-12 py-16 md:grid-cols-12 lg:py-24">
-    <div class="md:col-span-12 lg:col-span-4">
-      <Logo variant="reverse" width={190} class="mb-10 h-auto w-44" />
-      <p class="serif max-w-[18ch] text-4xl leading-[1.05] italic md:text-5xl">{before}{after !== null && <><span class="not-italic">{site.name}</span>{after}</>}</p>
+<footer class="on-plum bg-plum-deep text-paper">
+  <div class="frame pt-[clamp(2rem,4vw,3.25rem)] pb-[clamp(1.75rem,3.5vw,3rem)]">
+    <div class="flex items-center justify-between gap-6 border-b border-paper/20 pb-[clamp(1.5rem,3vw,2.5rem)]">
+      {
+        rest !== null ? (
+          <p class="sign">
+            <span class="sign__name">{site.name},</span>
+            <span class="sign__rest">{rest}</span>
+          </p>
+        ) : (
+          <p class="sign">{site.tagline}</p>
+        )
+      }
+      <Stamp id="stamp-footer" tilt={-11} class="w-20 shrink-0 text-blush sm:w-28 lg:w-32" />
     </div>
-    <div class="md:col-span-4 lg:col-span-3">
-      <h2 class="meta mb-4 text-sand">Visit</h2>
-      <address class="not-italic leading-relaxed">
-        <a href={site.mapsUrl} rel="noopener" class="ulink">{site.address.street}<br />{site.address.city}, {site.address.state} {site.address.zip}</a>
-      </address>
-      <h2 class="meta mt-8 mb-4 text-sand">Call &amp; write</h2>
-      <p class="leading-relaxed">
-        <a href={site.phoneHref} class="ulink tabular-nums">{site.phone}</a><br />
-        <a href={`mailto:${site.email}`} class="ulink break-all">{site.email}</a>
-      </p>
+    <div class="grid grid-cols-1 gap-x-8 gap-y-7 pt-[clamp(1.5rem,3vw,2.5rem)] sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1.35fr_0.75fr]">
+      <div>
+        <h2 class="foot-label">Visit</h2>
+        <address class="not-italic">
+          <a href={site.mapsUrl} rel="noopener" class="ulink">{site.address.street}<br />{site.address.city}, {site.address.state} {site.address.zip}</a>
+        </address>
+      </div>
+      <div>
+        <h2 class="foot-label">Call or email</h2>
+        <p><a href={site.phoneHref} class="text-[1.25rem] font-semibold tabular-nums transition-colors duration-200 hover:text-blush">{site.phone}</a></p>
+        <p class="mt-1"><a href={`mailto:${site.email}`} class="ulink [overflow-wrap:anywhere]">{site.email}</a></p>
+      </div>
+      <div>
+        <h2 class="foot-label">Showroom hours</h2>
+        <Hours class="hours-table max-w-[21rem]" />
+      </div>
+      <div>
+        <h2 class="foot-label">Follow</h2>
+        <SocialLinks labels class="social-list flex flex-col gap-1.5" />
+      </div>
     </div>
-    <div class="md:col-span-5 lg:col-span-3">
-      <h2 class="meta mb-4 text-sand">Showroom hours</h2>
-      <Hours class="hours-table" />
-    </div>
-    <div class="md:col-span-3 lg:col-span-2">
-      <h2 class="meta mb-4 text-sand">Follow</h2>
-      <SocialLinks labels class="social-list flex flex-col gap-2" />
-    </div>
-  </div>
-  <div class="border-t border-linen/15">
-    <nav aria-label="Cabinets and products" class="wrap py-6">
-      <ul class="meta dots flex flex-wrap justify-center gap-y-2 text-linen/80">
-        {services.map((s) => <li><a href={serviceHref(s.data.slug)} class="hover:text-linen">{s.data.title}</a></li>)}
-      </ul>
-    </nav>
   </div>
 </footer>
+
+<style>
+  /* One label style for every column, so the four line up along the top. */
+  .foot-label {
+    margin-bottom: 0.625rem;
+    color: var(--color-blush);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+</style>

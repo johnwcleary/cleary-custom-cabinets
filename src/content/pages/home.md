@@ -17,8 +17,8 @@ countertopsHeading: "Countertops"
 countertopsMaterials: ["Quartz", "Corian", "Granite", "Marble", "Butcher block", "Wood", "Formica"]
 showroomLabel: "The showroom"
 showroomText: "Our family business always gives you exceptional service and the confidence you need to proceed."
-showroomButton: "Make a showroom appointment"
+showroomButton: "Come in for a free design consultation"
 contactLabel: "Contact"
-contactHeading: "Contact us today and make a showroom appointment."
+contactHeading: "Come in for a free design consultation."
 contactButton: "Contact us"
 ---

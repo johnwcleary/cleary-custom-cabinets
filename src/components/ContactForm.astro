@@ -1,78 +1,133 @@
 ---
+import { site } from '../lib/site';
+
 interface Props {
+  /** short: three questions, used on the home and cabinet pages. full: the longer form on /contact. */
+  variant?: 'short' | 'full';
+  heading?: string;
   helper?: string;
   class?: string;
 }
-const { helper, class: className } = Astro.props;
+const { variant = 'short', heading, helper, class: className } = Astro.props;
+const full = variant === 'full';
 ---
 
 <!--
   The form posts nowhere yet. At launch it is wired to a backend (Cloudflare Pages Function + email,
   or Formspree) — find it by data-form-backend. The honeypot field ("company") must stay empty.
 -->
-<form class:list={['hform', className]} action="#" method="post" data-form-backend="todo-phase-2" aria-describedby="form-helper">
-  <div class="grid grid-cols-1 gap-x-6 sm:grid-cols-2">
-    <p class="field">
-      <label for="cf-name" class="meta">Name</label>
-      <input id="cf-name" name="name" type="text" autocomplete="name" required />
-    </p>
-    <p class="field">
-      <label for="cf-email" class="meta">Email</label>
-      <input id="cf-email" name="email" type="email" autocomplete="email" required />
-    </p>
-    <p class="field sm:col-span-2">
-      <label for="cf-phone" class="meta">Telephone Number</label>
-      <input id="cf-phone" name="phone" type="tel" autocomplete="tel" />
-    </p>
-    <p class="field sm:col-span-2">
-      <label for="cf-message" class="meta">Please describe your project.</label>
-      <textarea id="cf-message" name="message" rows="6" required></textarea>
-    </p>
-  </div>
+<form class:list={['cform', className]} action="#" method="post" data-form-backend="todo-phase-2">
+  {heading && <h2 class="cform__title">{heading}</h2>}
+  <p class="cform__field">
+    <label for="cf-name">Your name</label>
+    <input id="cf-name" name="name" type="text" autocomplete="name" required />
+  </p>
+  {
+    full ? (
+      <>
+        <p class="cform__field">
+          <label for="cf-email">Your email</label>
+          <input id="cf-email" name="email" type="email" autocomplete="email" required />
+        </p>
+        <p class="cform__field">
+          <label for="cf-phone">Your phone number</label>
+          <input id="cf-phone" name="phone" type="tel" autocomplete="tel" />
+        </p>
+      </>
+    ) : (
+      <p class="cform__field">
+        <label for="cf-contact">Your phone number or email</label>
+        <input id="cf-contact" name="contact" type="text" required />
+      </p>
+    )
+  }
+  <p class="cform__field">
+    <label for="cf-message">Tell us about your project</label>
+    <textarea id="cf-message" name="message" rows={full ? 6 : 3} required={full}></textarea>
+  </p>
   <p class="sr-only-baseline" aria-hidden="true">
     <label for="cf-company">Leave this field empty</label>
     <input id="cf-company" name="company" type="text" tabindex="-1" autocomplete="off" />
   </p>
-  <div class="mt-8 flex flex-wrap items-center justify-between gap-4">
-    <p id="form-helper" class="smallcaps text-muted">{helper}</p>
-    <button type="submit" class="btn">Send</button>
-  </div>
+  {helper && <p class="cform__help">{helper}</p>}
+  <button type="submit" class="btn cform__send">Send</button>
+  <p class="cform__call">Or call us: <a href={site.phoneHref} class="ulink tabular-nums">{site.phone}</a></p>
 </form>
 
 <style>
-  .field {
+  .cform {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    margin: 0 0 1.75rem;
+    gap: 0.75rem;
+    height: 100%;
+    padding: clamp(1rem, 1.5vw, 1.375rem);
+    background: #fff;
+    border: 1px solid var(--color-line);
+    border-radius: 6px;
   }
-  .field label {
+  .cform__title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.625rem, 2.2vw, 2rem);
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+  .cform__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin: 0;
+  }
+  .cform__field:has(textarea) {
+    flex: 1;
+  }
+  .cform label {
+    font-size: 1.0625rem;
+    font-weight: 600;
+  }
+  .cform input,
+  .cform textarea {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.625rem 0.75rem;
+    background: #fff;
+    border: 1.5px solid #7d8083; /* 3.9:1 on white, so the box itself is easy to see */
+    border-radius: 4px;
+    font-size: 1.125rem;
+    line-height: 1.35;
+    color: var(--color-ink);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  @media (hover: hover) {
+    .cform input:hover,
+    .cform textarea:hover {
+      border-color: var(--color-ink);
+      box-shadow: 0 1px 4px rgb(35 38 43 / 0.12);
+    }
+  }
+  .cform textarea {
+    flex: 1;
+    min-height: 5rem;
+    resize: vertical;
+  }
+  .cform input:focus-visible,
+  .cform textarea:focus-visible {
+    outline: 3px solid var(--color-pencil);
+    outline-offset: 0;
+    border-color: var(--color-pencil);
+  }
+  .cform__help {
+    margin: 0;
     color: var(--color-muted);
   }
-  .field input,
-  .field textarea {
+  .cform__send {
+    justify-content: center;
     width: 100%;
-    background: var(--color-linen);
-    border: 1px solid var(--color-line);
-    border-radius: 2px;
-    padding: 0.85rem 1rem;
-    font-family: var(--font-serif);
-    font-size: 1.375rem;
-    line-height: 1.2;
-    color: var(--color-ink);
+    min-height: 3.5rem;
+    font-size: 1.25rem;
   }
-  .field textarea {
-    resize: vertical;
-    min-height: 9rem;
-  }
-  .field input:hover,
-  .field textarea:hover {
-    border-color: rgb(42 32 28 / 0.4);
-  }
-  .field input:focus-visible,
-  .field textarea:focus-visible {
-    outline: 2px solid var(--color-cherry);
-    outline-offset: 1px;
-    border-color: transparent;
+  .cform__call {
+    margin: 0;
+    text-align: center;
+    font-size: 1.0625rem;
   }
 </style>

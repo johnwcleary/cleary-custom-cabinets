@@ -12,39 +12,25 @@ interface Props {
   group?: string;
   eager?: boolean;
   class?: string;
-  /** Centre the caption under the image. */
-  center?: boolean;
 }
-const { image, caption, ratio = '4 / 5', sizes = '(min-width: 768px) 45vw, 92vw', group, eager = false, class: className, center = false } = Astro.props;
+const { image, caption, ratio = '4 / 3', sizes = '(min-width: 1024px) 30vw, (min-width: 640px) 46vw, 92vw', group, eager = false, class: className } = Astro.props;
 const maxWidth = image.width < 1600 ? `max-width: ${Math.round(image.width * 1.35)}px` : undefined;
 const style = `aspect-ratio: ${ratio === 'auto' ? `${image.width} / ${image.height}` : ratio}`;
 ---
 
-<figure class:list={['hfig', center && 'mx-auto text-center', className]} style={maxWidth}>
+<figure class={className} style={maxWidth}>
   {
     group ? (
-      <LightboxLink image={image} caption={caption} group={group} class="hfig__link vignette block">
-        <span class="block" style={style}>
+      <LightboxLink image={image} caption={caption} group={group} class="block">
+        <span class="block overflow-hidden rounded-[4px]" style={style}>
           <Image src={image} alt={caption} widths={widthsFor(image)} sizes={sizes} class="photo" loading={eager ? 'eager' : 'lazy'} />
         </span>
       </LightboxLink>
     ) : (
-      <span class="vignette block" style={style}>
+      <span class="block overflow-hidden rounded-[4px]" style={style}>
         <Image src={image} alt={caption} widths={widthsFor(image)} sizes={sizes} class="photo" loading={eager ? 'eager' : 'lazy'} />
       </span>
     )
   }
-  <figcaption class="smallcaps mt-3 text-muted">{caption}</figcaption>
+  <figcaption class="mt-1.5 text-[0.9375rem] leading-snug text-muted">{caption}</figcaption>
 </figure>
-
-<style>
-  @media (prefers-reduced-motion: no-preference) {
-    .hfig__link :global(.photo) {
-      transition: transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1), filter 0.6s;
-    }
-    .hfig__link:hover :global(.photo),
-    .hfig__link:focus-visible :global(.photo) {
-      transform: scale(1.025);
-    }
-  }
-</style>

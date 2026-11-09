@@ -11,29 +11,31 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const current = (href: string) => (path === href ? 'page' : undefined);
 ---
 
-<div class="bg-walnut text-linen on-dark">
-  <p class="meta wrap py-1.5 text-center text-[0.625rem] tracking-[0.08em] sm:py-2 sm:text-[0.6875rem] sm:tracking-[0.14em]">{site.announcement || site.serviceArea}</p>
+<div class="on-dark bg-pencil text-paper">
+  <p class="px-4 py-1.5 text-center text-[0.8125rem] font-medium">{site.announcement || site.serviceArea}</p>
 </div>
-<header class="relative z-40 border-b border-line bg-linen">
-  <div class="wrap grid h-16 grid-cols-[1fr_auto_1fr] items-center sm:h-[4.5rem] lg:h-24">
+<header class="sticky top-0 z-40 border-b border-line bg-paper">
+  <div class="frame flex h-14 items-center gap-5 lg:h-16 lg:gap-8">
+    <a href="/" class="shrink-0" aria-label={`${site.name}, home`}>
+      <Logo variant="mark" width={92} class="h-auto w-16 lg:w-[5.75rem]" />
+    </a>
     <nav aria-label="Main" class="hidden lg:block">
-      <ul class="meta flex items-center gap-7">
+      <ul class="flex items-center gap-7 text-[1.0625rem] font-medium">
         <li>
-          <button type="button" class="group flex items-center gap-1.5 py-2 uppercase" aria-expanded="false" aria-controls="cabinets-menu" data-disclosure>
+          <button type="button" class="nav-link flex cursor-pointer items-center gap-1.5" aria-expanded="false" aria-controls="cabinets-menu" data-disclosure>
             Cabinets
-            <svg width="9" height="9" viewBox="0 0 10 10" aria-hidden="true" class="group-aria-expanded:rotate-180"><path d="M1 3.5 5 7l4-3.5" fill="none" stroke="currentColor" stroke-width="1.2"></path></svg>
+            <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3.5 5 7l4-3.5" fill="none" stroke="currentColor" stroke-width="1.4"></path></svg>
           </button>
-          <div id="cabinets-menu" class="absolute inset-x-0 top-full border-b border-line bg-linen normal-case tracking-normal" hidden>
-            <ul class="wrap grid grid-cols-7 gap-4 py-8">
+          <div id="cabinets-menu" class="absolute inset-x-0 top-full border-b border-line bg-paper" hidden>
+            <ul class="frame grid grid-cols-7 gap-3 py-4">
               {
                 services.map((s) => (
                   <li>
                     <a href={serviceHref(s.data.slug)} class="group block" aria-current={current(serviceHref(s.data.slug))}>
-                      <span class="vignette mb-3 block aspect-[4/5] overflow-hidden">
-                        <Image src={s.data.heroImage} alt={heroCaption(s, gallery)} widths={widthsFor(s.data.heroImage, [240, 400])} sizes="12vw" class="photo" loading="lazy" />
+                      <span class="mb-2 block aspect-[4/3] overflow-hidden rounded-[4px]">
+                        <Image src={s.data.heroImage} alt={heroCaption(s, gallery)} widths={widthsFor(s.data.heroImage, [240, 400])} sizes="13vw" class="photo" loading="lazy" />
                       </span>
-                      <span class="serif block text-xl leading-tight group-hover:text-cherry">{s.data.shortName ?? s.data.title}</span>
-                      <span class="block text-xs leading-snug text-muted">{s.data.title}</span>
+                      <span class="block transition-colors duration-200 group-hover:text-pencil">{s.data.shortName ?? s.data.title}</span>
                     </a>
                   </li>
                 ))
@@ -41,46 +43,21 @@ const current = (href: string) => (path === href ? 'page' : undefined);
             </ul>
           </div>
         </li>
-        <li><a href="/about" class:list={['py-2', current('/about') && 'ulink']} aria-current={current('/about')}>About</a></li>
-        <li><a href="/contact" class:list={['py-2', current('/contact') && 'ulink']} aria-current={current('/contact')}>Contact</a></li>
+        <li><a href="/about" class:list={['nav-link', current('/about') && 'text-pencil']} aria-current={current('/about')}>About</a></li>
+        <li><a href="/contact" class:list={['nav-link', current('/contact') && 'text-pencil']} aria-current={current('/contact')}>Contact</a></li>
       </ul>
     </nav>
-    <a href="/" class="col-start-1 block w-28 justify-self-start sm:w-36 lg:col-start-2 lg:w-44 lg:justify-self-center" aria-label={`${site.name}, home`}>
-      <Logo width={176} class="h-auto w-full" />
-    </a>
-    <div class="col-start-3 flex items-center justify-end gap-2 sm:gap-5">
-      <a href={site.phoneHref} class="meta hidden whitespace-nowrap tabular-nums hover:text-cherry sm:inline">Call {site.phone}</a>
-      <!-- Phones: a call button instead of the number, to keep the bar quiet. -->
-      <a href={site.phoneHref} class="grid size-10 place-items-center rounded-full border border-ink sm:hidden" aria-label={`Call ${site.phone}`}>
-        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"></path></svg>
-      </a>
-      <button type="button" class="meta rounded-full border border-ink px-3.5 py-2 lg:hidden" aria-expanded="false" aria-controls="mobile-menu" data-disclosure>Menu</button>
-    </div>
+    <a href={site.phoneHref} class="ml-auto text-[1.125rem] font-semibold tabular-nums transition-colors duration-200 hover:text-pencil lg:text-[1.375rem]">{site.phone}</a>
+    <button type="button" class="cursor-pointer text-[1.0625rem] font-medium lg:hidden" aria-expanded="false" aria-controls="mobile-menu" data-disclosure>Menu</button>
   </div>
 
-  <div id="mobile-menu" class="absolute inset-x-0 top-full h-[calc(100dvh-4rem)] overflow-y-auto sm:h-[calc(100dvh-4.5rem)] bg-linen lg:hidden" hidden>
-    <nav aria-label="Main (mobile)" class="wrap py-8">
-      <p class="meta mb-4 text-muted">Cabinets &amp; products</p>
-      <ul class="mb-10 grid grid-cols-2 gap-x-4 gap-y-6">
-        {
-          services.map((s) => (
-            <li>
-              <a href={serviceHref(s.data.slug)} class="block" aria-current={current(serviceHref(s.data.slug))}>
-                <span class="mb-2 block aspect-[3/2] overflow-hidden">
-                  <Image src={s.data.heroImage} alt={heroCaption(s, gallery)} widths={widthsFor(s.data.heroImage, [320, 480])} sizes="45vw" class="photo" loading="lazy" />
-                </span>
-                <span class="serif block text-xl leading-tight">{s.data.shortName ?? s.data.title}</span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-      <ul class="serif mb-10 space-y-2 text-4xl">
-        <li><a href="/about" aria-current={current('/about')}>About</a></li>
+  <div id="mobile-menu" class="absolute inset-x-0 top-full h-[calc(100dvh-3.5rem)] overflow-y-auto bg-paper lg:hidden" hidden>
+    <nav aria-label="Main (mobile)" class="frame py-5">
+      <ul class="space-y-3 text-[1.5rem] font-medium">
+        {services.map((s) => <li><a href={serviceHref(s.data.slug)} aria-current={current(serviceHref(s.data.slug))}>{s.data.shortName ?? s.data.title}</a></li>)}
+        <li class="pt-3"><a href="/about" aria-current={current('/about')}>About</a></li>
         <li><a href="/contact" aria-current={current('/contact')}>Contact</a></li>
       </ul>
-      <p class="meta mb-1 text-muted">Call the showroom</p>
-      <p class="serif text-3xl"><a href={site.phoneHref} class="ulink">{site.phone}</a></p>
     </nav>
   </div>
 </header>
