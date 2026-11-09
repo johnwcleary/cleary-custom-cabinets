@@ -1,15 +1,27 @@
 ---
 /**
- * Three small line drawings for the three services: a front elevation (design), a measured plan
- * (site measuring) and an exploded frame-and-panel door (fabrication). Dimension lines carry no
- * figures on purpose; nothing here is a real job.
+ * Three small line drawings for the three services: a kitchen elevation (design), a reception desk
+ * (commercial) and a base cabinet's front and side views, its drawer pulled out (fabrication).
+ * Dimension lines carry no figures on purpose; nothing here is a real job.
  */
 interface Props {
-  kind: 'elevation' | 'plan' | 'door';
+  kind: 'elevation' | 'commercial' | 'cabinet';
   class?: string;
 }
 const { kind, class: className } = Astro.props;
 const slash = (x: number, y: number) => `M${x - 3} ${y + 3}l6 -6`;
+
+/*
+ * The fabrication drawing is a 36" base cabinet in inches: its front view on the left and its side
+ * view on the right, as on a shop drawing, with the top drawer pulled out in the side view.
+ */
+type Pt = [number, number];
+const [U, GROUND, FRONT_X, SIDE_X] = [3.6, 190, 29.6, 206]; // px per inch, ground line, left of front view, face of side view
+const front = (x: number, y: number): Pt => [FRONT_X + x * U, GROUND - y * U];
+const side = (z: number, y: number): Pt => [SIDE_X + z * U, GROUND - y * U];
+const path = (pts: Pt[], close = false) => 'M' + pts.map((p) => p.map((n) => n.toFixed(1)).join(' ')).join('L') + (close ? 'Z' : '');
+const box = (view: typeof front, x0: number, y0: number, x1: number, y1: number) => path([view(x0, y0), view(x1, y0), view(x1, y1), view(x0, y1)], true);
+const ticks = (...pts: Pt[]) => pts.map(([x, y]) => slash(x, y)).join('');
 ---
 
 <svg viewBox="0 0 320 210" class={className} aria-hidden="true" focusable="false">
@@ -46,46 +58,56 @@ const slash = (x: number, y: number) => `M${x - 3} ${y + 3}l6 -6`;
     )
   }
   {
-    kind === 'plan' && (
+    kind === 'commercial' && (
       <g>
-        <path class="w" fill-rule="evenodd" d="M44 38H286V178H240V172H280V44H50V172H200V178H44Z" />
-        <path class="l" d="M44 38H286V178H240V172H280V44H50V172H200V178H44Z" />
-        <rect class="v" x="110" y="38" width="80" height="6" />
-        <path class="l" d="M110 41H190" />
-        <path class="l" d="M200 172V132" />
-        <path class="l d" d="M200 132A40 40 0 0 1 240 172" />
-        <path class="l" d="M50 68H280M74 68V172" />
-        <rect class="l" x="138" y="49" width="44" height="14" rx="2" />
-        <rect class="l" x="124" y="100" width="76" height="34" />
-        <path class="l d" d="M124 106H200" />
-        <path class="p" d="M44 12V32M110 12V32M190 12V32M286 12V32M44 18H286" />
-        <path class="p" d={[44, 110, 190, 286].map((x) => slash(x, 18)).join('')} />
-        <path class="p" d="M16 38H38M16 178H38M22 38V178" />
-        <path class="p" d={[38, 178].map((y) => slash(22, y)).join('')} />
-        <path class="p" d="M44 184V204M200 184V204M240 184V204M286 184V204M44 198H286" />
-        <path class="p" d={[44, 200, 240, 286].map((x) => slash(x, 198)).join('')} />
+        <path class="l" d="M12 192H308" />
+        <rect class="l" x="30" y="30" width="260" height="52" />
+        <path class="l" d="M82 30V82M134 30V82M186 30V82M238 30V82" />
+        <path class="l d" d="M82 30 33 56 82 82M134 30 85 56 134 82M186 30 137 56 186 82M238 30 189 56 238 82M239 30 287 56 239 82" />
+        <rect class="l" x="36" y="110" width="248" height="8" />
+        <path class="l" d="M46 118V192M274 118V192M103 118V192M160 118V192M217 118V192" />
+        <rect class="l" x="53" y="126" width="43" height="58" />
+        <rect class="l" x="110" y="126" width="43" height="58" />
+        <rect class="l" x="167" y="126" width="43" height="58" />
+        <rect class="l" x="224" y="126" width="43" height="58" />
+        <path class="l d" d="M46 142H274" />
+        <path class="p" d="M30 6V24M134 8V24M186 8V24M290 6V24M30 14H290" />
+        <path class="p" d={[30, 134, 186, 290].map((x) => slash(x, 14)).join('')} />
+        <path class="p" d="M292 110h18M292 192h18M304 110V192" />
+        <path class="p" d={[110, 192].map((y) => slash(304, y)).join('')} />
       </g>
     )
   }
   {
-    kind === 'door' && (
+    kind === 'cabinet' && (
       <g>
-        <path class="c" d="M160 6V204" />
-        <rect class="l" x="70" y="16" width="20" height="178" />
-        <rect class="l" x="230" y="16" width="20" height="178" />
-        <rect class="l d" x="85" y="32" width="5" height="10" />
-        <rect class="l d" x="85" y="168" width="5" height="10" />
-        <rect class="l d" x="230" y="32" width="5" height="10" />
-        <rect class="l d" x="230" y="168" width="5" height="10" />
-        <path class="l d" d="M85 42V168M235 42V168" />
-        <rect class="l" x="112" y="26" width="96" height="22" />
-        <rect class="l" x="112" y="162" width="96" height="22" />
-        <path class="l" d="M112 32H100V42H112M208 32H220V42H208M112 168H100V178H112M208 168H220V178H208" />
-        <path class="l d" d="M112 43H208M112 167H208" />
-        <rect class="l" x="130" y="70" width="60" height="70" />
-        <rect class="l" x="138" y="78" width="44" height="54" />
-        <path class="l" d="M130 70 138 78M190 70 182 78M130 140 138 132M190 140 182 132" />
-        <path class="p d" d="M90 37H100M220 37H230M90 173H100M220 173H230M150 48V70M170 48V70M150 140V162M170 140V162" />
+        <path class="l" d={path([[12, GROUND], [314, GROUND]])} />
+        <path class="l t" d={box(front, 1, 0, 35, 4)} />
+        <path class="l" d={box(front, 0, 4, 36, 34.5)} />
+        <path class="l" d={box(front, -1, 34.5, 37, 36)} />
+        <path class="l" d={box(front, 1, 27.5, 35, 33.5)} />
+        <path class="l" d={path([front(14, 30.5), front(22, 30.5)])} />
+        <path class="l" d={box(front, 1, 5, 17.75, 26.5)} />
+        <path class="l" d={box(front, 18.25, 5, 35, 26.5)} />
+        <path class="l" d={box(front, 3, 7, 15.75, 24.5)} />
+        <path class="l" d={box(front, 20.25, 7, 33, 24.5)} />
+        <path class="l" d={path([front(16.5, 21.5), front(16.5, 25)]) + path([front(19.5, 21.5), front(19.5, 25)])} />
+
+        <path class="l" d={path([side(0, 34.5), side(24, 34.5), side(24, 0), side(3, 0), side(3, 4), side(0, 4)], true)} />
+        <path class="l" d={box(side, -1, 34.5, 24, 36)} />
+        <path class="l" d={box(side, -0.75, 5, 0, 26.5)} />
+        <path class="l" d={box(side, -8, 28, 0, 32.5)} />
+        <path class="l d" d={path([side(0, 28), side(14, 28), side(14, 32.5), side(0, 32.5)])} />
+        <path class="l" d={box(side, -8.75, 27.5, -8, 33.5)} />
+        <path class="l" d={path([side(-8.75, 31.2), side(-9.75, 31.2), side(-9.75, 29.8), side(-8.75, 29.8)])} />
+        <path class="l" d={path([0, 1, 2, 3, 4, 5].map((i): Pt => side(-8 + (i % 2 ? 0.9 : 0), 28.4 + i * 0.75)))} />
+
+        <path class="p" d={path([front(0, 37), front(0, 43)]) + path([front(36, 37), front(36, 43)]) + path([front(0, 41), front(36, 41)])} />
+        <path class="p" d={ticks(front(0, 41), front(36, 41))} />
+        <path class="p" d={path([side(0, 37), side(0, 43)]) + path([side(24, 37), side(24, 43)]) + path([side(0, 41), side(24, 41)])} />
+        <path class="p" d={ticks(side(0, 41), side(24, 41))} />
+        <path class="p" d={path([side(25, 0), side(28.5, 0)]) + path([side(25, 36), side(28.5, 36)]) + path([side(27, 0), side(27, 36)])} />
+        <path class="p" d={ticks(side(27, 0), side(27, 36))} />
       </g>
     )
   }
@@ -115,13 +137,15 @@ const slash = (x: number, y: number) => `M${x - 3} ${y + 3}l6 -6`;
   .d {
     stroke-dasharray: 3 3;
   }
-  .w {
-    fill: var(--color-ink);
-    fill-opacity: 0.16;
+  .t {
+    fill: color-mix(in srgb, var(--color-ink) 9%, var(--color-paper));
   }
-  .v {
-    fill: var(--color-paper);
-    stroke: var(--color-ink);
-    vector-effect: non-scaling-stroke;
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .l {
+      transition: stroke 0.25s ease;
+    }
+    :global(.svc:hover) .l {
+      stroke: var(--color-pencil);
+    }
   }
 </style>

@@ -1,67 +1,28 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ContactForm from '../components/ContactForm.astro';
-import Hours from '../components/Hours.astro';
 import SocialLinks from '../components/SocialLinks.astro';
-import Fig from '../components/sheet/Fig.astro';
-import SheetHead from '../components/sheet/SheetHead.astro';
 import { getPage } from '../lib/content';
 import { site } from '../lib/site';
 
 const contact = await getPage('contact');
-const about = await getPage('about');
-const h = (await getPage('home')).data;
-// These sources are small, so they run at about their own size rather than a full column.
-const showrooms = (about.data.photos ?? []).filter((p) => p.caption.startsWith('Our Showroom')).slice(2, 4);
 ---
 
 <BaseLayout title={contact.data.seoTitle}>
-  <div class="frame">
-    <section class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_38rem]" aria-labelledby="page-title">
-      <div class="flex flex-col">
-        <div class="wrap py-6 lg:py-8">
-          <p class="mono mb-3 text-muted">Contact</p>
-          <h1 id="page-title" class="page-title mb-5">Contact us</h1>
-          <p class="lead max-w-[30ch]">{contact.data.lead}</p>
-        </div>
-        <dl class="ruled mt-auto grid grid-cols-1 border-t border-line sm:grid-cols-2">
-          <div class="p-4">
-            <dt class="mono mb-2 text-muted">Find us:</dt>
-            <dd><a href={site.mapsUrl} rel="noopener" class="ulink">{site.address.street}<br />{site.address.city}, {site.address.state} {site.address.zip}</a></dd>
-          </div>
-          <div class="p-4">
-            <dt class="mono mb-2 text-muted">Call &amp; write</dt>
-            <dd>
-              <a href={site.phoneHref} class="caps text-[1.75rem] tabular-nums hover:text-pencil">{site.phone}</a><br />
-              <a href={`mailto:${site.email}`} class="ulink break-all text-[0.9375rem]">{site.email}</a>
-            </dd>
-          </div>
-          <div class="p-4">
-            <dt class="mono mb-2 text-muted">Follow us:</dt>
-            <dd><SocialLinks labels class="social-list flex flex-col gap-1.5" /></dd>
-          </div>
-          <div class="p-4">
-            <dt class="mono mb-2 text-muted">Service area</dt>
-            <dd>{site.serviceArea}</dd>
-          </div>
-        </dl>
+  <section class="frame section" aria-labelledby="page-title">
+    <h1 id="page-title" class="page-title mb-2">Contact us</h1>
+    <p class="lead mb-4 max-w-[40ch]">{contact.data.lead}</p>
+    <div class="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,38rem)_minmax(0,1fr)] lg:gap-10">
+      <div id="appointment">
+        <ContactForm variant="full" helper={contact.data.formHelper} />
       </div>
-      <div id="appointment" class="border-t border-ink lg:border-t-0 lg:border-l">
-        <ContactForm variant="full" helper={contact.data.formHelper} button={h.showroomButton} />
+      <div class="space-y-3 text-[1.125rem]">
+        <p><a href={site.phoneHref} class="text-[1.75rem] font-semibold tabular-nums hover:text-pencil">{site.phone}</a></p>
+        <p><a href={`mailto:${site.email}`} class="ulink [overflow-wrap:anywhere]">{site.email}</a></p>
+        <p><a href={site.mapsUrl} rel="noopener" class="ulink">{site.address.street}<br />{site.address.city}, {site.address.state} {site.address.zip}</a></p>
+        <p>{site.serviceArea}</p>
+        <SocialLinks labels class="social-list flex flex-col gap-1.5" />
       </div>
-    </section>
-
-    <section class="sheet" aria-labelledby="hours-title">
-      <SheetHead no="01" id="hours-title">Showroom hours</SheetHead>
-      <div class="grid grid-cols-1 lg:grid-cols-2">
-        <div class="wrap py-6 lg:py-8">
-          <p class="lead mb-7 max-w-[28ch]">Make a showroom appointment for the quality and service you deserve.</p>
-          <Hours class="hours-table max-w-lg" />
-        </div>
-        <div class="grid grid-cols-2 gap-3 border-t border-line p-3 lg:border-t-0 lg:border-l lg:p-4">
-          {showrooms.map((p, i) => <Fig image={p.image} caption={p.caption} no={i + 1} ratio="4 / 5" group="contact" sizes="(min-width: 1024px) 24vw, 45vw" />)}
-        </div>
-      </div>
-    </section>
-  </div>
+    </div>
+  </section>
 </BaseLayout>

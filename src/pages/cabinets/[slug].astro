@@ -5,157 +5,82 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ContactForm from '../../components/ContactForm.astro';
 import LightboxLink from '../../components/LightboxLink.astro';
 import Fig from '../../components/sheet/Fig.astro';
-import SheetHead from '../../components/sheet/SheetHead.astro';
-import Drawing from '../../components/sheet/Drawing.astro';
-import { getServices, getGallery, getPage, neighbours, serviceHref, splitFeatured, heroCaption, getAllGallery, type Service } from '../../lib/content';
-import { pad2, widthsFor } from '../../lib/img';
+import { getServices, getGallery, getPage, splitFeatured, heroCaption, getAllGallery, type Service } from '../../lib/content';
+import { widthsFor } from '../../lib/img';
 import { site } from '../../lib/site';
 
 export const getStaticPaths = (async () => {
   const services = await getServices();
-  return services.map((service) => ({ params: { slug: service.data.slug }, props: { service, services } }));
+  return services.map((service) => ({ params: { slug: service.data.slug }, props: { service } }));
 }) satisfies GetStaticPaths;
 
 interface Props {
   service: Service;
-  services: Service[];
 }
-const { service, services } = Astro.props;
+const { service } = Astro.props;
 const s = service.data;
 const h = (await getPage('home')).data;
 const items = await getGallery(s.slug);
 const all = await getAllGallery();
-const { prev, next } = neighbours(services, s.slug);
 const { featured, rest: others } = splitFeatured(items, s.heroImage.src);
 const [hero, ...rest] = featured;
 const heroAlt = heroCaption(service, all);
-// Blank cells on a three-column sheet get the drafting hatch rather than a hole.
-const blanks = (3 - (rest.length % 3)) % 3;
-const collectionBlanks = (6 - (others.length % 6)) % 6;
-const drawings = ['elevation', 'plan', 'door'] as const;
 ---
 
 <BaseLayout title={s.seoTitle} image={s.heroImage}>
-  <div class="frame">
-    <section class="grid grid-cols-1 lg:grid-cols-[minmax(0,5fr)_minmax(0,8fr)]" aria-labelledby="page-title">
-      <div class="wrap flex flex-col py-5 lg:py-7">
-        <p class="mono mb-3 flex gap-3 text-muted">
-          <a href="/#services" class="hover:text-pencil hover:underline">Cabinets &amp; products</a>
-          <span class="ml-auto">{pad2(s.order)} / {pad2(services.length)}</span>
-        </p>
-        <h1 id="page-title" class="page-title mb-5">{s.title}</h1>
-        {s.intro && <p class="lead max-w-[30ch] !text-[clamp(1.375rem,2vw,1.75rem)]">{s.intro}</p>}
-        {h.showroomButton && <p class="mt-5"><a href="#appointment" class="btn">{h.showroomButton} <span aria-hidden="true">→</span></a></p>}
-        <p class="dim mono mt-6 lg:mt-auto lg:pt-6"><span class="shrink-0">{items.length} photographs</span></p>
-      </div>
-      <div class="border-t border-line p-3 lg:border-t-0 lg:border-l lg:p-4">
-        {
-          hero ? (
-            <Fig image={hero.data.image} caption={hero.data.caption} no={hero.data.order} ratio="3 / 2" group={s.slug} eager sizes="(min-width: 1024px) 58vw, 92vw" class="mx-auto" />
-          ) : (
-            <Fig image={s.heroImage} caption={heroAlt} ratio="3 / 2" eager sizes="(min-width: 1024px) 58vw, 92vw" class="mx-auto" />
-          )
-        }
-      </div>
-    </section>
-
+  <section class="frame section grid grid-cols-1 items-center gap-4 lg:grid-cols-[minmax(0,5fr)_minmax(0,8fr)] lg:gap-8" aria-labelledby="page-title">
+    <div>
+      <h1 id="page-title" class="page-title mb-3">{s.title}</h1>
+      {s.intro && <p class="lead mb-4">{s.intro}</p>}
+      {h.showroomButton && <a href="#appointment" class="btn">{h.showroomButton}</a>}
+    </div>
     {
-      rest.length > 0 && (
-        <section class="sheet" aria-label={`${s.title}: featured photographs`}>
-          <ul class="ruled grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {rest.map((g) => (
-              <li class="p-3 lg:p-4">
-                <Fig image={g.data.image} caption={g.data.caption} no={g.data.order} group={s.slug} class="mx-auto" />
-              </li>
-            ))}
-            {Array.from({ length: blanks }).map(() => (
-              <li class="hatch hidden lg:block" aria-hidden="true" />
-            ))}
-          </ul>
-        </section>
+      hero ? (
+        <Fig image={hero.data.image} caption={hero.data.caption} ratio="3 / 2" group={s.slug} eager sizes="(min-width: 1024px) 58vw, 92vw" class="mx-auto w-full" />
+      ) : (
+        <Fig image={s.heroImage} caption={heroAlt} ratio="3 / 2" eager sizes="(min-width: 1024px) 58vw, 92vw" class="mx-auto w-full" />
       )
     }
+  </section>
 
-    {
-      others.length > 0 && (
-        <section class="sheet" aria-labelledby="collection-title">
-          <SheetHead no={pad2(s.order)} id="collection-title" note={`${others.length} more photographs`}>More from the collection</SheetHead>
-          <ul class="ruled grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
-            {others.map((g) => (
-              <li>
-                <LightboxLink image={g.data.image} caption={g.data.caption} group={s.slug} label={`Fig. ${g.data.order}`} class="coll block h-full p-2.5 focus-visible:[outline-offset:-3px]">
-                  <span class="block aspect-[4/3] overflow-hidden">
-                    <Image src={g.data.image} alt={g.data.caption} widths={widthsFor(g.data.image, [320, 560])} sizes="(min-width: 1024px) 15vw, (min-width: 640px) 30vw, 45vw" class="photo" />
-                  </span>
-                  <span class="mono mt-1.5 flex gap-2 text-muted">
-                    <span class="shrink-0 text-ink">{g.data.order}</span>
-                    <span>{g.data.caption}</span>
-                  </span>
-                </LightboxLink>
-              </li>
-            ))}
-            {collectionBlanks > 0 && <li class="hatch hidden lg:block" style={`grid-column: span ${collectionBlanks}`} aria-hidden="true" />}
-          </ul>
-        </section>
-      )
-    }
+  {
+    rest.length > 0 && (
+      <section class="frame pb-[clamp(1.25rem,2.4vw,2.25rem)]" aria-label={`${s.title}: featured photographs`}>
+        <ul class="grid grid-cols-1 gap-x-3 gap-y-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-4">
+          {rest.map((g) => <li><Fig image={g.data.image} caption={g.data.caption} group={s.slug} class="mx-auto" /></li>)}
+        </ul>
+      </section>
+    )
+  }
 
-    <section class="sheet grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_31rem]" aria-label="In closing">
-      <div class="flex flex-col">
-      <div class="wrap py-6 lg:py-8">
-        <p class="lead mb-4 max-w-[32ch]">{s.closing || site.tagline}</p>
-        {s.closingAside && <p class="mb-4 max-w-[46ch] text-muted">{s.closingAside}</p>}
-        {
-          s.video && (
-            <p class="text-[0.9375rem]">
-              <span class="mono mr-2 text-muted">Video</span>
-              <a href={s.video.url} rel="noopener" class="ulink">{s.video.title}</a> <span class="text-muted">(Vimeo)</span>
-            </p>
-          )
-        }
-      </div>
-      <ol class="ruled mt-auto hidden grid-cols-3 border-t border-line sm:grid">
-        {
-          site.services.map((name, i) => (
-            <li class="flex flex-col p-3 lg:p-4">
-              {drawings[i] && <Drawing kind={drawings[i]} class="mb-3 mt-auto" />}
-              <span class="caps text-[1.25rem]">{name}</span>
-            </li>
-          ))
-        }
-      </ol>
-      </div>
-      <div id="appointment" class="border-t border-ink lg:border-t-0 lg:border-l">
-        <ContactForm label={h.contactLabel} heading={h.contactHeading} button={h.showroomButton} />
-      </div>
-    </section>
-
-    <nav class="sheet" aria-label="More cabinets and products">
-      <ul class="ruled grid grid-cols-2">
-        {
-          [
-            { svc: prev, rel: 'prev', dir: 'Previous' },
-            { svc: next, rel: 'next', dir: 'Next' },
-          ].map(({ svc, rel, dir }) => (
+  {
+    others.length > 0 && (
+      <section class="frame pb-[clamp(1.25rem,2.4vw,2.25rem)]" aria-labelledby="collection-title">
+        <h2 id="collection-title" class="heading mb-3">More from the collection</h2>
+        <ul class="grid grid-cols-2 gap-x-3 gap-y-4 sm:grid-cols-3 lg:grid-cols-5">
+          {others.map((g) => (
             <li>
-              <a href={serviceHref(svc.data.slug)} rel={rel} class:list={['pn block h-full p-3 focus-visible:[outline-offset:-3px] lg:p-4', dir === 'Next' && 'text-right']}>
-                <span class="mono mb-1 block text-muted">{dir === 'Previous' && '← '}{dir} {pad2(svc.data.order)}{dir === 'Next' && ' →'}</span>
-                <span class="caps block text-[1.75rem] lg:text-[2.25rem]">{svc.data.shortName ?? svc.data.title}</span>
-              </a>
+              <LightboxLink image={g.data.image} caption={g.data.caption} group={s.slug} class="block">
+                <span class="block aspect-[4/3] overflow-hidden rounded-[4px]">
+                  <Image src={g.data.image} alt={g.data.caption} widths={widthsFor(g.data.image, [320, 560])} sizes="(min-width: 1024px) 18vw, (min-width: 640px) 30vw, 45vw" class="photo" />
+                </span>
+                <span class="mt-1.5 block text-[0.9375rem] leading-snug text-muted">{g.data.caption}</span>
+              </LightboxLink>
             </li>
-          ))
-        }
-      </ul>
-    </nav>
-  </div>
-</BaseLayout>
+          ))}
+        </ul>
+      </section>
+    )
+  }
 
-<style>
-  .pn:hover .caps,
-  .pn:focus-visible .caps {
-    color: var(--color-pencil);
-  }
-  .coll:hover .text-ink {
-    color: var(--color-pencil);
-  }
-</style>
+  <section class="frame section grid grid-cols-1 items-center gap-5 lg:grid-cols-[minmax(0,1fr)_27rem] lg:gap-10" aria-label="In closing">
+    <div>
+      <p class="lead mb-3">{s.closing || site.tagline}</p>
+      {s.closingAside && <p class="mb-4 max-w-[46ch] text-muted">{s.closingAside}</p>}
+      {s.video && <p><a href={s.video.url} rel="noopener" class="ulink">{s.video.title}</a> <span class="text-muted">(video)</span></p>}
+    </div>
+    <div id="appointment">
+      <ContactForm heading={h.contactHeading} />
+    </div>
+  </section>
+</BaseLayout>

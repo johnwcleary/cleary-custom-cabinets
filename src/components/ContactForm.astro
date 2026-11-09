@@ -2,15 +2,13 @@
 import { site } from '../lib/site';
 
 interface Props {
-  /** ticket: the short job ticket used high on the home page. full: the longer form on /contact. */
-  variant?: 'ticket' | 'full';
-  label?: string;
+  /** short: three questions, used on the home and cabinet pages. full: the longer form on /contact. */
+  variant?: 'short' | 'full';
   heading?: string;
-  button?: string;
   helper?: string;
   class?: string;
 }
-const { variant = 'ticket', label, heading, button = 'Send', helper, class: className } = Astro.props;
+const { variant = 'short', heading, helper, class: className } = Astro.props;
 const full = variant === 'full';
 ---
 
@@ -18,247 +16,118 @@ const full = variant === 'full';
   The form posts nowhere yet. At launch it is wired to a backend (Cloudflare Pages Function + email,
   or Formspree) — find it by data-form-backend. The honeypot field ("company") must stay empty.
 -->
-<form class:list={['ticket', className]} action="#" method="post" data-form-backend="todo-phase-2">
+<form class:list={['cform', className]} action="#" method="post" data-form-backend="todo-phase-2">
+  {heading && <h2 class="cform__title">{heading}</h2>}
+  <p class="cform__field">
+    <label for="cf-name">Your name</label>
+    <input id="cf-name" name="name" type="text" autocomplete="name" required />
+  </p>
   {
-    heading && (
-      <div class="ticket__head">
-        {label && <p class="mono mb-1.5 text-muted">{label}</p>}
-        <h2 class="lead !text-[clamp(1.5rem,2.1vw,1.875rem)]">{heading}</h2>
-      </div>
-    )
-  }
-  <fieldset class="ticket__row">
-    <legend class="mono ticket__legend">Client</legend>
-    <div class="ticket__choices">
-      {
-        site.clients.map((c, i) => (
-          <label class="ticket__choice">
-            <input type="radio" name="client" value={c} id={`cf-client-${i}`} />
-            <span>{c}</span>
-          </label>
-        ))
-      }
-    </div>
-  </fieldset>
-  <div class="ticket__row ticket__pair">
-    <p class="ticket__cell">
-      <label for="cf-name" class="mono">Name</label>
-      <input id="cf-name" name="name" type="text" autocomplete="name" required />
-    </p>
-    {
-      full ? (
-        <p class="ticket__cell">
-          <label for="cf-email" class="mono">Email</label>
+    full ? (
+      <>
+        <p class="cform__field">
+          <label for="cf-email">Your email</label>
           <input id="cf-email" name="email" type="email" autocomplete="email" required />
         </p>
-      ) : (
-        <p class="ticket__cell">
-          <label for="cf-contact" class="mono">Phone or email</label>
-          <input id="cf-contact" name="contact" type="text" autocomplete="on" required />
+        <p class="cform__field">
+          <label for="cf-phone">Your phone number</label>
+          <input id="cf-phone" name="phone" type="tel" autocomplete="tel" />
         </p>
-      )
-    }
-  </div>
-  {
-    full && (
-      <p class="ticket__row ticket__cell">
-        <label for="cf-phone" class="mono">Telephone Number</label>
-        <input id="cf-phone" name="phone" type="tel" autocomplete="tel" />
+      </>
+    ) : (
+      <p class="cform__field">
+        <label for="cf-contact">Your phone number or email</label>
+        <input id="cf-contact" name="contact" type="text" required />
       </p>
     )
   }
-  <p class="ticket__row ticket__cell ticket__grow">
-    <label for="cf-message" class="mono">Please describe your project.</label>
+  <p class="cform__field">
+    <label for="cf-message">Tell us about your project</label>
     <textarea id="cf-message" name="message" rows={full ? 6 : 3} required={full}></textarea>
   </p>
   <p class="sr-only-baseline" aria-hidden="true">
     <label for="cf-company">Leave this field empty</label>
     <input id="cf-company" name="company" type="text" tabindex="-1" autocomplete="off" />
   </p>
-  {helper && <p class="ticket__row mono px-4 py-2 text-muted">{helper}</p>}
-  <div class="ticket__row ticket__foot">
-    <button type="submit" class="btn">{button} <span aria-hidden="true">→</span></button>
-    <a href={site.phoneHref} class="ticket__call">
-      <span class="mono text-muted">Call</span>
-      <span class="caps text-[1.5rem] tabular-nums">{site.phone}</span>
-    </a>
-  </div>
+  {helper && <p class="cform__help">{helper}</p>}
+  <button type="submit" class="btn cform__send">Send</button>
+  <p class="cform__call">Or call us: <a href={site.phoneHref} class="ulink tabular-nums">{site.phone}</a></p>
 </form>
 
 <style>
-  .ticket {
+  .cform {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    background: var(--color-sheet);
-  }
-  .ticket__head {
-    padding: 0.875rem 1rem 0.9375rem;
-  }
-  .ticket__row {
-    margin: 0;
-    border: 0;
-    border-top: 1px solid var(--color-line);
-    min-width: 0;
-  }
-  fieldset.ticket__row {
-    padding: 0;
-  }
-  .ticket__legend {
-    float: left;
-    width: 100%;
-    padding: 0.5rem 1rem 0.375rem;
-    color: var(--color-muted);
-  }
-  .ticket__choices {
-    clear: both;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    border-top: 1px solid var(--color-line);
-  }
-  .ticket__choice + .ticket__choice {
-    border-left: 1px solid var(--color-line);
-  }
-  .ticket__choice {
-    position: relative;
-    display: grid;
-    cursor: pointer;
-  }
-  .ticket__choice input {
-    position: absolute;
-    inset: 0;
-    margin: 0;
-    opacity: 0;
-    cursor: pointer;
-  }
-  .ticket__choice span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 3rem;
-    padding: 0.375rem 0.5rem;
-    text-align: center;
-    font-family: var(--font-display);
-    font-size: 1.0625rem;
-    font-weight: 500;
-    line-height: 1.05;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-  }
-  .ticket__choice:hover span {
-    color: var(--color-pencil);
-  }
-  .ticket__choice input:checked + span {
-    background: var(--color-ink);
-    color: var(--color-paper);
-  }
-  .ticket__choice input:focus-visible + span {
-    outline: 2px solid var(--color-pencil);
-    outline-offset: -2px;
-  }
-  .ticket__call {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
     gap: 0.75rem;
-    padding: 0.5rem 1rem;
-    border-top: 1px solid var(--color-line);
+    height: 100%;
+    padding: clamp(1rem, 1.5vw, 1.375rem);
+    background: #fff;
+    border: 1px solid var(--color-line);
+    border-radius: 6px;
   }
-  .ticket__pair {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
+  .cform__title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.625rem, 2.2vw, 2rem);
+    line-height: 1.2;
+    text-wrap: balance;
   }
-  @media (min-width: 30rem) {
-    .ticket__pair {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .ticket__pair .ticket__cell + .ticket__cell {
-      border-left: 1px solid var(--color-line);
-    }
-  }
-  @media (max-width: 29.99rem) {
-    .ticket__pair .ticket__cell + .ticket__cell {
-      border-top: 1px solid var(--color-line);
-    }
-  }
-  .ticket__cell {
+  .cform__field {
     display: flex;
     flex-direction: column;
+    gap: 0.25rem;
     margin: 0;
-    min-width: 0;
   }
-  .ticket__cell label {
-    padding: 0.5rem 1rem 0;
-    color: var(--color-muted);
+  .cform__field:has(textarea) {
+    flex: 1;
   }
-  .ticket__cell input,
-  .ticket__cell textarea {
-    width: 100%;
-    padding: 0.125rem 1rem 0.625rem;
-    background: transparent;
+  .cform label {
     font-size: 1.0625rem;
+    font-weight: 600;
+  }
+  .cform input,
+  .cform textarea {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.625rem 0.75rem;
+    background: #fff;
+    border: 1.5px solid #7d8083; /* 3.9:1 on white, so the box itself is easy to see */
+    border-radius: 4px;
+    font-size: 1.125rem;
     line-height: 1.35;
     color: var(--color-ink);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
-  /* The project box is ruled like the writing lines on a work order. */
-  .ticket__cell textarea {
+  @media (hover: hover) {
+    .cform input:hover,
+    .cform textarea:hover {
+      border-color: var(--color-ink);
+      box-shadow: 0 1px 4px rgb(35 38 43 / 0.12);
+    }
+  }
+  .cform textarea {
     flex: 1;
+    min-height: 5rem;
     resize: vertical;
-    min-height: 5.25rem;
-    margin-top: 0.125rem;
-    padding: 0 1rem;
-    line-height: 1.75rem;
-    background-image: linear-gradient(transparent calc(1.75rem - 1px), var(--color-line) calc(1.75rem - 1px));
-    background-size: calc(100% - 2rem) 1.75rem;
-    background-position: 1rem 0;
-    background-repeat: repeat-y;
-    background-attachment: local;
   }
-  .ticket__cell:focus-within {
-    background: #fff;
+  .cform input:focus-visible,
+  .cform textarea:focus-visible {
+    outline: 3px solid var(--color-pencil);
+    outline-offset: 0;
+    border-color: var(--color-pencil);
   }
-  .ticket__cell:focus-within label {
-    color: var(--color-pencil);
+  .cform__help {
+    margin: 0;
+    color: var(--color-muted);
   }
-  .ticket__cell input:focus-visible,
-  .ticket__cell textarea:focus-visible {
-    outline: none;
-    box-shadow: inset 0 -2px 0 var(--color-pencil);
-  }
-  .ticket__grow {
-    flex: 1;
-  }
-  .ticket__foot {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-  }
-  @media (min-width: 30rem) {
-    .ticket__foot {
-      grid-template-columns: minmax(0, 1fr) auto;
-    }
-    .ticket__call {
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
-      gap: 0.125rem;
-      border-top: 0;
-      border-left: 1px solid var(--color-line);
-    }
-  }
-  @media (max-width: 22rem) {
-    .ticket__foot .btn {
-      font-size: 1.0625rem;
-    }
-  }
-  .ticket__foot .btn {
+  .cform__send {
+    justify-content: center;
     width: 100%;
-    padding-block: 1.05rem;
-    white-space: nowrap;
+    min-height: 3.5rem;
+    font-size: 1.25rem;
   }
-  .ticket__call:hover .caps {
-    color: var(--color-pencil);
-  }
-  .ticket__call:focus-visible {
-    outline-offset: -2px;
+  .cform__call {
+    margin: 0;
+    text-align: center;
+    font-size: 1.0625rem;
   }
 </style>

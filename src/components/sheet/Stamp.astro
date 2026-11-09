@@ -1,0 +1,48 @@
+---
+import favicon from '../../../public/favicon.svg?raw';
+import { site } from '../../lib/site';
+import { getPage } from '../../lib/content';
+
+interface Props {
+  class?: string;
+  /** Unique on the page: names the ink filter and the text paths. */
+  id: string;
+  /** Tilt in degrees, so no two stamps land quite the same way. */
+  tilt?: number;
+}
+const { class: className, id, tilt = -9 } = Astro.props;
+const home = await getPage('home');
+// The real facts only: name and town on the top arc, the family line on the bottom arc.
+const top = `${site.name} · ${site.address.city}, ${site.address.state}`.toUpperCase();
+const bottom = (home.data.heroSubtitle ?? '').toUpperCase();
+const mark = favicon.match(/ d="([^"]+)"/)![1];
+const viewBox = favicon.match(/viewBox="([^"]+)"/)![1].split(' ').map(Number);
+const label = `${site.name}, ${site.address.city}, ${site.address.state}. ${home.data.heroSubtitle ?? ''}`;
+---
+
+<svg class={className} viewBox="0 0 200 200" role="img" aria-label={label} style={`transform: rotate(${tilt}deg)`}>
+  <defs>
+    <!-- Roughens every edge a little and thins the ink in patches, like a hand stamp. -->
+    <filter id={`${id}-ink`} x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4" result="grain" />
+      <feDisplacementMap in="SourceGraphic" in2="grain" scale="1.4" result="rough" />
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="11" result="patches" />
+      <feColorMatrix in="patches" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.1 1.55" result="wear" />
+      <feComposite in="rough" in2="wear" operator="in" />
+    </filter>
+    <path id={`${id}-top`} d="M 100 100 m -76 0 a 76 76 0 0 1 152 0" fill="none" />
+    <path id={`${id}-bottom`} d="M 100 100 m -83.5 0 a 83.5 83.5 0 0 0 167 0" fill="none" />
+  </defs>
+  <g filter={`url(#${id}-ink)`} fill="currentColor">
+    <circle cx="100" cy="100" r="96" fill="none" stroke="currentColor" stroke-width="2.4" />
+    <circle cx="100" cy="100" r="91.5" fill="none" stroke="currentColor" stroke-width="0.8" />
+    <circle cx="100" cy="100" r="66" fill="none" stroke="currentColor" stroke-width="0.8" />
+    <g font-family="var(--font-sans)" font-size="10" font-weight="600">
+      <text><textPath href={`#${id}-top`} startOffset="50%" text-anchor="middle" textLength="226" lengthAdjust="spacing">{top}</textPath></text>
+      <text font-size="8.4"><textPath href={`#${id}-bottom`} startOffset="50%" text-anchor="middle" textLength="236" lengthAdjust="spacing">{bottom}</textPath></text>
+    </g>
+    <svg x="48" y="48" width="104" height="104" viewBox={viewBox.join(' ')}>
+      <path fill-rule="evenodd" d={mark} />
+    </svg>
+  </g>
+</svg>

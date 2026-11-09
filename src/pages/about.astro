@@ -2,12 +2,8 @@
 import { render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Fig from '../components/sheet/Fig.astro';
-import SheetHead from '../components/sheet/SheetHead.astro';
-import Drawing from '../components/sheet/Drawing.astro';
-import Hours from '../components/Hours.astro';
 import { getPage, getBrandGroups } from '../lib/content';
 import { site } from '../lib/site';
-import { pad2 } from '../lib/img';
 
 const about = await getPage('about');
 const { Content } = await render(about);
@@ -15,93 +11,40 @@ const brands = await getBrandGroups();
 const h = (await getPage('home')).data;
 const photos = about.data.photos ?? [];
 const exterior = photos.find((p) => p.caption.startsWith('Our Small Business'));
-const showrooms = photos.filter((p) => p.caption.startsWith('Our Showroom'));
-const shop = photos.find((p) => p.caption.startsWith('Our Shop'));
-const strip = [showrooms[0], showrooms[1], shop].filter((p) => !!p);
-const withHours = showrooms.slice(2);
-const drawings = ['elevation', 'plan', 'door'] as const;
-const brandBlanks = (4 - (brands.length % 4)) % 4;
+const others = photos.filter((p) => p !== exterior);
 ---
 
 <BaseLayout title={about.data.seoTitle} image={exterior?.image}>
-  <div class="frame">
-    <section class="grid grid-cols-1 lg:grid-cols-2" aria-labelledby="page-title">
-      <div class="wrap flex flex-col py-6 lg:py-8">
-        <p class="mono mb-3 text-muted">About</p>
-        <h1 id="page-title" class="page-title mb-6">About {site.name}</h1>
-        <div class="about-copy max-w-[56ch] text-[1.0625rem] leading-[1.65]"><Content /></div>
-        <p class="mt-7 flex flex-wrap gap-2">
-          {h.showroomButton && <a href="/#appointment" class="btn">{h.showroomButton} <span aria-hidden="true">→</span></a>}
-          <a href={site.phoneHref} class="btn btn-ghost tabular-nums">{site.phone}</a>
-        </p>
-        <p class="dim mono mt-auto hidden pt-7 lg:flex"><span class="shrink-0">{site.serviceArea}</span></p>
-      </div>
-      <div class="flex flex-col gap-4 border-t border-line p-3 lg:border-t-0 lg:border-l lg:p-4">
-        {exterior && <Fig image={exterior.image} caption={exterior.caption} no={1} ratio="16 / 9" group="about" eager sizes="(min-width: 1024px) 45vw, 92vw" class="w-full" />}
-        <div class="grid grid-cols-3 gap-3">
-          {strip.map((p, i) => <Fig image={p!.image} caption={p!.caption} no={i + 2} ratio="4 / 5" group="about" sizes="(min-width: 1024px) 15vw, 30vw" />)}
-        </div>
-      </div>
-    </section>
+  <section class="frame section grid grid-cols-1 gap-5 lg:grid-cols-2 lg:gap-10" aria-labelledby="page-title">
+    <div>
+      <h1 id="page-title" class="page-title mb-3">About {site.name}</h1>
+      <div class="lead !text-[1.25rem] !leading-[1.55]"><Content /></div>
+      {h.showroomButton && <p class="mt-4"><a href="/#appointment" class="btn">{h.showroomButton}</a></p>}
+    </div>
+    {exterior && <Fig image={exterior.image} caption={exterior.caption} ratio="16 / 10" group="about" eager sizes="(min-width: 1024px) 45vw, 92vw" />}
+  </section>
 
-    <section class="sheet" aria-labelledby="services-title">
-      <SheetHead no="01" id="services-title">Services</SheetHead>
-      <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,9fr)_minmax(0,5fr)]">
-        <ol class="ruled grid grid-cols-1 sm:grid-cols-3">
-          {
-            site.services.map((name, i) => (
-              <li class="flex flex-col p-3 lg:p-4">
-                <span class="mono mb-3 text-muted">{pad2(i + 1)}</span>
-                {drawings[i] && <Drawing kind={drawings[i]} class="mb-4 mt-auto" />}
-                <span class="caps text-[1.5rem] lg:text-[1.75rem]">{name}</span>
-              </li>
-            ))
-          }
-        </ol>
-        <div class="wrap border-t border-line py-5 lg:border-t-0 lg:border-l">
-          <h2 class="mono mb-3 text-muted">Clients</h2>
-          <ul>{site.clients.map((x) => <li class="caps border-t border-line py-2.5 text-[1.5rem] last:border-b">{x}</li>)}</ul>
-        </div>
-      </div>
-    </section>
+  <section class="frame section" aria-label="Our showroom and shop">
+    <ul class="grid grid-cols-2 gap-3 lg:grid-cols-5">
+      {others.map((p) => <li><Fig image={p.image} caption={p.caption} ratio="4 / 5" group="about" sizes="(min-width: 1024px) 18vw, 46vw" /></li>)}
+    </ul>
+  </section>
 
-    <section class="sheet" aria-labelledby="hours-title">
-      <SheetHead no="02" id="hours-title">Showroom hours</SheetHead>
-      <div class="grid grid-cols-1 lg:grid-cols-2">
-        <div class="wrap py-6 lg:py-8">
-          <Hours class="hours-table mb-6 max-w-lg text-lg" />
-          <p class="mb-6"><a href={site.mapsUrl} rel="noopener" class="ulink">{site.address.street}, {site.address.city}, {site.address.state} {site.address.zip}</a></p>
-          {h.showroomButton && <a href="/#appointment" class="btn">{h.showroomButton} <span aria-hidden="true">→</span></a>}
-        </div>
-        <div class="grid grid-cols-2 gap-3 border-t border-line p-3 lg:border-t-0 lg:border-l lg:p-4">
-          {withHours.map((p, i) => <Fig image={p.image} caption={p.caption} no={i + 5} ratio="4 / 5" group="about" sizes="(min-width: 1024px) 24vw, 45vw" />)}
-        </div>
-      </div>
-    </section>
-
-    <section class="sheet" aria-labelledby="lines-title">
-      <SheetHead no="03" id="lines-title">Lines we distribute</SheetHead>
-      <div class="ruled grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-        {
-          brands.map((g) => (
-            <section aria-label={g.data.label} class="p-3 lg:p-4">
-              <h3 class="mono mb-2.5 text-muted">{g.data.label}</h3>
-              <ul class="space-y-0.5 leading-snug">
-                {g.data.items.map((b) => (
-                  <li>{b.url ? <a href={b.url} rel="noopener" class="hover:text-pencil hover:underline hover:underline-offset-4">{b.name}</a> : <span>{b.name}</span>}</li>
-                ))}
-              </ul>
-            </section>
-          ))
-        }
-        {Array.from({ length: brandBlanks }).map(() => <div class="hatch hidden lg:block" aria-hidden="true" />)}
-      </div>
-    </section>
-  </div>
+  <section class="frame section" aria-labelledby="lines-title">
+    <h2 id="lines-title" class="heading mb-3">Lines we distribute</h2>
+    <div class="grid grid-cols-2 gap-x-5 gap-y-5 lg:grid-cols-4">
+      {
+        brands.map((g) => (
+          <section aria-label={g.data.label}>
+            <h3 class="mb-2 font-semibold">{g.data.label}</h3>
+            <ul class="space-y-0.5 leading-snug">
+              {g.data.items.map((b) => (
+                <li>{b.url ? <a href={b.url} rel="noopener" class="hover:text-pencil hover:underline hover:underline-offset-4">{b.name}</a> : <span>{b.name}</span>}</li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+  </section>
 </BaseLayout>
-
-<style>
-  .about-copy :global(p) {
-    text-wrap: pretty;
-  }
-</style>

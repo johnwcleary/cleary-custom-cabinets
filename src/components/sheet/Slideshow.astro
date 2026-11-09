@@ -1,0 +1,154 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import { getServices, getAllGallery, getPage, heroCaption } from '../../lib/content';
+import { widthsFor } from '../../lib/img';
+
+const h = (await getPage('home')).data;
+const services = await getServices();
+const gallery = await getAllGallery();
+const wide = (i: ImageMetadata) => i.width >= 1600 && i.width / i.height >= 1.2;
+
+// The Home hero first, then one photo per product: its hero image if that is large and wide enough,
+// otherwise its first featured photo that is. All of these are chosen in Storyblok.
+type Slide = { image: ImageMetadata; caption: string };
+const slides: Slide[] = [{ image: h.heroImage!, caption: h.heroCaption ?? '' }];
+for (const s of services) {
+  const own = gallery.filter((g) => g.data.service === s.data.slug && g.data.featured).sort((a, b) => a.data.order - b.data.order);
+  const pick = wide(s.data.heroImage) ? { image: s.data.heroImage, caption: heroCaption(s, gallery) } : own.map((g) => ({ image: g.data.image, caption: g.data.caption })).find((g) => wide(g.image));
+  if (pick && !slides.some((x) => x.image.src === pick.image.src)) slides.push(pick);
+}
+---
+
+<div class="show relative aspect-[4/3] w-full overflow-hidden rounded-[6px] sm:aspect-[16/10] lg:aspect-auto lg:h-full lg:min-h-[24rem]" data-show role="group" aria-roledescription="carousel" aria-label="Photographs of our work">
+  {
+    slides.map((s, i) => (
+      <div class:list={['show__slide', i === 0 && 'is-active']} role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${slides.length}`} data-slide>
+        <Image src={s.image} alt={s.caption} widths={widthsFor(s.image, [800, 1200, 1600, 2000])} sizes="(min-width: 1024px) 62vw, 100vw" class="photo" loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : undefined} />
+      </div>
+    ))
+  }
+  {
+    slides.length > 1 && (
+      <button type="button" class="show__toggle" aria-label="Pause slideshow" data-show-toggle>
+        <span data-icon-pause><svg width="12" height="12" viewBox="0 0 10 10" aria-hidden="true" fill="currentColor"><path d="M1.5 0h2.5v10H1.5zM6 0h2.5v10H6z"></path></svg></span>
+        <span data-icon-play hidden><svg width="12" height="12" viewBox="0 0 10 10" aria-hidden="true" fill="currentColor"><path d="M1.5 0 9.5 5l-8 5z"></path></svg></span>
+      </button>
+    )
+  }
+</div>
+
+<style>
+  .show__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    /* Only the current and next slides are laid out, so the others' photos are not downloaded. */
+    display: none;
+    transition: opacity 0.9s ease, visibility 0s linear 0.9s;
+  }
+  .show__slide:global(.is-ready),
+  .show__slide:global(.is-active) {
+    display: block;
+  }
+  .show__slide:global(.is-active) {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.9s ease;
+  }
+  .show__toggle {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background: rgb(250 248 242 / 0.88);
+    color: var(--color-ink);
+    cursor: pointer;
+  }
+  .show__toggle:hover {
+    background: var(--color-paper);
+  }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .show__toggle {
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+    .show__toggle:hover {
+      transform: scale(1.06);
+    }
+  }
+  .show__toggle [hidden] {
+    display: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .show__slide,
+    .show__slide:global(.is-active) {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const INTERVAL = 6000;
+  document.querySelectorAll<HTMLElement>('[data-show]').forEach((root) => {
+    const slides = [...root.querySelectorAll<HTMLElement>('[data-slide]')];
+    if (slides.length < 2) return;
+    const toggle = root.querySelector<HTMLButtonElement>('[data-show-toggle]')!;
+    const iconPause = toggle.querySelector<HTMLElement>('[data-icon-pause]')!;
+    const iconPlay = toggle.querySelector<HTMLElement>('[data-icon-play]')!;
+
+    let current = 0;
+    let timer: number | undefined;
+    let held = false; // the pointer or keyboard focus is on the slideshow
+    let stopped = matchMedia('(prefers-reduced-motion: reduce)').matches; // paused by the visitor, or by their settings
+
+    const at = (n: number) => (n + slides.length) % slides.length;
+    // Fetch the next photo ahead of time, so a slide never fades in half loaded.
+    const prepare = (n: number) => slides[at(n)].classList.add('is-ready');
+
+    async function go(n: number) {
+      const next = at(n);
+      prepare(next);
+      await slides[next].querySelector('img')?.decode().catch(() => {});
+      slides[current].classList.remove('is-active');
+      slides[next].classList.add('is-active');
+      current = next;
+      prepare(next + 1);
+      schedule();
+    }
+    function schedule() {
+      clearTimeout(timer);
+      timer = undefined;
+      if (!stopped && !held && !document.hidden) timer = window.setTimeout(() => go(current + 1), INTERVAL);
+    }
+    function paint() {
+      toggle.setAttribute('aria-label', stopped ? 'Play slideshow' : 'Pause slideshow');
+      iconPause.toggleAttribute('hidden', stopped);
+      iconPlay.toggleAttribute('hidden', !stopped);
+    }
+
+    toggle.addEventListener('click', () => {
+      stopped = !stopped;
+      paint();
+      schedule();
+    });
+    const hold = (on: boolean) => () => {
+      held = on;
+      schedule();
+    };
+    root.addEventListener('pointerenter', hold(true));
+    root.addEventListener('pointerleave', hold(false));
+    root.addEventListener('focusin', hold(true));
+    root.addEventListener('focusout', hold(false));
+    document.addEventListener('visibilitychange', schedule);
+
+    paint();
+    if (!stopped) prepare(1);
+    schedule();
+  });
+</script>
