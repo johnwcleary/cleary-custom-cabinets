@@ -20,7 +20,7 @@ for (const s of services) {
 }
 ---
 
-<div class="show relative aspect-[5/4] w-full overflow-hidden rounded-[6px] sm:aspect-[16/10] lg:aspect-auto lg:h-full lg:min-h-[26rem]" data-show role="group" aria-roledescription="carousel" aria-label="Photographs of our work">
+<div class="show relative aspect-square w-full min-[400px]:aspect-[5/4] overflow-hidden rounded-[6px] sm:aspect-[16/10] lg:aspect-auto lg:h-full lg:min-h-[26rem]" data-show role="group" aria-roledescription="carousel" aria-label="Photographs of our work">
   {
     slides.map((s, i) => (
       <div class:list={['show__slide', i === 0 && 'is-active']} role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${slides.length}`} data-slide>

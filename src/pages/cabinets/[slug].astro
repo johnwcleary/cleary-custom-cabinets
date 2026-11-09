@@ -73,7 +73,7 @@ const heroAlt = heroCaption(service, all);
 
   <section class="frame section grid grid-cols-1 items-center gap-5 lg:grid-cols-[minmax(0,1fr)_25rem] lg:gap-10 xl:grid-cols-[minmax(0,1fr)_27rem]" aria-label="In closing">
     <div>
-      <p class="lead mb-3">{s.closing || site.tagline}</p>
+      <p class="closing mb-3">{s.closing || site.tagline}</p>
       {s.closingAside && <p class="measure mb-2 text-muted">{s.closingAside}</p>}
       {s.video && <p><a href={s.video.url} rel="noopener" class="ulink tap">{s.video.title}</a> <span class="text-muted">(video)</span></p>}
     </div>

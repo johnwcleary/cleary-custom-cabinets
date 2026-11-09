@@ -121,6 +121,14 @@
     font-size: clamp(1.75rem, 2.7vw, 2.375rem);
     line-height: 1.15;
   }
+  /* The last word on a cabinet page, set large enough to hold its side of the row beside the form. */
+  .closing {
+    max-width: 24ch;
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 2.9vw, 2.625rem);
+    line-height: 1.15;
+    text-wrap: balance;
+  }
   .lead {
     font-size: clamp(1.1875rem, 1.5vw, 1.375rem);
     font-weight: 450;
@@ -193,6 +201,10 @@
   }
   /* Mouse-over motion: small and quick. Touch screens and reduced-motion settings skip all of it. */
   .nav-link {
+    /* Room inside the link, so the keyboard focus ring does not sit against the letters. */
+    margin-inline: -0.5rem;
+    padding-inline: 0.5rem;
+    border-radius: 4px;
     font-weight: 550;
     text-decoration: underline transparent;
     text-decoration-thickness: max(2px, 0.09em);
