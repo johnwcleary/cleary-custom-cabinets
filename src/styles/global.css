@@ -1,39 +1,39 @@
 @import "tailwindcss";
 @import "@fontsource/dm-serif-display/400.css";
 @import "@fontsource/dm-serif-display/400-italic.css";
-@import "@fontsource/dm-serif-text/400.css";
-@import "@fontsource/dm-serif-text/400-italic.css";
 @import "@fontsource-variable/dm-sans";
 
 /*
- * Plain and warm: drafting paper, dark ink and the logo's plum. DM Serif Display for titles, DM Sans
- * for reading, and DM Serif Text wherever the words are the family's own.
+ * Open showroom: a bright, barely warm page, dark ink and the logo's plum for anything you can
+ * press. DM Serif Display for titles and DM Sans for everything you read. Every size is in rem on
+ * an 18px base, so the whole site follows the reader's own text-size setting.
  */
 @theme {
-  --color-paper: #f3efe6;
-  --color-sheet: #faf8f2; /* the ticket, one shade brighter than the paper */
-  --color-ink: #23262b; /* 13.3:1 on paper */
-  --color-muted: #55585c; /* 6.2:1 on paper */
-  --color-pencil: #682c43; /* 8.6:1 on paper */
+  --color-paper: #fcfbf8;
+  --color-sheet: #f3efe7; /* the form's panel, one step warmer than the page */
+  --color-ink: #1c1e22; /* 16.2:1 on paper */
+  --color-muted: #45484d; /* 9.0:1 on paper */
+  --color-pencil: #682c43; /* the logo's plum: 9.7:1 on paper */
   --color-plum-deep: #4c1e30; /* the signed footer */
   --color-blush: #ecd5c8;
-  --color-line: rgb(35 38 43 / 0.32);
+  --color-line: rgb(28 30 34 / 0.2);
+  --color-control: #54575c; /* edges of boxes you type in: 7.0:1 on white */
 
   --font-display: "DM Serif Display", ui-serif, Georgia, serif;
   --font-sans: "DM Sans Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "DM Serif Text", ui-serif, Georgia, serif;
   --font-sign: "DM Serif Display", ui-serif, Georgia, serif;
 }
 
 @layer base {
   html {
     font-family: var(--font-sans);
+    font-weight: 420;
     color: var(--color-ink);
     background: var(--color-paper);
-    font-size: 1.0625rem;
-    line-height: 1.55;
+    font-size: 112.5%;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
-    scroll-padding-top: 5rem;
+    scroll-padding-top: 6rem;
   }
   @media (prefers-reduced-motion: no-preference) {
     html {
@@ -45,7 +45,7 @@
   }
   ::selection {
     background: var(--color-pencil);
-    color: var(--color-paper);
+    color: #fff;
   }
   a {
     color: inherit;
@@ -54,83 +54,99 @@
   img {
     height: auto;
   }
+  /* A plum ring with a white edge inside it, so it shows on the page, on photographs and on plum. */
   :focus-visible {
-    outline: 2px solid var(--color-pencil);
-    outline-offset: 2px;
+    outline: 3px solid var(--color-pencil);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 3px #fff;
   }
   .on-dark :focus-visible,
   .on-plum :focus-visible {
-    outline-color: var(--color-paper);
+    outline-color: #fff;
+    box-shadow: 0 0 0 3px var(--color-plum-deep);
   }
   strong {
-    font-weight: 600;
+    font-weight: 650;
   }
 }
 
 @layer components {
   .frame {
-    width: min(100% - 2 * clamp(0.875rem, 1.8vw, 1.5rem), 92rem);
+    width: min(100% - 2 * clamp(0.875rem, 2.5vw, 2.25rem), 84rem);
     margin-inline: auto;
   }
   .section {
-    padding-block: clamp(1.25rem, 2.4vw, 2.25rem);
+    padding-block: clamp(1.25rem, 2.4vw, 2.125rem);
   }
 
   .caps {
     font-family: var(--font-display);
     font-weight: 400;
-    line-height: 1.08;
+    line-height: 1.12;
   }
   .hero-col {
     container-type: inline-size;
   }
+  /* A white card on the photograph, like a showroom tag: dark ink on white reads on any picture. */
+  .placard {
+    background: #fff;
+    color: var(--color-ink);
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgb(28 30 34 / 0.14), 0 6px 20px rgb(28 30 34 / 0.14);
+  }
   .hero-title {
     font-family: var(--font-display);
     font-weight: 400;
-    /* Sized to the photo it sits on, so "Custom & Stock Cabinetry" stays on one line. */
-    font-size: min(calc((100cqw - 3.25rem) * 0.083), 5.25rem);
-    line-height: 1.02;
+    /* Sized to the photo it sits on, so "Custom & Stock Cabinetry" fits on one line down to a small phone. */
+    font-size: min(7.2cqw, 2.75rem);
+    line-height: 1.08;
+    text-wrap: balance;
   }
-  /* Shade under the title so it reads on any photo. */
-  .hero-overlay {
-    background: linear-gradient(to top, rgb(20 20 22 / 0.72), rgb(20 20 22 / 0.35) 60%, transparent);
-    text-shadow: 0 1px 12px rgb(20 20 22 / 0.35);
+  .hero-sub {
+    font-size: clamp(1rem, 2.6cqw, 1.25rem);
+    font-weight: 500;
+    line-height: 1.35;
+    text-wrap: balance;
   }
   .page-title {
     font-family: var(--font-display);
     font-weight: 400;
-    font-size: clamp(2.375rem, 4.2vw, 3.875rem);
-    line-height: 1.05;
+    font-size: clamp(2.25rem, 4.2vw, 3.75rem);
+    line-height: 1.08;
     text-wrap: balance;
   }
   .heading {
     font-family: var(--font-display);
     font-weight: 400;
     font-size: clamp(1.75rem, 2.7vw, 2.375rem);
-    line-height: 1.1;
+    line-height: 1.15;
   }
   .lead {
-    font-family: var(--font-serif);
-    font-size: clamp(1.25rem, 1.8vw, 1.625rem);
-    line-height: 1.3;
+    font-size: clamp(1.1875rem, 1.5vw, 1.375rem);
+    font-weight: 450;
+    line-height: 1.5;
+    max-width: 31em;
     text-wrap: pretty;
   }
+  /* Running text never runs wider than a comfortable line. */
+  .measure {
+    max-width: 31em;
+  }
   .sign {
-    font-family: var(--font-serif);
-    font-size: clamp(2rem, 4.4vw, 4.25rem);
+    font-family: var(--font-sign);
+    font-size: clamp(2rem, 4.4vw, 4rem);
     font-style: italic;
     line-height: 1.12;
     text-wrap: balance;
   }
   .sign__name {
     display: block;
-    font-family: var(--font-sign);
     font-style: normal;
   }
   .sign__rest {
     display: block;
     margin-top: 0.3em;
-    font-size: 0.55em;
+    font-size: max(0.55em, 1.375rem);
   }
 
   .photo {
@@ -139,22 +155,21 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
-    filter: saturate(0.92) contrast(1.02);
-    background: #e4dfd3;
+    background: #ebe7df;
   }
 
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 3rem;
-    padding: 0.625rem 1.25rem;
-    border-radius: 4px;
+    min-height: 3.25rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
     background: var(--color-pencil);
-    color: var(--color-paper);
+    color: #fff;
     font-size: 1.125rem;
-    font-weight: 600;
-    line-height: 1.2;
+    font-weight: 650;
+    line-height: 1.25;
     text-align: center;
     cursor: pointer;
   }
@@ -163,16 +178,30 @@
   }
   .ulink {
     text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.25em;
+    text-decoration-thickness: max(1.5px, 0.07em);
+    text-underline-offset: 0.22em;
   }
   .ulink:hover {
     color: var(--color-pencil);
+    text-decoration-thickness: max(2.5px, 0.12em);
+  }
+  /* A link or button that stands on its own is at least 48px tall, for thumbs and unsteady hands. */
+  .tap {
+    display: inline-flex;
+    align-items: center;
+    min-height: max(48px, 2.75rem);
   }
   /* Mouse-over motion: small and quick. Touch screens and reduced-motion settings skip all of it. */
   .nav-link {
-    padding-block: 0.125rem;
-    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+    font-weight: 550;
+    text-decoration: underline transparent;
+    text-decoration-thickness: max(2px, 0.09em);
+    text-underline-offset: 0.3em;
+  }
+  .nav-link:hover,
+  .nav-link[aria-current="page"],
+  .nav-link[aria-expanded="true"] {
+    text-decoration-color: currentColor;
   }
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
     .btn {
@@ -180,7 +209,7 @@
     }
     .btn:hover {
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgb(35 38 43 / 0.18);
+      box-shadow: 0 4px 12px rgb(28 30 34 / 0.2);
     }
     .btn:active {
       transform: none;
@@ -190,14 +219,10 @@
       transition: color 0.2s ease, text-underline-offset 0.2s ease;
     }
     .ulink:hover {
-      text-underline-offset: 0.35em;
+      text-underline-offset: 0.3em;
     }
     .nav-link {
-      transition: color 0.2s ease, background-size 0.25s ease;
-    }
-    .nav-link:hover {
-      color: var(--color-pencil);
-      background-size: 100% 1px;
+      transition: text-decoration-color 0.2s ease;
     }
     .photo {
       transition: transform 0.5s ease;
@@ -207,7 +232,7 @@
       transform: scale(1.035);
     }
     .social-list a {
-      transition: color 0.2s ease, transform 0.2s ease;
+      transition: transform 0.2s ease;
     }
     .social-list a:hover {
       transform: translateX(2px);
@@ -219,10 +244,10 @@
     left: 1rem;
     top: -10rem;
     z-index: 100;
-    padding: 0.75rem 1rem;
+    padding: 0.875rem 1.125rem;
     background: var(--color-ink);
-    color: var(--color-paper);
-    font-size: 0.875rem;
+    color: #fff;
+    font-weight: 600;
   }
   .skip-link:focus {
     top: 1rem;
@@ -241,7 +266,7 @@
     justify-content: space-between;
     align-items: baseline;
     gap: 1rem;
-    padding-block: 0.15rem;
+    padding-block: 0.2rem;
   }
   .hours-table dd {
     font-variant-numeric: tabular-nums;
@@ -251,7 +276,13 @@
   .social-list a {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.625rem;
+    min-height: max(48px, 2.75rem);
+  }
+  .social-list a span {
+    text-decoration: underline;
+    text-decoration-thickness: max(1.5px, 0.07em);
+    text-underline-offset: 0.22em;
   }
   .social-list a:hover {
     color: var(--color-pencil);

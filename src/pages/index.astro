@@ -19,20 +19,20 @@ const shop = (about.data.photos ?? []).find((p) => p.caption.startsWith('Our Sho
 const h = home.data;
 const drawings = ['elevation', 'commercial', 'cabinet'] as const;
 const groups = [
-  { heading: h.cabinetryHeading, group: 'cabinet' as const, items: h.cabinetryMaterials ?? [], cols: 'grid-cols-3' },
-  { heading: h.countertopsHeading, group: 'counter' as const, items: h.countertopsMaterials ?? [], cols: 'grid-cols-3 sm:grid-cols-4 lg:grid-cols-7' },
+  { heading: h.cabinetryHeading, group: 'cabinet' as const, items: h.cabinetryMaterials ?? [], span: 'xl:col-span-3' },
+  { heading: h.countertopsHeading, group: 'counter' as const, items: h.countertopsMaterials ?? [], span: 'xl:col-span-7' },
 ];
 ---
 
 <BaseLayout title={home.data.seoTitle}>
-  <section class="frame pt-3 pb-[clamp(1rem,2vw,1.75rem)] lg:pt-4" aria-labelledby="home-title">
-    <div class="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_26rem] lg:gap-5 xl:grid-cols-[minmax(0,1fr)_27rem]">
+  <section class="frame pt-3 pb-[clamp(0.5rem,1vw,1rem)] lg:pt-4" aria-labelledby="home-title">
+    <div class="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_25rem] lg:gap-5 xl:grid-cols-[minmax(0,1fr)_27rem]">
       <div class="hero-col relative min-w-0">
         <Slideshow />
-        <!-- The title sits on the photo; clicks and hovers pass through to the slideshow. -->
-        <div class="hero-overlay pointer-events-none absolute inset-x-0 bottom-0 rounded-b-[6px] px-4 pt-16 pb-4 text-paper lg:px-6 lg:pb-5">
+        <!-- The title is a white tag on the photo; clicks and hovers pass through to the slideshow. -->
+        <div class="placard pointer-events-none absolute inset-x-2 bottom-2 px-3.5 py-2.5 sm:right-auto sm:bottom-4 sm:left-4 sm:max-w-[calc(100%-2rem)] sm:px-5 sm:py-3.5 lg:bottom-5 lg:left-5">
           <h1 id="home-title" class="hero-title">{h.heroTitle}</h1>
-          <p class="lead mt-1 italic !text-[min(4.6cqw,1.5rem)]">{h.heroSubtitle}</p>
+          <p class="hero-sub mt-1 text-muted">{h.heroSubtitle}</p>
         </div>
       </div>
       <div id="appointment">
@@ -50,8 +50,8 @@ const groups = [
     <div>
       <h2 id="about-title" class="heading mb-3">{h.aboutLabel}</h2>
       {h.aboutHeading && <p class="lead mb-2.5">{h.aboutHeading}</p>}
-      {h.aboutText && <p class="mb-3 max-w-[52ch] text-muted">{h.aboutText}</p>}
-      {h.aboutButton && <p><a href="/about" class="ulink">{h.aboutButton}</a></p>}
+      {h.aboutText && <p class="measure mb-1.5 text-muted">{h.aboutText}</p>}
+      {h.aboutButton && <p><a href="/about" class="ulink tap font-semibold">{h.aboutButton}</a></p>}
     </div>
     <ul class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-5">
       {
@@ -67,22 +67,23 @@ const groups = [
 
   <section class="frame section" aria-labelledby="materials-title">
     <h2 id="materials-title" class="heading mb-3">{h.materialsLabel}</h2>
-    <div class="grid grid-cols-1 gap-5 lg:grid-cols-[3fr_7fr] lg:gap-4">
+    <!-- One row of ten equal samples on a wide screen; two groups, one above the other, on anything narrower. -->
+    <div class="grid grid-cols-1 gap-5 xl:grid-cols-10 xl:gap-x-4 xl:gap-y-0">
       {
         groups.map((g) => (
-          <div>
-            <h3 class="mb-2 text-[1.125rem] font-semibold">{g.heading}</h3>
-            <ul class:list={['grid gap-2', g.cols]}>
+          <div class:list={['xl:grid xl:grid-cols-subgrid', g.span]}>
+            <h3 class="mb-2 text-[1.125rem] font-semibold xl:col-span-full">{g.heading}</h3>
+            <ul class="grid grid-cols-3 gap-x-3 gap-y-3 sm:grid-cols-4 lg:grid-cols-7 xl:col-span-full xl:grid-cols-subgrid xl:gap-x-4">
               {g.items.map((m) => {
                 const img = swatch(m, g.group);
                 return (
                   <li>
                     {img && (
-                      <span class="swatch mb-1 block aspect-square overflow-hidden rounded-[4px]">
-                        <Image src={img} alt={`${m} ${g.heading?.toLowerCase() ?? ''}`.trim()} widths={widthsFor(img, [240, 400, 600])} sizes="(min-width: 1024px) 12vw, 30vw" class="photo" />
+                      <span class="swatch mb-1.5 block aspect-square overflow-hidden rounded-[4px]">
+                        <Image src={img} alt={`${m} ${g.heading?.toLowerCase() ?? ''}`.trim()} widths={widthsFor(img, [240, 400, 600])} sizes="(min-width: 1280px) 8vw, (min-width: 1024px) 12vw, (min-width: 640px) 22vw, 30vw" class="photo" />
                       </span>
                     )}
-                    <span class="block leading-snug">{m}</span>
+                    <span class="block leading-snug [overflow-wrap:anywhere]">{m}</span>
                   </li>
                 );
               })}
@@ -94,14 +95,14 @@ const groups = [
   </section>
 
   <section class="frame section grid grid-cols-1 items-center gap-5 lg:grid-cols-2 lg:gap-10" aria-labelledby="showroom-title">
-    <div class="grid grid-cols-2 items-start gap-3">
-      <Fig image={showroom.image} caption={showroom.caption} ratio="4 / 5" group="home-visit" sizes="(min-width: 1024px) 24vw, 46vw" />
-      <Fig image={shop.image} caption={shop.caption} ratio="4 / 5" group="home-visit" sizes="(min-width: 1024px) 24vw, 46vw" />
+    <div class="grid grid-cols-2 items-start gap-3 lg:gap-5">
+      <Fig image={showroom.image} caption={showroom.caption} ratio="4 / 5" group="home-visit" hideCaption sizes="(min-width: 1024px) 24vw, 46vw" />
+      <Fig image={shop.image} caption={shop.caption} ratio="4 / 5" group="home-visit" hideCaption sizes="(min-width: 1024px) 24vw, 46vw" />
     </div>
     <div>
       <h2 id="showroom-title" class="heading mb-3">{h.showroomLabel}</h2>
-      {h.showroomText && <p class="lead mb-3">{h.showroomText}</p>}
-      <p class="mb-4"><a href={site.mapsUrl} rel="noopener" class="ulink">{site.address.street}, {site.address.city}, {site.address.state} {site.address.zip}</a></p>
+      {h.showroomText && <p class="lead mb-1.5">{h.showroomText}</p>}
+      <p class="mb-3"><a href={site.mapsUrl} rel="noopener" class="ulink tap">{site.address.street}, {site.address.city}, {site.address.state} {site.address.zip}</a></p>
       {h.showroomButton && <a href="#appointment" class="btn">{h.showroomButton}</a>}
     </div>
   </section>

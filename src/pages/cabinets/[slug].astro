@@ -46,7 +46,7 @@ const heroAlt = heroCaption(service, all);
   {
     rest.length > 0 && (
       <section class="frame pb-[clamp(1.25rem,2.4vw,2.25rem)]" aria-label={`${s.title}: featured photographs`}>
-        <ul class="grid grid-cols-1 gap-x-3 gap-y-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-4">
+        <ul class="grid grid-cols-1 gap-x-3 gap-y-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-4">
           {rest.map((g) => <li><Fig image={g.data.image} caption={g.data.caption} group={s.slug} class="mx-auto" /></li>)}
         </ul>
       </section>
@@ -57,14 +57,12 @@ const heroAlt = heroCaption(service, all);
     others.length > 0 && (
       <section class="frame pb-[clamp(1.25rem,2.4vw,2.25rem)]" aria-labelledby="collection-title">
         <h2 id="collection-title" class="heading mb-3">More from the collection</h2>
-        <ul class="grid grid-cols-2 gap-x-3 gap-y-4 sm:grid-cols-3 lg:grid-cols-5">
+        <!-- A wall of photographs. Each one's caption is its alt text and shows when the photo is opened. -->
+        <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 lg:gap-4">
           {others.map((g) => (
             <li>
-              <LightboxLink image={g.data.image} caption={g.data.caption} group={s.slug} class="block">
-                <span class="block aspect-[4/3] overflow-hidden rounded-[4px]">
-                  <Image src={g.data.image} alt={g.data.caption} widths={widthsFor(g.data.image, [320, 560])} sizes="(min-width: 1024px) 18vw, (min-width: 640px) 30vw, 45vw" class="photo" />
-                </span>
-                <span class="mt-1.5 block text-[0.9375rem] leading-snug text-muted">{g.data.caption}</span>
+              <LightboxLink image={g.data.image} caption={g.data.caption} group={s.slug} class="block aspect-[4/3] overflow-hidden rounded-[4px]">
+                <Image src={g.data.image} alt={g.data.caption} widths={widthsFor(g.data.image, [320, 560, 800])} sizes="(min-width: 1024px) 23vw, (min-width: 640px) 30vw, 45vw" class="photo" />
               </LightboxLink>
             </li>
           ))}
@@ -73,11 +71,11 @@ const heroAlt = heroCaption(service, all);
     )
   }
 
-  <section class="frame section grid grid-cols-1 items-center gap-5 lg:grid-cols-[minmax(0,1fr)_27rem] lg:gap-10" aria-label="In closing">
+  <section class="frame section grid grid-cols-1 items-center gap-5 lg:grid-cols-[minmax(0,1fr)_25rem] lg:gap-10 xl:grid-cols-[minmax(0,1fr)_27rem]" aria-label="In closing">
     <div>
       <p class="lead mb-3">{s.closing || site.tagline}</p>
-      {s.closingAside && <p class="mb-4 max-w-[46ch] text-muted">{s.closingAside}</p>}
-      {s.video && <p><a href={s.video.url} rel="noopener" class="ulink">{s.video.title}</a> <span class="text-muted">(video)</span></p>}
+      {s.closingAside && <p class="measure mb-2 text-muted">{s.closingAside}</p>}
+      {s.video && <p><a href={s.video.url} rel="noopener" class="ulink tap">{s.video.title}</a> <span class="text-muted">(video)</span></p>}
     </div>
     <div id="appointment">
       <ContactForm heading={h.contactHeading} />

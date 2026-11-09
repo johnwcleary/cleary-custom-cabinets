@@ -8,9 +8,9 @@ import { site } from '../lib/site';
 const rest = site.tagline.startsWith(site.name) ? site.tagline.slice(site.name.length).replace(/^[,\s]+/, '') : null;
 ---
 
-<footer class="on-plum bg-plum-deep text-paper">
+<footer class="on-plum bg-plum-deep text-white">
   <div class="frame pt-[clamp(2rem,4vw,3.25rem)] pb-[clamp(1.75rem,3.5vw,3rem)]">
-    <div class="flex items-center justify-between gap-6 border-b border-paper/20 pb-[clamp(1.5rem,3vw,2.5rem)]">
+    <div class="flex items-center justify-between gap-6 pb-[clamp(1.5rem,3vw,2.5rem)]">
       {
         rest !== null ? (
           <p class="sign">
@@ -21,27 +21,27 @@ const rest = site.tagline.startsWith(site.name) ? site.tagline.slice(site.name.l
           <p class="sign">{site.tagline}</p>
         )
       }
-      <Stamp id="stamp-footer" tilt={-11} class="w-20 shrink-0 text-blush sm:w-28 lg:w-32" />
+      <Stamp id="stamp-footer" tilt={-11} class="w-24 shrink-0 text-blush sm:w-32 lg:w-40" />
     </div>
-    <div class="grid grid-cols-1 gap-x-8 gap-y-7 pt-[clamp(1.5rem,3vw,2.5rem)] sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1.35fr_0.75fr]">
+    <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1.35fr_0.75fr]">
       <div>
         <h2 class="foot-label">Visit</h2>
         <address class="not-italic">
-          <a href={site.mapsUrl} rel="noopener" class="ulink">{site.address.street}<br />{site.address.city}, {site.address.state} {site.address.zip}</a>
+          <a href={site.mapsUrl} rel="noopener" class="ulink tap py-2 leading-snug">{site.address.street}<br />{site.address.city}, {site.address.state} {site.address.zip}</a>
         </address>
       </div>
       <div>
         <h2 class="foot-label">Call or email</h2>
-        <p><a href={site.phoneHref} class="text-[1.25rem] font-semibold tabular-nums transition-colors duration-200 hover:text-blush">{site.phone}</a></p>
-        <p class="mt-1"><a href={`mailto:${site.email}`} class="ulink [overflow-wrap:anywhere]">{site.email}</a></p>
+        <p><a href={site.phoneHref} class="ulink tap text-[1.375rem] font-semibold tabular-nums">{site.phone}</a></p>
+        <p><a href={`mailto:${site.email}`} class="ulink tap [overflow-wrap:anywhere]">{site.email}</a></p>
       </div>
       <div>
         <h2 class="foot-label">Showroom hours</h2>
-        <Hours class="hours-table max-w-[21rem]" />
+        <Hours class="hours-table max-w-[21rem] pt-2.5" />
       </div>
       <div>
         <h2 class="foot-label">Follow</h2>
-        <SocialLinks labels class="social-list flex flex-col gap-1.5" />
+        <SocialLinks labels class="social-list flex flex-col" />
       </div>
     </div>
   </div>
@@ -50,12 +50,8 @@ const rest = site.tagline.startsWith(site.name) ? site.tagline.slice(site.name.l
 <style>
   /* One label style for every column, so the four line up along the top. */
   .foot-label {
-    margin-bottom: 0.625rem;
     color: var(--color-blush);
-    font-size: 0.8125rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    line-height: 1.2;
-    text-transform: uppercase;
+    font-weight: 650;
+    line-height: 1.3;
   }
 </style>
