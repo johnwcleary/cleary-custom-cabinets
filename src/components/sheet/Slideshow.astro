@@ -20,7 +20,7 @@ for (const s of services) {
 }
 ---
 
-<div class="show relative aspect-[4/3] w-full overflow-hidden rounded-[6px] sm:aspect-[16/10] lg:aspect-auto lg:h-full lg:min-h-[24rem]" data-show role="group" aria-roledescription="carousel" aria-label="Photographs of our work">
+<div class="show relative aspect-square w-full min-[400px]:aspect-[5/4] overflow-hidden rounded-[6px] sm:aspect-[16/10] lg:aspect-auto lg:h-full lg:min-h-[26rem]" data-show role="group" aria-roledescription="carousel" aria-label="Photographs of our work">
   {
     slides.map((s, i) => (
       <div class:list={['show__slide', i === 0 && 'is-active']} role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${slides.length}`} data-slide>
@@ -31,8 +31,8 @@ for (const s of services) {
   {
     slides.length > 1 && (
       <button type="button" class="show__toggle" aria-label="Pause slideshow" data-show-toggle>
-        <span data-icon-pause><svg width="12" height="12" viewBox="0 0 10 10" aria-hidden="true" fill="currentColor"><path d="M1.5 0h2.5v10H1.5zM6 0h2.5v10H6z"></path></svg></span>
-        <span data-icon-play hidden><svg width="12" height="12" viewBox="0 0 10 10" aria-hidden="true" fill="currentColor"><path d="M1.5 0 9.5 5l-8 5z"></path></svg></span>
+        <span data-icon-pause><svg width="14" height="14" viewBox="0 0 10 10" aria-hidden="true" fill="currentColor"><path d="M1.5 0h2.5v10H1.5zM6 0h2.5v10H6z"></path></svg></span>
+        <span data-icon-play hidden><svg width="14" height="14" viewBox="0 0 10 10" aria-hidden="true" fill="currentColor"><path d="M1.5 0 9.5 5l-8 5z"></path></svg></span>
       </button>
     )
   }
@@ -59,27 +59,27 @@ for (const s of services) {
   }
   .show__toggle {
     position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
+    top: 0.625rem;
+    right: 0.625rem;
     z-index: 1;
     display: grid;
     place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
+    width: max(48px, 2.75rem);
+    height: max(48px, 2.75rem);
     border-radius: 50%;
-    background: rgb(250 248 242 / 0.88);
+    /* White with a dark rim, so the button shows on a pale photo and on a dark one. */
+    background: #fff;
     color: var(--color-ink);
+    border: 2px solid var(--color-ink);
     cursor: pointer;
   }
   .show__toggle:hover {
-    background: var(--color-paper);
+    background: var(--color-ink);
+    color: #fff;
   }
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
     .show__toggle {
-      transition: background-color 0.2s ease, transform 0.2s ease;
-    }
-    .show__toggle:hover {
-      transform: scale(1.06);
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
   }
   .show__toggle [hidden] {

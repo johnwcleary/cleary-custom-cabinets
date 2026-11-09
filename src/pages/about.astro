@@ -18,28 +18,28 @@ const others = photos.filter((p) => p !== exterior);
   <section class="frame section grid grid-cols-1 gap-5 lg:grid-cols-2 lg:gap-10" aria-labelledby="page-title">
     <div>
       <h1 id="page-title" class="page-title mb-3">About {site.name}</h1>
-      <div class="lead !text-[1.25rem] !leading-[1.55]"><Content /></div>
+      <div class="lead [&>p+p]:mt-3"><Content /></div>
       {h.showroomButton && <p class="mt-4"><a href="/#appointment" class="btn">{h.showroomButton}</a></p>}
     </div>
     {exterior && <Fig image={exterior.image} caption={exterior.caption} ratio="16 / 10" group="about" eager sizes="(min-width: 1024px) 45vw, 92vw" />}
   </section>
 
   <section class="frame section" aria-label="Our showroom and shop">
-    <ul class="grid grid-cols-2 gap-3 lg:grid-cols-5">
+    <ul class="grid grid-cols-2 gap-x-3 gap-y-4 lg:grid-cols-5 lg:gap-x-4">
       {others.map((p) => <li><Fig image={p.image} caption={p.caption} ratio="4 / 5" group="about" sizes="(min-width: 1024px) 18vw, 46vw" /></li>)}
     </ul>
   </section>
 
   <section class="frame section" aria-labelledby="lines-title">
     <h2 id="lines-title" class="heading mb-3">Lines we distribute</h2>
-    <div class="grid grid-cols-2 gap-x-5 gap-y-5 lg:grid-cols-4">
+    <div class="grid grid-cols-2 gap-x-5 gap-y-4 lg:grid-cols-4">
       {
         brands.map((g) => (
           <section aria-label={g.data.label}>
-            <h3 class="mb-2 font-semibold">{g.data.label}</h3>
-            <ul class="space-y-0.5 leading-snug">
+            <h3 class="text-[1.125rem] font-semibold">{g.data.label}</h3>
+            <ul class="leading-snug [overflow-wrap:anywhere]">
               {g.data.items.map((b) => (
-                <li>{b.url ? <a href={b.url} rel="noopener" class="hover:text-pencil hover:underline hover:underline-offset-4">{b.name}</a> : <span>{b.name}</span>}</li>
+                <li>{b.url ? <a href={b.url} rel="noopener" class="ulink tap">{b.name}</a> : <span class="tap">{b.name}</span>}</li>
               ))}
             </ul>
           </section>

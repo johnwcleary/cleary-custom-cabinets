@@ -11,17 +11,17 @@ const contact = await getPage('contact');
 <BaseLayout title={contact.data.seoTitle}>
   <section class="frame section" aria-labelledby="page-title">
     <h1 id="page-title" class="page-title mb-2">Contact us</h1>
-    <p class="lead mb-4 max-w-[40ch]">{contact.data.lead}</p>
+    <p class="lead mb-4">{contact.data.lead}</p>
     <div class="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,38rem)_minmax(0,1fr)] lg:gap-10">
       <div id="appointment">
         <ContactForm variant="full" helper={contact.data.formHelper} />
       </div>
-      <div class="space-y-3 text-[1.125rem]">
-        <p><a href={site.phoneHref} class="text-[1.75rem] font-semibold tabular-nums hover:text-pencil">{site.phone}</a></p>
-        <p><a href={`mailto:${site.email}`} class="ulink [overflow-wrap:anywhere]">{site.email}</a></p>
-        <p><a href={site.mapsUrl} rel="noopener" class="ulink">{site.address.street}<br />{site.address.city}, {site.address.state} {site.address.zip}</a></p>
-        <p>{site.serviceArea}</p>
-        <SocialLinks labels class="social-list flex flex-col gap-1.5" />
+      <div class="text-[1.125rem]">
+        <p><a href={site.phoneHref} class="ulink tap text-[1.75rem] font-semibold tabular-nums">{site.phone}</a></p>
+        <p><a href={`mailto:${site.email}`} class="ulink tap [overflow-wrap:anywhere]">{site.email}</a></p>
+        <p><a href={site.mapsUrl} rel="noopener" class="ulink tap py-2 leading-snug">{site.address.street}<br />{site.address.city}, {site.address.state} {site.address.zip}</a></p>
+        <p class="measure my-2">{site.serviceArea}</p>
+        <SocialLinks labels class="social-list flex flex-col" />
       </div>
     </div>
   </section>

@@ -11,9 +11,11 @@ interface Props {
   sizes?: string;
   group?: string;
   eager?: boolean;
+  /** Keep the caption as alt text and in the lightbox, but don't print it under the photo. */
+  hideCaption?: boolean;
   class?: string;
 }
-const { image, caption, ratio = '4 / 3', sizes = '(min-width: 1024px) 30vw, (min-width: 640px) 46vw, 92vw', group, eager = false, class: className } = Astro.props;
+const { image, caption, ratio = '4 / 3', sizes = '(min-width: 1024px) 30vw, (min-width: 640px) 46vw, 92vw', group, eager = false, hideCaption = false, class: className } = Astro.props;
 const maxWidth = image.width < 1600 ? `max-width: ${Math.round(image.width * 1.35)}px` : undefined;
 const style = `aspect-ratio: ${ratio === 'auto' ? `${image.width} / ${image.height}` : ratio}`;
 ---
@@ -32,5 +34,5 @@ const style = `aspect-ratio: ${ratio === 'auto' ? `${image.width} / ${image.heig
       </span>
     )
   }
-  <figcaption class="mt-1.5 text-[0.9375rem] leading-snug text-muted">{caption}</figcaption>
+  {!hideCaption && <figcaption class="mt-2 leading-snug text-muted">{caption}</figcaption>}
 </figure>

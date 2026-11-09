@@ -2,32 +2,37 @@
 import { Image } from 'astro:assets';
 import Logo from './Logo.astro';
 import { site } from '../lib/site';
-import { getServices, serviceHref, heroCaption, getAllGallery } from '../lib/content';
+import { getServices, serviceHref, heroCaption, getAllGallery, getBrandGroups } from '../lib/content';
+import { sentenceCase } from '../lib/text';
 import { widthsFor } from '../lib/img';
 
 const services = await getServices();
 const gallery = await getAllGallery();
+// A promotion typed in capitals is shown in sentence case; brand names keep their capitals.
+const brands = (await getBrandGroups()).flatMap((g) => g.data.items.map((b) => b.name));
+const announcement = sentenceCase(site.announcement || site.serviceArea, brands);
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const current = (href: string) => (path === href ? 'page' : undefined);
 ---
 
-<div class="on-dark bg-pencil text-paper">
-  <p class="px-4 py-1.5 text-center text-[0.8125rem] font-medium">{site.announcement || site.serviceArea}</p>
+<div class="on-dark bg-pencil text-white">
+  <p class="frame py-2 text-center font-medium leading-snug">{announcement}</p>
 </div>
 <header class="sticky top-0 z-40 border-b border-line bg-paper">
-  <div class="frame flex h-14 items-center gap-5 lg:h-16 lg:gap-8">
-    <a href="/" class="shrink-0" aria-label={`${site.name}, home`}>
-      <Logo variant="mark" width={92} class="h-auto w-16 lg:w-[5.75rem]" />
+  <div class="frame flex h-16 items-center gap-4 lg:h-[4.5rem] lg:gap-8">
+    <a href="/" class="tap shrink-0 gap-3" aria-label={`${site.name}, home`}>
+      <Logo variant="mark" width={92} class="h-auto w-14 min-[360px]:w-16 lg:w-[5.25rem]" />
+      <span class="caps hidden text-[1.375rem] sm:block">{site.name}</span>
     </a>
     <nav aria-label="Main" class="hidden lg:block">
-      <ul class="flex items-center gap-7 text-[1.0625rem] font-medium">
+      <ul class="flex items-center gap-7">
         <li>
-          <button type="button" class="nav-link flex cursor-pointer items-center gap-1.5" aria-expanded="false" aria-controls="cabinets-menu" data-disclosure>
+          <button type="button" class="nav-link tap cursor-pointer gap-2" aria-expanded="false" aria-controls="cabinets-menu" data-disclosure>
             Cabinets
-            <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3.5 5 7l4-3.5" fill="none" stroke="currentColor" stroke-width="1.4"></path></svg>
+            <svg width="12" height="12" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3.5 5 7l4-3.5" fill="none" stroke="currentColor" stroke-width="1.6"></path></svg>
           </button>
-          <div id="cabinets-menu" class="absolute inset-x-0 top-full border-b border-line bg-paper" hidden>
-            <ul class="frame grid grid-cols-7 gap-3 py-4">
+          <div id="cabinets-menu" class="absolute inset-x-0 top-full border-b border-line bg-paper shadow-[0_12px_24px_rgb(28_30_34/0.08)]" hidden>
+            <ul class="frame grid grid-cols-7 gap-4 py-5">
               {
                 services.map((s) => (
                   <li>
@@ -35,7 +40,7 @@ const current = (href: string) => (path === href ? 'page' : undefined);
                       <span class="mb-2 block aspect-[4/3] overflow-hidden rounded-[4px]">
                         <Image src={s.data.heroImage} alt={heroCaption(s, gallery)} widths={widthsFor(s.data.heroImage, [240, 400])} sizes="13vw" class="photo" loading="lazy" />
                       </span>
-                      <span class="block transition-colors duration-200 group-hover:text-pencil">{s.data.shortName ?? s.data.title}</span>
+                      <span class="nav-link block group-hover:[text-decoration-color:currentColor]">{s.data.shortName ?? s.data.title}</span>
                     </a>
                   </li>
                 ))
@@ -43,20 +48,20 @@ const current = (href: string) => (path === href ? 'page' : undefined);
             </ul>
           </div>
         </li>
-        <li><a href="/about" class:list={['nav-link', current('/about') && 'text-pencil']} aria-current={current('/about')}>About</a></li>
-        <li><a href="/contact" class:list={['nav-link', current('/contact') && 'text-pencil']} aria-current={current('/contact')}>Contact</a></li>
+        <li><a href="/about" class="nav-link tap" aria-current={current('/about')}>About</a></li>
+        <li><a href="/contact" class="nav-link tap" aria-current={current('/contact')}>Contact</a></li>
       </ul>
     </nav>
-    <a href={site.phoneHref} class="ml-auto text-[1.125rem] font-semibold tabular-nums transition-colors duration-200 hover:text-pencil lg:text-[1.375rem]">{site.phone}</a>
-    <button type="button" class="cursor-pointer text-[1.0625rem] font-medium lg:hidden" aria-expanded="false" aria-controls="mobile-menu" data-disclosure>Menu</button>
+    <a href={site.phoneHref} class="ulink tap ml-auto text-[1.125rem] font-semibold tabular-nums lg:text-[1.375rem]">{site.phone}</a>
+    <button type="button" class="tap cursor-pointer rounded-[6px] border-2 border-ink px-3 font-semibold lg:hidden" aria-expanded="false" aria-controls="mobile-menu" data-disclosure>Menu</button>
   </div>
 
-  <div id="mobile-menu" class="absolute inset-x-0 top-full h-[calc(100dvh-3.5rem)] overflow-y-auto bg-paper lg:hidden" hidden>
-    <nav aria-label="Main (mobile)" class="frame py-5">
-      <ul class="space-y-3 text-[1.5rem] font-medium">
-        {services.map((s) => <li><a href={serviceHref(s.data.slug)} aria-current={current(serviceHref(s.data.slug))}>{s.data.shortName ?? s.data.title}</a></li>)}
-        <li class="pt-3"><a href="/about" aria-current={current('/about')}>About</a></li>
-        <li><a href="/contact" aria-current={current('/contact')}>Contact</a></li>
+  <div id="mobile-menu" class="absolute inset-x-0 top-full h-[calc(100dvh-4rem)] overflow-y-auto bg-paper lg:hidden" hidden>
+    <nav aria-label="Main (mobile)" class="frame py-4">
+      <ul class="text-[1.375rem] font-medium">
+        {services.map((s) => <li><a href={serviceHref(s.data.slug)} class="nav-link tap w-full" aria-current={current(serviceHref(s.data.slug))}>{s.data.shortName ?? s.data.title}</a></li>)}
+        <li class="mt-4"><a href="/about" class="nav-link tap w-full" aria-current={current('/about')}>About</a></li>
+        <li><a href="/contact" class="nav-link tap w-full" aria-current={current('/contact')}>Contact</a></li>
       </ul>
     </nav>
   </div>
