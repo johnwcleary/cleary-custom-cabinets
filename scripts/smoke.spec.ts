@@ -105,7 +105,7 @@ test('keyboard: contact form fields are reachable and labelled', async ({ page }
   await page.goto('/contact');
   const form = page.locator('form[data-form-backend="todo-phase-2"]');
   await expect(form).toHaveCount(1);
-  for (const name of ['name', 'email', 'phone', 'message']) {
+  for (const name of ['name', 'contact', 'message']) {
     const field = form.locator(`[name="${name}"]`);
     await expect(field).toHaveCount(1);
     const id = await field.getAttribute('id');

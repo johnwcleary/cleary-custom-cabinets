@@ -24,12 +24,12 @@ const style = `aspect-ratio: ${ratio === 'auto' ? `${image.width} / ${image.heig
   {
     group ? (
       <LightboxLink image={image} caption={caption} group={group} class="block">
-        <span class="block overflow-hidden rounded-[4px]" style={style}>
+        <span class="block overflow-hidden" style={style}>
           <Image src={image} alt={caption} widths={widthsFor(image)} sizes={sizes} class="photo" loading={eager ? 'eager' : 'lazy'} />
         </span>
       </LightboxLink>
     ) : (
-      <span class="block overflow-hidden rounded-[4px]" style={style}>
+      <span class="block overflow-hidden" style={style}>
         <Image src={image} alt={caption} widths={widthsFor(image)} sizes={sizes} class="photo" loading={eager ? 'eager' : 'lazy'} />
       </span>
     )

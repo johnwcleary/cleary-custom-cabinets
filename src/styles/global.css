@@ -1,33 +1,33 @@
 @import "tailwindcss";
-@import "@fontsource/dm-serif-display/400.css";
-@import "@fontsource/dm-serif-display/400-italic.css";
-@import "@fontsource-variable/dm-sans";
+@import "@fontsource/libre-caslon-text/400.css";
+@import "@fontsource/libre-caslon-text/400-italic.css";
+@import "@fontsource-variable/source-sans-3/wght.css";
+@import "@fontsource-variable/source-sans-3/wght-italic.css";
 
 /*
- * Open showroom: a bright, barely warm page, dark ink and the logo's plum for anything you can
- * press. DM Serif Display for titles and DM Sans for everything you read. Every size is in rem on
- * an 18px base, so the whole site follows the reader's own text-size setting.
+ * The colours and the square corners are the logo's: its black and plum on plain white, inside a
+ * ruled frame. Titles are set in Caslon, the old sign-writer's serif, in ordinary upper and lower
+ * case; running text is Source Sans. Every size is in rem on an 18px base, so the whole site
+ * follows the reader's own text-size setting.
  */
 @theme {
-  --color-paper: #fcfbf8;
-  --color-sheet: #f3efe7; /* the form's panel, one step warmer than the page */
-  --color-ink: #1c1e22; /* 16.2:1 on paper */
-  --color-muted: #45484d; /* 9.0:1 on paper */
-  --color-pencil: #682c43; /* the logo's plum: 9.7:1 on paper */
+  --color-paper: #fff;
+  --color-ink: #1c1a19; /* the logo's black: 17.3:1 on white */
+  --color-muted: #45484d; /* 9.3:1 on white */
+  --color-pencil: #682c43; /* the logo's plum: 10.1:1 on white */
   --color-plum-deep: #4c1e30; /* the signed footer */
   --color-blush: #ecd5c8;
-  --color-line: rgb(28 30 34 / 0.2);
+  --color-line: rgb(28 26 25 / 0.22);
   --color-control: #54575c; /* edges of boxes you type in: 7.0:1 on white */
 
-  --font-display: "DM Serif Display", ui-serif, Georgia, serif;
-  --font-sans: "DM Sans Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-sign: "DM Serif Display", ui-serif, Georgia, serif;
+  --font-display: "Libre Caslon Text", "Big Caslon", Baskerville, Georgia, serif;
+  --font-sans: "Source Sans 3 Variable", ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
   html {
     font-family: var(--font-sans);
-    font-weight: 420;
+    font-weight: 400;
     color: var(--color-ink);
     background: var(--color-paper);
     font-size: 112.5%;
@@ -66,7 +66,7 @@
     box-shadow: 0 0 0 3px var(--color-plum-deep);
   }
   strong {
-    font-weight: 650;
+    font-weight: 600;
   }
 }
 
@@ -79,59 +79,113 @@
     padding-block: clamp(1.25rem, 2.4vw, 2.125rem);
   }
 
-  .caps {
+  /* Caslon at its one weight, with full-height figures. Used for every title and name. */
+  .display,
+  .hero-title,
+  .page-title,
+  .heading {
     font-family: var(--font-display);
     font-weight: 400;
-    line-height: 1.12;
+    font-variant-numeric: lining-nums;
+  }
+  .display {
+    line-height: 1.15;
+  }
+  /* The home page's opening photo, as wide as the screen. --hero-aside is the width the title cannot use:
+     on a wide screen, the form that sits on the right of the photo. --hero-foot is the room left under
+     the title for the slideshow's marks. --hero-gut is the page's margin, as .frame leaves it. */
+  .hero {
+    --hero-fade: 3rem;
+    --hero-foot: 2.75rem;
+    --hero-aside: 0px;
+    --hero-gut: max(clamp(0.875rem, 2.5vw, 2.25rem), (100vw - 84rem) / 2);
   }
   .hero-col {
     container-type: inline-size;
   }
-  /* A white card on the photograph, like a showroom tag: dark ink on white reads on any picture. */
+  /* The title is white, straight on the photograph. Behind it the picture darkens toward its foot,
+     enough that the words keep at least 4.5:1 contrast on the palest photo. */
+  .hero-text {
+    padding: var(--hero-fade) 0 var(--hero-foot);
+    background: linear-gradient(to top, rgb(0 0 0 / 0.68), rgb(0 0 0 / 0.56) calc(100% - var(--hero-fade)), rgb(0 0 0 / 0.28) calc(100% - 0.5 * var(--hero-fade)), rgb(0 0 0 / 0));
+    color: #fff;
+  }
+  @media (min-width: 640px) {
+    .hero {
+      --hero-fade: 4.5rem;
+      --hero-foot: 3rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .hero {
+      --hero-fade: 6rem;
+      --hero-form: 25rem;
+      --hero-aside: calc(var(--hero-form) + 4rem);
+    }
+    /* About as tall as the window allows, and taller on a very wide screen so the photo is not cut to a strip. */
+    .hero-photo {
+      min-height: clamp(34rem, 100svh - 12rem, max(42rem, 36vw));
+    }
+    /* The form has no panel: the right-hand side of the photo darkens, enough that white words keep
+       4.5:1 contrast on the palest picture, and the form is set straight on it. */
+    .hero-shade {
+      background: linear-gradient(to left, rgb(0 0 0 / 0.74), rgb(0 0 0 / 0.64) calc(var(--hero-gut) + var(--hero-form) + 1rem), rgb(0 0 0 / 0) calc(var(--hero-gut) + var(--hero-form) + 17rem));
+    }
+    .hero-form {
+      --cform-bg: transparent;
+      --cform-ink: #fff;
+      --cform-edge: #fff;
+      --cform-ring: #fff;
+      --cform-ring-gap: 2px;
+      width: var(--hero-form);
+      margin-block: 1.5rem 2.5rem;
+    }
+    .hero-form .btn:hover {
+      background: #fff;
+      color: var(--color-pencil);
+    }
+    .hero-form .ulink:hover {
+      color: var(--color-blush);
+    }
+  }
+  /* A plain white label set in from the corner of the photograph, so the picture shows all round it. */
   .placard {
     background: #fff;
     color: var(--color-ink);
-    border-radius: 4px;
-    box-shadow: 0 1px 2px rgb(28 30 34 / 0.14), 0 6px 20px rgb(28 30 34 / 0.14);
   }
   .hero-title {
-    font-family: var(--font-display);
-    font-weight: 400;
-    /* Sized to the photo it sits on, so "Custom & Stock Cabinetry" fits on one line down to a small phone. */
-    font-size: min(7.2cqw, 2.75rem);
-    line-height: 1.08;
+    /* Sized to the room it has on the photo, so "Custom & Stock Cabinetry" (13 ems long) fits on one line; only the narrowest phones take two. */
+    font-size: clamp(1.2rem, calc((100cqw - var(--hero-aside)) / 13.2), 2.75rem);
+    line-height: 1.12;
     text-wrap: balance;
   }
   .hero-sub {
-    font-size: clamp(1rem, 2.6cqw, 1.25rem);
+    font-size: clamp(1rem, 2.6cqw, 1.3125rem);
     font-weight: 500;
     line-height: 1.35;
     text-wrap: balance;
   }
   .page-title {
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: clamp(2.25rem, 4.2vw, 3.75rem);
-    line-height: 1.08;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    line-height: 1.1;
     text-wrap: balance;
   }
   .heading {
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: clamp(1.75rem, 2.7vw, 2.375rem);
+    font-size: clamp(1.5rem, 2.1vw, 1.875rem);
     line-height: 1.15;
   }
   /* The last word on a cabinet page, set large enough to hold its side of the row beside the form. */
   .closing {
     max-width: 24ch;
     font-family: var(--font-display);
-    font-size: clamp(1.75rem, 2.9vw, 2.625rem);
-    line-height: 1.15;
+    font-size: clamp(1.625rem, 2.7vw, 2.375rem);
+    font-weight: 400;
+    line-height: 1.22;
     text-wrap: balance;
   }
   .lead {
     font-size: clamp(1.1875rem, 1.5vw, 1.375rem);
-    font-weight: 450;
+    font-weight: 400;
     line-height: 1.5;
     max-width: 31em;
     text-wrap: pretty;
@@ -140,21 +194,23 @@
   .measure {
     max-width: 31em;
   }
+  /* The footer's signature: the name upright, the rest of the line smaller and in Caslon's italic. */
   .sign {
-    font-family: var(--font-sign);
-    font-size: clamp(2rem, 4.4vw, 4rem);
-    font-style: italic;
-    line-height: 1.12;
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3.4vw, 3rem);
+    line-height: 1.15;
     text-wrap: balance;
   }
   .sign__name {
     display: block;
-    font-style: normal;
   }
   .sign__rest {
     display: block;
     margin-top: 0.3em;
-    font-size: max(0.55em, 1.375rem);
+    /* The italic f swings left of its box; this brings the line back under the name. */
+    margin-left: 0.12em;
+    font-size: max(0.5em, 1.25rem);
+    font-style: italic;
   }
 
   .photo {
@@ -163,7 +219,7 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
-    background: #ebe7df;
+    background: #e8e7e5;
   }
 
   .btn {
@@ -172,11 +228,10 @@
     justify-content: center;
     min-height: 3.25rem;
     padding: 0.75rem 1.5rem;
-    border-radius: 6px;
     background: var(--color-pencil);
     color: #fff;
     font-size: 1.125rem;
-    font-weight: 650;
+    font-weight: 600;
     line-height: 1.25;
     text-align: center;
     cursor: pointer;
@@ -204,8 +259,7 @@
     /* Room inside the link, so the keyboard focus ring does not sit against the letters. */
     margin-inline: -0.5rem;
     padding-inline: 0.5rem;
-    border-radius: 4px;
-    font-weight: 550;
+    font-weight: 500;
     text-decoration: underline transparent;
     text-decoration-thickness: max(2px, 0.09em);
     text-underline-offset: 0.3em;
@@ -217,15 +271,7 @@
   }
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
     .btn {
-      transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgb(28 30 34 / 0.2);
-    }
-    .btn:active {
-      transform: none;
-      box-shadow: none;
+      transition: background-color 0.2s ease;
     }
     .ulink {
       transition: color 0.2s ease, text-underline-offset 0.2s ease;

@@ -20,20 +20,23 @@ for (const s of services) {
 }
 ---
 
-<div class="show relative aspect-square w-full min-[400px]:aspect-[5/4] overflow-hidden rounded-[6px] sm:aspect-[16/10] lg:aspect-auto lg:h-full lg:min-h-[26rem]" data-show role="group" aria-roledescription="carousel" aria-label="Photographs of our work">
+<div class="show relative aspect-square w-full min-[400px]:aspect-[5/4] overflow-hidden sm:aspect-[16/10] lg:aspect-auto lg:h-full lg:min-h-[26rem]" data-show role="group" aria-roledescription="carousel" aria-label="Photographs of our work">
   {
     slides.map((s, i) => (
       <div class:list={['show__slide', i === 0 && 'is-active']} role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${slides.length}`} data-slide>
-        <Image src={s.image} alt={s.caption} widths={widthsFor(s.image, [800, 1200, 1600, 2000])} sizes="(min-width: 1024px) 62vw, 100vw" class="photo" loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : undefined} />
+        <Image src={s.image} alt={s.caption} widths={widthsFor(s.image, [800, 1200, 1600, 2000, 2400])} sizes="100vw" class="photo" loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : undefined} />
       </div>
     ))
   }
   {
     slides.length > 1 && (
-      <button type="button" class="show__toggle" aria-label="Pause slideshow" data-show-toggle>
-        <span data-icon-pause><svg width="14" height="14" viewBox="0 0 10 10" aria-hidden="true" fill="currentColor"><path d="M1.5 0h2.5v10H1.5zM6 0h2.5v10H6z"></path></svg></span>
-        <span data-icon-play hidden><svg width="14" height="14" viewBox="0 0 10 10" aria-hidden="true" fill="currentColor"><path d="M1.5 0 9.5 5l-8 5z"></path></svg></span>
-      </button>
+      <div class="show__marks">
+        <div class="frame">
+          <div class="show__row" role="group" aria-label="Choose a photograph">
+            {slides.map((_, i) => <button type="button" class="show__mark" aria-label={`Photograph ${i + 1} of ${slides.length}`} aria-current={i === 0 ? 'true' : undefined} data-show-mark />)}
+          </div>
+        </div>
+      </div>
     )
   }
 </div>
@@ -46,7 +49,7 @@ for (const s of services) {
     visibility: hidden;
     /* Only the current and next slides are laid out, so the others' photos are not downloaded. */
     display: none;
-    transition: opacity 0.9s ease, visibility 0s linear 0.9s;
+    transition: opacity 0.6s ease, visibility 0s linear 0.6s;
   }
   .show__slide:global(.is-ready),
   .show__slide:global(.is-active) {
@@ -55,35 +58,52 @@ for (const s of services) {
   .show__slide:global(.is-active) {
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.9s ease;
+    transition: opacity 0.6s ease;
   }
-  .show__toggle {
+  /* One short rule per photo along the foot of the frame, in line with the title above it; the current one is solid.
+     They sit on the darkened foot of the picture, so white shows on any photo. */
+  .show__marks {
     position: absolute;
-    top: 0.625rem;
-    right: 0.625rem;
+    inset: auto 0 0;
     z-index: 1;
-    display: grid;
-    place-items: center;
-    width: max(48px, 2.75rem);
+    pointer-events: none;
+  }
+  .show__row {
+    display: flex;
+    margin-inline: -3px;
+  }
+  /* Each mark is a button 48px tall; choosing one shows that photo and stops the show there. */
+  .show__mark {
+    flex: 0 1 3rem;
+    min-width: 0;
     height: max(48px, 2.75rem);
-    border-radius: 50%;
-    /* White with a dark rim, so the button shows on a pale photo and on a dark one. */
-    background: #fff;
-    color: var(--color-ink);
-    border: 2px solid var(--color-ink);
+    padding: 0 3px;
+    display: flex;
+    align-items: center;
+    pointer-events: auto;
     cursor: pointer;
   }
-  .show__toggle:hover {
-    background: var(--color-ink);
-    color: #fff;
+  .show__mark::before {
+    content: '';
+    flex: 1;
+    height: 4px;
+    background: rgb(255 255 255 / 0.5);
+  }
+  .show__mark:hover::before {
+    background: rgb(255 255 255 / 0.8);
+  }
+  .show__mark[aria-current]::before {
+    background: #fff;
+  }
+  .show__mark:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: -6px;
+    box-shadow: none;
   }
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-    .show__toggle {
-      transition: background-color 0.2s ease, color 0.2s ease;
+    .show__mark::before {
+      transition: background-color 0.2s ease;
     }
-  }
-  .show__toggle [hidden] {
-    display: none;
   }
   @media (prefers-reduced-motion: reduce) {
     .show__slide,
@@ -94,18 +114,16 @@ for (const s of services) {
 </style>
 
 <script>
-  const INTERVAL = 6000;
+  const INTERVAL = 3500;
   document.querySelectorAll<HTMLElement>('[data-show]').forEach((root) => {
     const slides = [...root.querySelectorAll<HTMLElement>('[data-slide]')];
     if (slides.length < 2) return;
-    const toggle = root.querySelector<HTMLButtonElement>('[data-show-toggle]')!;
-    const iconPause = toggle.querySelector<HTMLElement>('[data-icon-pause]')!;
-    const iconPlay = toggle.querySelector<HTMLElement>('[data-icon-play]')!;
+    const marks = [...root.querySelectorAll<HTMLButtonElement>('[data-show-mark]')];
 
     let current = 0;
     let timer: number | undefined;
-    let held = false; // the pointer or keyboard focus is on the slideshow
-    let stopped = matchMedia('(prefers-reduced-motion: reduce)').matches; // paused by the visitor, or by their settings
+    let held = false; // someone is filling in the form that sits on the photo
+    let stopped = matchMedia('(prefers-reduced-motion: reduce)').matches; // the visitor chose a photo, or their settings ask for no motion
 
     const at = (n: number) => (n + slides.length) % slides.length;
     // Fetch the next photo ahead of time, so a slide never fades in half loaded.
@@ -118,7 +136,8 @@ for (const s of services) {
       slides[current].classList.remove('is-active');
       slides[next].classList.add('is-active');
       current = next;
-      prepare(next + 1);
+      marks.forEach((m, i) => (i === current ? m.setAttribute('aria-current', 'true') : m.removeAttribute('aria-current')));
+      if (!stopped) prepare(next + 1);
       schedule();
     }
     function schedule() {
@@ -126,28 +145,25 @@ for (const s of services) {
       timer = undefined;
       if (!stopped && !held && !document.hidden) timer = window.setTimeout(() => go(current + 1), INTERVAL);
     }
-    function paint() {
-      toggle.setAttribute('aria-label', stopped ? 'Play slideshow' : 'Pause slideshow');
-      iconPause.toggleAttribute('hidden', stopped);
-      iconPlay.toggleAttribute('hidden', !stopped);
-    }
 
-    toggle.addEventListener('click', () => {
-      stopped = !stopped;
-      paint();
-      schedule();
-    });
+    // Choosing a photo is also how the show is stopped: it stays on the one chosen.
+    marks.forEach((m, i) =>
+      m.addEventListener('click', () => {
+        stopped = true;
+        clearTimeout(timer);
+        if (i !== current) go(i);
+      }),
+    );
     const hold = (on: boolean) => () => {
       held = on;
       schedule();
     };
-    root.addEventListener('pointerenter', hold(true));
-    root.addEventListener('pointerleave', hold(false));
-    root.addEventListener('focusin', hold(true));
-    root.addEventListener('focusout', hold(false));
+    // The photo fills the top of the page, so the show does not wait for the pointer to leave it: only for the form.
+    const form = root.closest('[data-show-zone]')?.querySelector('form');
+    form?.addEventListener('focusin', hold(true));
+    form?.addEventListener('focusout', hold(false));
     document.addEventListener('visibilitychange', schedule);
 
-    paint();
     if (!stopped) prepare(1);
     schedule();
   });

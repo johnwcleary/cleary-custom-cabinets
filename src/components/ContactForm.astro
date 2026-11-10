@@ -2,18 +2,17 @@
 import { site } from '../lib/site';
 
 interface Props {
-  /** short: three questions, used on the home and cabinet pages. full: the longer form on /contact. */
-  variant?: 'short' | 'full';
   heading?: string;
   helper?: string;
+  /** The "Or call us" line under the button. Left off where the phone number is already beside the form. */
+  call?: boolean;
   class?: string;
 }
-const { variant = 'short', heading, helper, class: className } = Astro.props;
-const full = variant === 'full';
+const { heading, helper, call = true, class: className } = Astro.props;
 ---
 
 <!--
-  The form posts nowhere yet. At launch it is wired to a backend (Cloudflare Pages Function + email,
+  One form, the same three questions on every page that has it. It posts nowhere yet. At launch it is wired to a backend (Cloudflare Pages Function + email,
   or Formspree) — find it by data-form-backend. The honeypot field ("company") must stay empty.
 -->
 <form class:list={['cform', className]} action="#" method="post" data-form-backend="todo-phase-2">
@@ -22,28 +21,13 @@ const full = variant === 'full';
     <label for="cf-name">Your name</label>
     <input id="cf-name" name="name" type="text" autocomplete="name" required />
   </p>
-  {
-    full ? (
-      <>
-        <p class="cform__field">
-          <label for="cf-email">Your email</label>
-          <input id="cf-email" name="email" type="email" autocomplete="email" required />
-        </p>
-        <p class="cform__field">
-          <label for="cf-phone">Your phone number</label>
-          <input id="cf-phone" name="phone" type="tel" autocomplete="tel" />
-        </p>
-      </>
-    ) : (
-      <p class="cform__field">
-        <label for="cf-contact">Your phone number or email</label>
-        <input id="cf-contact" name="contact" type="text" required />
-      </p>
-    )
-  }
+  <p class="cform__field">
+    <label for="cf-contact">Your phone number or email</label>
+    <input id="cf-contact" name="contact" type="text" required />
+  </p>
   <p class="cform__field">
     <label for="cf-message">Tell us about your project</label>
-    <textarea id="cf-message" name="message" rows={full ? 6 : 3} required={full}></textarea>
+    <textarea id="cf-message" name="message" rows="3"></textarea>
   </p>
   <p class="sr-only-baseline" aria-hidden="true">
     <label for="cf-company">Leave this field empty</label>
@@ -51,23 +35,24 @@ const full = variant === 'full';
   </p>
   {helper && <p class="cform__help">{helper}</p>}
   <button type="submit" class="btn cform__send">Send</button>
-  <p class="cform__call">Or call us: <a href={site.phoneHref} class="ulink tap tabular-nums">{site.phone}</a></p>
+  {call && <p class="cform__call">Or call us: <a href={site.phoneHref} class="ulink tap tabular-nums">{site.phone}</a></p>}
 </form>
 
 <style>
-  /* A warm panel with white boxes in it: the boxes are plainly places to type. */
+  /* No frame of its own: plainly boxed places to type, in line with the page. Where the form sits on a
+     photograph, the --cform-* properties turn its words, box edges and focus ring white. */
   .cform {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
     height: 100%;
-    padding: clamp(1rem, 1.6vw, 1.375rem);
-    background: var(--color-sheet);
-    border-radius: 8px;
+    background: var(--cform-bg, #fff);
+    color: var(--cform-ink, inherit);
   }
   .cform__title {
     font-family: var(--font-display);
     font-size: clamp(1.5rem, 2vw, 1.75rem);
+    font-weight: 400;
     line-height: 1.2;
     text-wrap: balance;
   }
@@ -82,7 +67,7 @@ const full = variant === 'full';
   }
   .cform label {
     font-size: 1.0625rem;
-    font-weight: 650;
+    font-weight: 600;
     line-height: 1.35;
   }
   .cform input,
@@ -91,18 +76,17 @@ const full = variant === 'full';
     min-height: 3rem;
     padding: 0.625rem 0.75rem;
     background: #fff;
-    border: 2px solid var(--color-control);
-    border-radius: 6px;
+    border: 1px solid var(--cform-edge, var(--color-control));
+    border-radius: 0;
     font-size: 1.125rem;
     line-height: 1.4;
     color: var(--color-ink);
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    transition: border-color 0.15s ease;
   }
   @media (hover: hover) {
     .cform input:hover,
     .cform textarea:hover {
-      border-color: var(--color-ink);
-      box-shadow: 0 1px 4px rgb(28 30 34 / 0.14);
+      border-color: var(--cform-edge, var(--color-ink));
     }
   }
   .cform textarea {
@@ -112,9 +96,9 @@ const full = variant === 'full';
   }
   .cform input:focus-visible,
   .cform textarea:focus-visible {
-    outline: 3px solid var(--color-pencil);
-    outline-offset: 0;
-    border-color: var(--color-pencil);
+    outline: 3px solid var(--cform-ring, var(--color-pencil));
+    outline-offset: var(--cform-ring-gap, 0);
+    border-color: var(--cform-ring, var(--color-pencil));
     box-shadow: none;
   }
   .cform__help {
@@ -135,6 +119,6 @@ const full = variant === 'full';
     font-size: 1.0625rem;
   }
   .cform__call a {
-    font-weight: 650;
+    font-weight: 600;
   }
 </style>
