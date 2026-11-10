@@ -4,7 +4,7 @@ import SocialLinks from './SocialLinks.astro';
 import Stamp from './sheet/Stamp.astro';
 import { site } from '../lib/site';
 
-// The name on one line, set upright; the rest of the tagline smaller and italic on the next.
+// The name on one line, lettered like the logo; the rest of the tagline smaller on the next.
 const rest = site.tagline.startsWith(site.name) ? site.tagline.slice(site.name.length).replace(/^[,\s]+/, '') : null;
 ---
 
@@ -51,7 +51,9 @@ const rest = site.tagline.startsWith(site.name) ? site.tagline.slice(site.name.l
   /* One label style for every column, so the four line up along the top. */
   .foot-label {
     color: var(--color-blush);
-    font-weight: 650;
+    font-weight: 600;
+    letter-spacing: 0.08em;
     line-height: 1.3;
+    text-transform: uppercase;
   }
 </style>

@@ -61,7 +61,7 @@ const heroAlt = heroCaption(service, all);
         <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 lg:gap-4">
           {others.map((g) => (
             <li>
-              <LightboxLink image={g.data.image} caption={g.data.caption} group={s.slug} class="block aspect-[4/3] overflow-hidden rounded-[4px]">
+              <LightboxLink image={g.data.image} caption={g.data.caption} group={s.slug} class="block aspect-[4/3] overflow-hidden">
                 <Image src={g.data.image} alt={g.data.caption} widths={widthsFor(g.data.image, [320, 560, 800])} sizes="(min-width: 1024px) 23vw, (min-width: 640px) 30vw, 45vw" class="photo" />
               </LightboxLink>
             </li>
