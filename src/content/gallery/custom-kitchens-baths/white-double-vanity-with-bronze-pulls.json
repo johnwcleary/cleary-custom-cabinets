@@ -1,0 +1,9 @@
+{
+  "service": "custom-kitchens-baths",
+  "order": 10,
+  "caption": "White Double Vanity with Bronze Pulls",
+  "image": "../../../assets/gallery/custom-kitchens-baths/white-double-vanity-with-bronze-pulls.jpg",
+  "width": 1800,
+  "height": 2400,
+  "featured": false
+}

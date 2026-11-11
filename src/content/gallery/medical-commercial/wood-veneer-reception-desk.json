@@ -1,0 +1,9 @@
+{
+  "service": "medical-commercial",
+  "order": 2,
+  "caption": "Wood Veneer Reception Desk",
+  "image": "../../../assets/gallery/medical-commercial/wood-veneer-reception-desk.jpg",
+  "width": 2400,
+  "height": 1800,
+  "featured": true
+}

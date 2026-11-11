@@ -1,0 +1,9 @@
+{
+  "service": "medical-commercial",
+  "order": 1,
+  "caption": "Reception Desk with Stained Glass Panels",
+  "image": "../../../assets/gallery/medical-commercial/reception-desk-with-stained-glass-panels.jpg",
+  "width": 2400,
+  "height": 1800,
+  "featured": true
+}

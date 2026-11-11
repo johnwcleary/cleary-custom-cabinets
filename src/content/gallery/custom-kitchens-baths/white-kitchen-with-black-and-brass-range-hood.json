@@ -1,0 +1,9 @@
+{
+  "service": "custom-kitchens-baths",
+  "order": 1,
+  "caption": "White Kitchen with Black and Brass Range Hood",
+  "image": "../../../assets/gallery/custom-kitchens-baths/white-kitchen-with-black-and-brass-range-hood.jpg",
+  "width": 3200,
+  "height": 2400,
+  "featured": true
+}

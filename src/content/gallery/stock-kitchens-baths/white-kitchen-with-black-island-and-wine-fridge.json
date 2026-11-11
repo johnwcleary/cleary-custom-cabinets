@@ -1,0 +1,9 @@
+{
+  "service": "stock-kitchens-baths",
+  "order": 2,
+  "caption": "White Kitchen with Black Island and Wine Fridge",
+  "image": "../../../assets/gallery/stock-kitchens-baths/white-kitchen-with-black-island-and-wine-fridge.jpg",
+  "width": 2400,
+  "height": 1800,
+  "featured": true
+}

@@ -1,9 +1,9 @@
 {
   "service": "custom-kitchens-baths",
-  "order": 28,
+  "order": 38,
   "caption": "Custom Painted Wood Kitchen",
   "image": "../../../assets/gallery/custom-kitchens-baths/28-custom-painted-wood-kitchen.jpg",
   "width": 1800,
   "height": 2400,
-  "featured": true
+  "featured": false
 }

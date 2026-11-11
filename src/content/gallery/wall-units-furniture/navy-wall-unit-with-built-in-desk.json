@@ -1,0 +1,9 @@
+{
+  "service": "wall-units-furniture",
+  "order": 1,
+  "caption": "Navy Wall Unit with Built-In Desk",
+  "image": "../../../assets/gallery/wall-units-furniture/navy-wall-unit-with-built-in-desk.jpg",
+  "width": 2400,
+  "height": 1800,
+  "featured": true
+}
