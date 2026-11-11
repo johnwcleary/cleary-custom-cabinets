@@ -122,23 +122,11 @@
       padding: 2rem 2.25rem 2.25rem;
     }
   }
-  /* The About panel on the home page: the header blue ruled like blueprint paper, a fine grid with a heavier
-     line every fifth square, and a ruled border inset from the edge as on a drawing sheet. */
+  /* The About panel on the home page: the header blue, with a ruled border inset from the edge as on a drawing sheet. */
   .blueprint {
-    --grid: rgb(255 255 255 / 0.07);
-    --grid-major: rgb(255 255 255 / 0.13);
     position: relative;
     padding: clamp(1.5rem, 3.5vw, 3rem) clamp(1.25rem, 3.5vw, 3rem);
-    background-color: var(--color-blue);
-    background-image:
-      linear-gradient(var(--grid-major) 1px, transparent 1px), linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
-      linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-    background-size:
-      5rem 5rem,
-      5rem 5rem,
-      1rem 1rem,
-      1rem 1rem;
-    background-position: -1px -1px;
+    background: var(--color-blue);
     color: #fff;
   }
   .blueprint::before {

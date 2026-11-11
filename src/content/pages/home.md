@@ -1,7 +1,7 @@
 ---
 title: "Home"
 seoTitle: "Stock and Custom Cabinets for the quality and service you deserve"
-heroImage: "../../assets/gallery/custom-kitchens-baths/white-kitchen-with-black-and-brass-range-hood.jpg"
+heroImage: "../../assets/home/01-custom-kitchens-and-baths.jpg"
 heroCaption: "Custom Kitchens and Baths"
 heroTitle: "Custom & Stock Cabinetry"
 heroSubtitle: "Family owned and operated since 1993"
