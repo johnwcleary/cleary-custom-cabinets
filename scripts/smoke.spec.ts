@@ -11,9 +11,16 @@ const BLOCKED_HOSTS = /squarespace-cdn\.com|squarespace\.com|fonts\.googleapis\.
 function watch(page: Page) {
   const errors: string[] = [];
   const external: string[] = [];
-  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  // The Google map is an embedded page of its own: what it loads, and what it logs, is Google's, so only
+  // the site's own frame is checked. The map's frame itself must be Google Maps and nothing else.
+  page.on('console', (m) => m.type() === 'error' && !/^https:\/\/[a-z.]*google\.com\//.test(m.location().url) && errors.push(m.text()));
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('request', (r) => {
+    const frame = r.frame();
+    if (frame.parentFrame()) {
+      if (r.isNavigationRequest() && !/^https:\/\/(www|maps)\.google\.com\/maps/.test(r.url())) external.push(r.url());
+      return;
+    }
     const url = new URL(r.url());
     if (!['127.0.0.1', 'localhost'].includes(url.hostname) && url.protocol.startsWith('http')) external.push(r.url());
   });

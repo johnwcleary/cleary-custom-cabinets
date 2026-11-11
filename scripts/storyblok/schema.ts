@@ -203,6 +203,7 @@ export const COMPONENTS: Component[] = [
         photos: blocks('Photos', ['gallery_photo'], { description: 'Drag to change the order.' }),
         closing: textarea('Closing sentence'),
         closing_aside: textarea('Extra closing line'),
+        brands: blocks('Brands we carry', ['featured_brand'], { description: 'Optional. A short description of each brand and a link to its website.' }),
         video_title: text('Video title'),
         video_url: text('Video link (Vimeo or YouTube)'),
       },
@@ -214,6 +215,18 @@ export const COMPONENTS: Component[] = [
         },
       },
     ),
+  },
+  {
+    name: 'featured_brand',
+    display_name: 'Brand on a cabinet page',
+    is_root: false,
+    is_nestable: true,
+    preview_field: 'name',
+    schema: fields({
+      name: text('Brand name', { required: true }),
+      url: text('Website link', { description: 'Opens in a new tab.' }),
+      about: textarea('Short description', { required: true, description: 'One or two sentences, in your own words.' }),
+    }),
   },
   {
     name: 'gallery_photo',

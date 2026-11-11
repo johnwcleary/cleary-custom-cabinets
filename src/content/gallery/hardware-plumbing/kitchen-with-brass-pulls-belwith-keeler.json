@@ -1,0 +1,9 @@
+{
+  "service": "hardware-plumbing",
+  "order": 2,
+  "caption": "Kitchen with brass pulls by Belwith Keeler",
+  "image": "../../../assets/gallery/hardware-plumbing/kitchen-with-brass-pulls-belwith-keeler.jpg",
+  "width": 1080,
+  "height": 891,
+  "featured": true
+}

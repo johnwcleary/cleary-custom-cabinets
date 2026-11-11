@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import Logo from './Logo.astro';
+import SocialLinks from './SocialLinks.astro';
 import { site } from '../lib/site';
 import { getServices, serviceHref, heroCaption, getAllGallery, getBrandGroups } from '../lib/content';
 import { sentenceCase } from '../lib/text';
@@ -15,7 +16,7 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const current = (href: string) => (path === href ? 'page' : undefined);
 ---
 
-<div class="on-dark bg-pencil text-white">
+<div class="on-blue bg-blue text-white">
   <p class="frame py-2 text-center font-medium leading-snug">{announcement}</p>
 </div>
 <header class="sticky top-0 z-40 border-b border-line bg-paper">
@@ -51,7 +52,8 @@ const current = (href: string) => (path === href ? 'page' : undefined);
         <li><a href="/contact" class="nav-link tap" aria-current={current('/contact')}>Contact</a></li>
       </ul>
     </nav>
-    <a href={site.phoneHref} class="ulink tap ml-auto text-[1.125rem] font-semibold tabular-nums lg:text-[1.375rem]">{site.phone}</a>
+    <SocialLinks class="head-social ml-auto hidden lg:flex" />
+    <a href={site.phoneHref} class="plain-link tap ml-auto text-[1.125rem] font-semibold tabular-nums lg:ml-0 lg:text-[1.375rem]">{site.phone}</a>
     <button type="button" class="tap cursor-pointer border-2 border-ink px-3 font-semibold lg:hidden" aria-expanded="false" aria-controls="mobile-menu" data-disclosure>Menu</button>
   </div>
 
@@ -62,6 +64,7 @@ const current = (href: string) => (path === href ? 'page' : undefined);
         <li class="mt-4"><a href="/about" class="nav-link tap w-full" aria-current={current('/about')}>About</a></li>
         <li><a href="/contact" class="nav-link tap w-full" aria-current={current('/contact')}>Contact</a></li>
       </ul>
+      <SocialLinks labels class="social-list mt-4 flex flex-col text-[1.125rem]" />
     </nav>
   </div>
 </header>

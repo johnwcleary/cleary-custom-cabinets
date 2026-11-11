@@ -1,7 +1,6 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ContactForm from '../components/ContactForm.astro';
 import Products from '../components/sheet/Products.astro';
 import Slideshow from '../components/sheet/Slideshow.astro';
 import Fig from '../components/sheet/Fig.astro';
@@ -26,23 +25,16 @@ const groups = [
 
 <BaseLayout title={home.data.seoTitle}>
   <section class="pb-[clamp(0.5rem,1vw,1rem)]" aria-labelledby="home-title">
-    <!-- The photo runs from one edge of the screen to the other. On a wide screen the form is set in white on its darkened right-hand side; on a narrow one the form follows the photo. -->
-    <div class="hero grid grid-cols-1 gap-4 lg:gap-0" data-show-zone>
-      <div class="hero-photo relative min-w-0 lg:col-start-1 lg:row-start-1">
+    <!-- The photo runs from one edge of the screen to the other. The title and a button to the contact page sit on a blue
+         panel: on its lower left on a wide screen, under it on a narrower one. -->
+    <div class="hero relative">
+      <div class="hero-photo relative min-w-0 lg:grid">
         <Slideshow />
-        <div class="hero-shade pointer-events-none absolute inset-0 hidden lg:block"></div>
-        <!-- The title is set straight on the photo, in line with the rest of the page; clicks pass through to the slideshow. -->
-        <div class="hero-text pointer-events-none absolute inset-x-0 bottom-0">
-          <div class="hero-col frame">
-            <h1 id="home-title" class="hero-title">{h.heroTitle}</h1>
-            <p class="hero-sub mt-1">{h.heroSubtitle}</p>
-          </div>
-        </div>
       </div>
-      <div class="frame pointer-events-none lg:z-10 lg:col-start-1 lg:row-start-1 lg:flex lg:items-center lg:justify-end">
-        <div id="appointment" class="hero-form pointer-events-auto">
-          <ContactForm heading={h.contactHeading} />
-        </div>
+      <div class="hero-panel on-blue">
+        <h1 id="home-title" class="hero-title">{h.heroTitle}</h1>
+        <p class="hero-sub mt-2">{h.heroSubtitle}</p>
+        {h.showroomButton && <p class="mt-6"><a href="/contact" class="btn btn-white btn-lg max-sm:w-full">{h.showroomButton}</a></p>}
       </div>
     </div>
   </section>
@@ -109,7 +101,7 @@ const groups = [
       <h2 id="showroom-title" class="heading mb-3">{h.showroomLabel}</h2>
       {h.showroomText && <p class="lead mb-1.5">{h.showroomText}</p>}
       <p class="mb-3"><a href={site.mapsUrl} rel="noopener" class="ulink tap">{site.address.street}, {site.address.city}, {site.address.state} {site.address.zip}</a></p>
-      {h.showroomButton && <a href="#appointment" class="btn">{h.showroomButton}</a>}
+      {h.showroomButton && <a href="/contact" class="btn">{h.showroomButton}</a>}
     </div>
   </section>
 </BaseLayout>

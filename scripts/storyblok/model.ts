@@ -150,6 +150,7 @@ export async function readLocal(): Promise<StoryDraft[]> {
         photos: photos.map((p) => blok('gallery_photo', { image: localRef(p.file, p.image), caption: p.caption, featured: !!p.featured })),
         closing: data.closing,
         closing_aside: data.closingAside ?? '',
+        brands: (data.brands ?? []).map((b: any) => blok('featured_brand', { name: b.name, url: b.url ?? '', about: b.about })),
         video_title: data.video?.title ?? '',
         video_url: data.video?.url ?? '',
         seo_title: data.seoTitle,
@@ -393,6 +394,9 @@ export function renderFiles(stories: Story[], sizes: Map<string, { width: number
     const c = story.content;
     const order = Number(c.order) || i + 1;
     const f = `src/content/services/${pad(order)}-${story.slug}.md`;
+    const brands = (c.brands ?? [])
+      .filter((b: any) => str(b.name))
+      .map((b: any) => (str(b.url) ? { name: str(b.name), url: str(b.url), about: str(b.about) } : { name: str(b.name), about: str(b.about) }));
     out.push({
       path: f,
       content: fm([
@@ -403,6 +407,7 @@ export function renderFiles(stories: Story[], sizes: Map<string, { width: number
         ['intro', str(c.intro), 'quoted'],
         ['closing', str(c.closing), 'quoted'],
         ['closingAside', str(c.closing_aside)],
+        ['brands', brands.length ? brands : undefined],
         ['heroImage', imageRef(f, c.hero_image, plan)],
         ['seoTitle', str(c.seo_title)],
         ['legacyPath', str(c.legacy_path) || `/cabinets-products/${story.slug}`],

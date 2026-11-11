@@ -49,7 +49,7 @@ for (const s of services) {
     visibility: hidden;
     /* Only the current and next slides are laid out, so the others' photos are not downloaded. */
     display: none;
-    transition: opacity 0.6s ease, visibility 0s linear 0.6s;
+    transition: opacity 0.9s ease, visibility 0s linear 0.9s;
   }
   .show__slide:global(.is-ready),
   .show__slide:global(.is-active) {
@@ -58,14 +58,16 @@ for (const s of services) {
   .show__slide:global(.is-active) {
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.6s ease;
+    transition: opacity 0.9s ease;
   }
   /* One short rule per photo along the foot of the frame, in line with the title above it; the current one is solid.
-     They sit on the darkened foot of the picture, so white shows on any photo. */
+     The foot of the picture darkens a little behind them, so white shows on any photo. */
   .show__marks {
     position: absolute;
     inset: auto 0 0;
     z-index: 1;
+    padding-top: 2rem;
+    background: linear-gradient(to top, rgb(0 0 0 / 0.45), rgb(0 0 0 / 0));
     pointer-events: none;
   }
   .show__row {
@@ -114,7 +116,7 @@ for (const s of services) {
 </style>
 
 <script>
-  const INTERVAL = 3500;
+  const INTERVAL = 5500;
   document.querySelectorAll<HTMLElement>('[data-show]').forEach((root) => {
     const slides = [...root.querySelectorAll<HTMLElement>('[data-slide]')];
     if (slides.length < 2) return;
@@ -122,7 +124,6 @@ for (const s of services) {
 
     let current = 0;
     let timer: number | undefined;
-    let held = false; // someone is filling in the form that sits on the photo
     let stopped = matchMedia('(prefers-reduced-motion: reduce)').matches; // the visitor chose a photo, or their settings ask for no motion
 
     const at = (n: number) => (n + slides.length) % slides.length;
@@ -143,7 +144,7 @@ for (const s of services) {
     function schedule() {
       clearTimeout(timer);
       timer = undefined;
-      if (!stopped && !held && !document.hidden) timer = window.setTimeout(() => go(current + 1), INTERVAL);
+      if (!stopped && !document.hidden) timer = window.setTimeout(() => go(current + 1), INTERVAL);
     }
 
     // Choosing a photo is also how the show is stopped: it stays on the one chosen.
@@ -154,14 +155,6 @@ for (const s of services) {
         if (i !== current) go(i);
       }),
     );
-    const hold = (on: boolean) => () => {
-      held = on;
-      schedule();
-    };
-    // The photo fills the top of the page, so the show does not wait for the pointer to leave it: only for the form.
-    const form = root.closest('[data-show-zone]')?.querySelector('form');
-    form?.addEventListener('focusin', hold(true));
-    form?.addEventListener('focusout', hold(false));
     document.addEventListener('visibilitychange', schedule);
 
     if (!stopped) prepare(1);
