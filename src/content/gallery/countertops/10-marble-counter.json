@@ -1,9 +1,0 @@
-{
-  "service": "countertops",
-  "order": 10,
-  "caption": "Marble Counter",
-  "image": "../../../assets/gallery/countertops/10-marble-counter.jpg",
-  "width": 2400,
-  "height": 1792,
-  "featured": true
-}

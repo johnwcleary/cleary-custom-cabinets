@@ -2,6 +2,8 @@
 import { render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Fig from '../components/sheet/Fig.astro';
+import Hours from '../components/Hours.astro';
+import Map from '../components/Map.astro';
 import { getPage, getBrandGroups } from '../lib/content';
 import { site } from '../lib/site';
 
@@ -14,32 +16,63 @@ const exterior = photos.find((p) => p.caption.startsWith('Our Small Business'));
 const others = photos.filter((p) => p !== exterior);
 ---
 
-<BaseLayout title={about.data.seoTitle} image={exterior?.image}>
+<!-- This page has its own large map, so the footer leaves out its small one. -->
+<BaseLayout title={about.data.seoTitle} image={exterior?.image} footerMap={false}>
   <section class="frame section grid grid-cols-1 gap-5 lg:grid-cols-2 lg:gap-10" aria-labelledby="page-title">
     <div>
       <h1 id="page-title" class="page-title mb-3">About {site.name}</h1>
       <div class="lead [&>p+p]:mt-3"><Content /></div>
-      {h.showroomButton && <p class="mt-4"><a href="/#appointment" class="btn">{h.showroomButton}</a></p>}
+      {h.showroomButton && <p class="mt-4"><a href="/contact" class="btn">{h.showroomButton}</a></p>}
     </div>
-    {exterior && <Fig image={exterior.image} caption={exterior.caption} ratio="16 / 10" group="about" eager sizes="(min-width: 1024px) 45vw, 92vw" />}
+    {exterior && <Fig image={exterior.image} caption={exterior.caption} ratio="16 / 10" group="about" eager hideCaption sizes="(min-width: 1024px) 45vw, 92vw" />}
   </section>
 
+  <!-- Edge to edge, as on the home page. On a phone the first photo is double width, so the five fill two columns evenly. Captions stay as alt text and in the enlarged view. -->
   <section class="frame section" aria-label="Our showroom and shop">
-    <ul class="grid grid-cols-2 gap-x-3 gap-y-4 lg:grid-cols-5 lg:gap-x-4">
-      {others.map((p) => <li><Fig image={p.image} caption={p.caption} ratio="4 / 5" group="about" sizes="(min-width: 1024px) 18vw, 46vw" /></li>)}
+    <ul class="grid grid-cols-2 lg:grid-cols-5">
+      {
+        others.map((p, i) => (
+          <li class:list={[i === 0 && 'col-span-2 lg:col-span-1']}>
+            <Fig image={p.image} caption={p.caption} ratio={i === 0 ? '16 / 10' : '4 / 5'} ratioLg="4 / 5" group="about" hideCaption fill sizes={i === 0 ? '(min-width: 1024px) 18vw, 100vw' : '(min-width: 1024px) 18vw, 50vw'} />
+          </li>
+        ))
+      }
     </ul>
   </section>
 
+  <section class="frame section grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-10" aria-labelledby="visit-title">
+    <div class="text-[1.125rem]">
+      <h2 id="visit-title" class="heading mb-3">Visit the showroom</h2>
+      <address class="not-italic">
+        <a href={site.mapsUrl} target="_blank" rel="noopener" class="ulink tap py-2 leading-snug">{site.address.street}<br />{site.address.city}, {site.address.state} {site.address.zip}<span class="sr-only-baseline"> (opens Google Maps in a new tab)</span></a>
+      </address>
+      <h3 class="kicker mt-4">Showroom hours</h3>
+      <Hours class="hours-table max-w-[21rem] pt-1.5" />
+    </div>
+    <Map class="aspect-[4/3] sm:aspect-[16/9]" />
+  </section>
+
   <section class="frame section" aria-labelledby="lines-title">
-    <h2 id="lines-title" class="heading mb-3">Lines we distribute</h2>
-    <div class="grid grid-cols-2 gap-x-5 gap-y-4 lg:grid-cols-4">
+    <h2 id="lines-title" class="heading mb-4">Lines we distribute</h2>
+    <!-- The groups run down the columns like a printed list, so short and long ones pack together without gaps. -->
+    <div class="lines">
       {
         brands.map((g) => (
-          <section aria-label={g.data.label}>
-            <h3 class="text-[1.125rem] font-semibold">{g.data.label}</h3>
+          <section class="lines__group" aria-labelledby={`lines-${g.id}`}>
+            <h3 id={`lines-${g.id}`} class="kicker">{g.data.label}</h3>
             <ul class="leading-snug [overflow-wrap:anywhere]">
               {g.data.items.map((b) => (
-                <li>{b.url ? <a href={b.url} rel="noopener" class="ulink tap">{b.name}</a> : <span class="tap">{b.name}</span>}</li>
+                <li>
+                  {b.url ? (
+                    <a href={b.url} target="_blank" rel="noopener" class="ulink tap gap-1.5">
+                      {b.name}
+                      <span class="sr-only-baseline"> (opens in a new tab)</span>
+                      <svg class="shrink-0" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 1.5h6.5V8M10.5 1.5 1.5 10.5" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
+                    </a>
+                  ) : (
+                    <span class="tap">{b.name}</span>
+                  )}
+                </li>
               ))}
             </ul>
           </section>
@@ -48,3 +81,22 @@ const others = photos.filter((p) => p !== exterior);
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .lines {
+    columns: 2 8.5rem;
+    column-gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+  @media (min-width: 1024px) {
+    .lines {
+      columns: 4;
+    }
+  }
+  /* A blue rule over each group; a group is never split across two columns. */
+  .lines__group {
+    break-inside: avoid;
+    margin-bottom: 1.75rem;
+    padding-top: 0.625rem;
+    border-top: 2px solid var(--color-blue);
+  }
+</style>

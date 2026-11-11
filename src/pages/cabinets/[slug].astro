@@ -25,6 +25,9 @@ const all = await getAllGallery();
 const { featured, rest: others } = splitFeatured(items, s.heroImage.src);
 const [hero, ...rest] = featured;
 const heroAlt = heroCaption(service, all);
+// One row of brands on a wide screen where they fit; otherwise rows of three.
+const n = s.brands?.length ?? 0;
+const brandCols = n === 4 ? 'lg:grid-cols-4' : n === 5 ? 'lg:grid-cols-3 xl:grid-cols-5' : 'lg:grid-cols-3';
 ---
 
 <BaseLayout title={s.seoTitle} image={s.heroImage}>
@@ -54,6 +57,34 @@ const heroAlt = heroCaption(service, all);
   }
 
   {
+    s.brands && s.brands.length > 0 && (
+      <section class="frame section" aria-labelledby="brands-title">
+        <h2 id="brands-title" class="heading mb-4">Brands we carry</h2>
+        <!-- Each brand under a blue rule: its name, linking to its own site in a new tab, and a line about it in our words. -->
+        <ul class:list={['grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2', brandCols]}>
+          {s.brands.map((b) => (
+            <li class="border-t-2 border-blue pt-3">
+              <h3 class="display text-[1.375rem]">
+                {b.url ? (
+                  <a href={b.url} target="_blank" rel="noopener" class="ulink tap">
+                    <span>
+                      {b.name}<span class="sr-only-baseline"> (opens in a new tab)</span>
+                      <svg class="ml-1 inline align-baseline" width="13" height="13" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 1.5h6.5V8M10.5 1.5 1.5 10.5" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
+                    </span>
+                  </a>
+                ) : (
+                  <span class="tap">{b.name}</span>
+                )}
+              </h3>
+              <p class="mt-1 text-muted">{b.about}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
     others.length > 0 && (
       <section class="frame pb-[clamp(1.25rem,2.4vw,2.25rem)]" aria-labelledby="collection-title">
         <h2 id="collection-title" class="heading mb-3">More from the collection</h2>
@@ -61,7 +92,7 @@ const heroAlt = heroCaption(service, all);
         <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 lg:gap-4">
           {others.map((g) => (
             <li>
-              <LightboxLink image={g.data.image} caption={g.data.caption} group={s.slug} class="block aspect-[4/3] overflow-hidden">
+              <LightboxLink image={g.data.image} caption={g.data.caption} group={s.slug} class="hl block aspect-[4/3] overflow-hidden">
                 <Image src={g.data.image} alt={g.data.caption} widths={widthsFor(g.data.image, [320, 560, 800])} sizes="(min-width: 1024px) 23vw, (min-width: 640px) 30vw, 45vw" class="photo" />
               </LightboxLink>
             </li>

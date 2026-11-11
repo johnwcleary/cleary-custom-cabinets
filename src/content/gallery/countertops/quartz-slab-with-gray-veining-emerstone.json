@@ -1,0 +1,9 @@
+{
+  "service": "countertops",
+  "order": 12,
+  "caption": "Quartz slab with gray veining by Emerstone",
+  "image": "../../../assets/gallery/countertops/quartz-slab-with-gray-veining-emerstone.jpg",
+  "width": 2400,
+  "height": 1225,
+  "featured": false
+}

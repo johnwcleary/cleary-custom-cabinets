@@ -5,16 +5,22 @@ import { widthsFor } from '../../lib/img';
 
 const services = await getServices();
 const gallery = await getAllGallery();
+// The large tile carries the opening sentence of its page.
+const firstSentence = (t: string) => t.match(/^.*?[.!?](?=\s|$)/)?.[0] ?? t;
 ---
 
-<!-- Seven photos, each named on a white label set in from its corner. The first is double width, which fills the grid evenly. -->
-<ul class="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-5">
+<!-- The first product large on the left with a line about it; the other six smaller beside it, each named
+     underneath. On a phone the first runs the full width and the rest follow two to a row. -->
+<ul class="products">
   {
     services.map((s, i) => (
-      <li class:list={[i === 0 && 'col-span-2']}>
-        <a href={serviceHref(s.data.slug)} class:list={['tile relative block h-full overflow-hidden', i === 0 ? 'aspect-[16/9] lg:aspect-auto' : 'aspect-[4/3]']}>
-          <Image src={s.data.heroImage} alt={heroCaption(s, gallery)} widths={widthsFor(s.data.heroImage, [320, 480, 800, 1200])} sizes={i === 0 ? '(min-width: 1024px) 48vw, 100vw' : '(min-width: 1024px) 23vw, 48vw'} class="photo absolute inset-0" />
-          <span class:list={['tile__name placard display', i === 0 ? 'text-[1.5rem] lg:text-[1.875rem]' : 'text-[0.9375rem] min-[360px]:text-[1.0625rem] min-[400px]:text-[1.1875rem] sm:text-[1.375rem] lg:text-[1.1875rem] xl:text-[1.5rem]']}>{s.data.shortName ?? s.data.title}</span>
+      <li class:list={[i === 0 && 'products__big']}>
+        <a href={serviceHref(s.data.slug)} class="products__link">
+          <span class="products__frame hl">
+            <Image src={s.data.heroImage} alt={heroCaption(s, gallery)} widths={widthsFor(s.data.heroImage, [320, 480, 800, 1200])} sizes={i === 0 ? '(min-width: 1024px) 40vw, 100vw' : '(min-width: 1024px) 18vw, 46vw'} class="photo absolute inset-0" />
+          </span>
+          <span class="products__name">{s.data.shortName ?? s.data.title}</span>
+          {i === 0 && s.data.intro && <span class="products__sub">{firstSentence(s.data.intro)}</span>}
         </a>
       </li>
     ))
@@ -22,37 +28,81 @@ const gallery = await getAllGallery();
 </ul>
 
 <style>
-  .tile__name {
-    position: absolute;
-    left: var(--inset);
-    bottom: var(--inset);
-    max-width: calc(100% - 2 * var(--inset));
-    --inset: 0.25rem;
-    padding: 0.4em 0.6em 0.35em;
-    /* A long name breaks before it is ever cut off, however large the reader's text is set. */
-    overflow-wrap: anywhere;
+  .products {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 0.875rem;
+  }
+  .products__big {
+    grid-column: 1 / -1;
+  }
+  .products__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .products__frame {
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background: #e8e7e5;
+  }
+  .products__big .products__frame {
+    aspect-ratio: 16 / 10;
+  }
+  /* Caslon, with an arrow; pointing at the tile underlines the name and draws the blue frame of .hl. */
+  .products__name {
+    margin-top: 0.6rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.1875rem, 1.7vw, 1.5rem);
+    line-height: 1.2;
     text-decoration: underline transparent;
     text-decoration-thickness: max(2px, 0.07em);
     text-underline-offset: 0.2em;
+    overflow-wrap: anywhere;
   }
-  .tile:hover .tile__name {
-    background: var(--color-ink);
-    color: #fff;
+  .products__name::after {
+    content: "\2192";
+    display: inline-block;
+    margin-left: 0.4em;
+    font-family: var(--font-sans);
+    font-size: 0.8em;
+  }
+  .products__link:hover .products__name {
     text-decoration-color: currentColor;
   }
-  @media (min-width: 360px) {
-    .tile__name {
-      --inset: 0.5rem;
-    }
+  .products__sub {
+    margin-top: 0.3rem;
+    color: var(--color-muted);
+    line-height: 1.45;
   }
   @media (min-width: 1024px) {
-    .tile__name {
-      --inset: 0.75rem;
+    .products {
+      grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr));
+      gap: 1.75rem 1.25rem;
+    }
+    .products__big {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+    .products__big .products__frame {
+      flex: 1;
+      min-height: 20rem;
+      aspect-ratio: auto;
+    }
+    .products__big .products__name {
+      font-size: clamp(1.5rem, 2.1vw, 1.875rem);
     }
   }
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-    .tile__name {
-      transition: background-color 0.2s ease, color 0.2s ease, text-decoration-color 0.2s ease;
+    .products__name {
+      transition: text-decoration-color 0.2s ease;
+    }
+    .products__name::after {
+      transition: translate 0.2s ease;
+    }
+    .products__link:hover .products__name::after {
+      translate: 0.25em 0;
     }
   }
 </style>

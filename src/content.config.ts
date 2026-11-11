@@ -23,6 +23,8 @@ const services = defineCollection({
       closing: z.string(),
       /** Optional second closing line (wall units: "Bring us your design idea…"). */
       closingAside: z.string().optional(),
+      /** Brands sold for this product, each with a short description in our own words. */
+      brands: z.array(z.object({ name: z.string(), url: z.url().optional(), about: z.string() })).optional(),
       heroImage: image(),
       /** The live page <title>, kept because it is specific and useful for search. */
       seoTitle: z.string(),

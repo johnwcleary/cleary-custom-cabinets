@@ -14,9 +14,11 @@ interface Props {
   description?: string;
   /** Open Graph image; defaults to the home hero. */
   image?: ImageMetadata;
+  /** The small map in the footer; off where the page shows a large one. */
+  footerMap?: boolean;
 }
 
-const { title, description = site.metaDescription } = Astro.props;
+const { title, description = site.metaDescription, footerMap = true } = Astro.props;
 const fullTitle = `${title} — ${site.name}`;
 // Canonical URL on the production domain (astro.config `site`).
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -52,7 +54,7 @@ const ogUrl = new URL(og.src, Astro.site);
     <main id="main" tabindex="-1">
       <slot />
     </main>
-    <Footer />
+    <Footer map={footerMap} />
     <Lightbox />
   </body>
 </html>

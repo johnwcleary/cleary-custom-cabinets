@@ -1,9 +1,0 @@
-{
-  "service": "hardware-plumbing",
-  "order": 11,
-  "caption": "Cutting Board Drawer",
-  "image": "../../../assets/gallery/hardware-plumbing/11-cutting-board-drawer.jpg",
-  "width": 480,
-  "height": 640,
-  "featured": false
-}

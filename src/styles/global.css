@@ -6,7 +6,8 @@
 
 /*
  * The colours and the square corners are the logo's: its black and plum on plain white, inside a
- * ruled frame. Titles are set in Caslon, the old sign-writer's serif, in ordinary upper and lower
+ * ruled frame, with the blue of the old site's header band for the strip at the top, the footer and
+ * the names on the product photos. Titles are set in Caslon, the old sign-writer's serif, in ordinary upper and lower
  * case; running text is Source Sans. Every size is in rem on an 18px base, so the whole site
  * follows the reader's own text-size setting.
  */
@@ -15,8 +16,11 @@
   --color-ink: #1c1a19; /* the logo's black: 17.3:1 on white */
   --color-muted: #45484d; /* 9.3:1 on white */
   --color-pencil: #682c43; /* the logo's plum: 10.1:1 on white */
-  --color-plum-deep: #4c1e30; /* the signed footer */
+  --color-plum-deep: #4c1e30;
   --color-blush: #ecd5c8;
+  /* The old site's header blue (#39739d), taken a shade deeper so white words on it keep 7:1, as body text does. */
+  --color-blue: #2c5d82; /* 7.0:1 with white */
+  --color-blue-pale: #d6e6f2;
   --color-line: rgb(28 26 25 / 0.22);
   --color-control: #54575c; /* edges of boxes you type in: 7.0:1 on white */
 
@@ -60,10 +64,13 @@
     outline-offset: 3px;
     box-shadow: 0 0 0 3px #fff;
   }
-  .on-dark :focus-visible,
-  .on-plum :focus-visible {
+  .on-dark :focus-visible {
     outline-color: #fff;
     box-shadow: 0 0 0 3px var(--color-plum-deep);
+  }
+  .on-blue :focus-visible {
+    outline-color: #fff;
+    box-shadow: 0 0 0 3px var(--color-blue);
   }
   strong {
     font-weight: 600;
@@ -91,77 +98,37 @@
   .display {
     line-height: 1.15;
   }
-  /* The home page's opening photo, as wide as the screen. --hero-aside is the width the title cannot use:
-     on a wide screen, the form that sits on the right of the photo. --hero-foot is the room left under
-     the title for the slideshow's marks. --hero-gut is the page's margin, as .frame leaves it. */
+  /* The home page's opening photo, as wide as the screen. On a wide screen the title and button sit on a
+     solid blue panel set on its lower left, in line with the page's margin; on a narrower one the panel
+     follows the photo, full width. */
   .hero {
-    --hero-fade: 3rem;
-    --hero-foot: 2.75rem;
-    --hero-aside: 0px;
     --hero-gut: max(clamp(0.875rem, 2.5vw, 2.25rem), (100vw - 84rem) / 2);
   }
-  .hero-col {
-    container-type: inline-size;
-  }
-  /* The title is white, straight on the photograph. Behind it the picture darkens toward its foot,
-     enough that the words keep at least 4.5:1 contrast on the palest photo. */
-  .hero-text {
-    padding: var(--hero-fade) 0 var(--hero-foot);
-    background: linear-gradient(to top, rgb(0 0 0 / 0.68), rgb(0 0 0 / 0.56) calc(100% - var(--hero-fade)), rgb(0 0 0 / 0.28) calc(100% - 0.5 * var(--hero-fade)), rgb(0 0 0 / 0));
+  .hero-panel {
+    padding: 1.5rem var(--hero-gut) 1.75rem;
+    background: var(--color-blue);
     color: #fff;
   }
-  @media (min-width: 640px) {
-    .hero {
-      --hero-fade: 4.5rem;
-      --hero-foot: 3rem;
-    }
-  }
   @media (min-width: 1024px) {
-    .hero {
-      --hero-fade: 6rem;
-      --hero-form: 25rem;
-      --hero-aside: calc(var(--hero-form) + 4rem);
-    }
     /* About as tall as the window allows, and taller on a very wide screen so the photo is not cut to a strip. */
     .hero-photo {
       min-height: clamp(34rem, 100svh - 12rem, max(42rem, 36vw));
     }
-    /* The form has no panel: the right-hand side of the photo darkens, enough that white words keep
-       4.5:1 contrast on the palest picture, and the form is set straight on it. */
-    .hero-shade {
-      background: linear-gradient(to left, rgb(0 0 0 / 0.74), rgb(0 0 0 / 0.64) calc(var(--hero-gut) + var(--hero-form) + 1rem), rgb(0 0 0 / 0) calc(var(--hero-gut) + var(--hero-form) + 17rem));
+    .hero-panel {
+      position: absolute;
+      left: var(--hero-gut);
+      bottom: 4rem;
+      width: min(33rem, 45vw);
+      padding: 2rem 2.25rem 2.25rem;
     }
-    .hero-form {
-      --cform-bg: transparent;
-      --cform-ink: #fff;
-      --cform-edge: #fff;
-      --cform-ring: #fff;
-      --cform-ring-gap: 2px;
-      width: var(--hero-form);
-      margin-block: 1.5rem 2.5rem;
-    }
-    .hero-form .btn:hover {
-      background: #fff;
-      color: var(--color-pencil);
-    }
-    .hero-form .ulink:hover {
-      color: var(--color-blush);
-    }
-  }
-  /* A plain white label set in from the corner of the photograph, so the picture shows all round it. */
-  .placard {
-    background: #fff;
-    color: var(--color-ink);
   }
   .hero-title {
-    /* Sized to the room it has on the photo, so "Custom & Stock Cabinetry" (13 ems long) fits on one line; only the narrowest phones take two. */
-    font-size: clamp(1.2rem, calc((100cqw - var(--hero-aside)) / 13.2), 2.75rem);
-    line-height: 1.12;
+    font-size: clamp(2rem, 3.4vw, 3.25rem);
+    line-height: 1.08;
     text-wrap: balance;
   }
   .hero-sub {
-    font-size: clamp(1rem, 2.6cqw, 1.3125rem);
-    font-weight: 500;
+    font-size: clamp(1.0625rem, 1.5vw, 1.3125rem);
     line-height: 1.35;
     text-wrap: balance;
   }
@@ -194,23 +161,13 @@
   .measure {
     max-width: 31em;
   }
-  /* The footer's signature: the name upright, the rest of the line smaller and in Caslon's italic. */
-  .sign {
-    font-family: var(--font-display);
-    font-size: clamp(1.75rem, 3.4vw, 3rem);
-    line-height: 1.15;
-    text-wrap: balance;
-  }
-  .sign__name {
-    display: block;
-  }
-  .sign__rest {
-    display: block;
-    margin-top: 0.3em;
-    /* The italic f swings left of its box; this brings the line back under the name. */
-    margin-left: 0.12em;
-    font-size: max(0.5em, 1.25rem);
-    font-style: italic;
+  /* A small blue heading over a group: lines on the About page, ways to reach us on Contact. */
+  .kicker {
+    color: var(--color-blue);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.3;
+    text-transform: uppercase;
   }
 
   .photo {
@@ -239,6 +196,27 @@
   .btn:hover {
     background: var(--color-ink);
   }
+  /* Every button ends in an arrow that moves on with the pointer. */
+  .btn::after {
+    content: "\2192";
+    margin-left: 0.6em;
+    font-weight: 400;
+  }
+  /* The main call to action, larger. */
+  /* White, for a button on the blue. */
+  .btn-white {
+    background: #fff;
+    color: var(--color-blue);
+  }
+  .btn-white:hover {
+    background: var(--color-blush);
+    color: var(--color-pencil);
+  }
+  .btn-lg {
+    min-height: 3.75rem;
+    padding: 0.875rem 1.75rem;
+    font-size: 1.25rem;
+  }
   .ulink {
     text-decoration: underline;
     text-decoration-thickness: max(1.5px, 0.07em);
@@ -247,6 +225,18 @@
   .ulink:hover {
     color: var(--color-pencil);
     text-decoration-thickness: max(2.5px, 0.12em);
+  }
+  /* Contact details in the header and footer: no underline until pointed at. */
+  .plain-link {
+    text-decoration: underline transparent;
+    text-decoration-thickness: max(1.5px, 0.07em);
+    text-underline-offset: 0.22em;
+  }
+  .plain-link:hover {
+    text-decoration-color: currentColor;
+  }
+  .on-blue .plain-link:hover {
+    color: var(--color-blue-pale);
   }
   /* A link or button that stands on its own is at least 48px tall, for thumbs and unsteady hands. */
   .tap {
@@ -273,6 +263,12 @@
     .btn {
       transition: background-color 0.2s ease;
     }
+    .btn::after {
+      transition: translate 0.2s ease;
+    }
+    .btn:hover::after {
+      translate: 0.25em 0;
+    }
     .ulink {
       transition: color 0.2s ease, text-underline-offset 0.2s ease;
     }
@@ -283,11 +279,10 @@
       transition: text-decoration-color 0.2s ease;
     }
     .photo {
-      transition: transform 0.5s ease;
+      transition: filter 0.25s ease;
     }
-    a:hover .photo,
-    .swatch:hover .photo {
-      transform: scale(1.035);
+    .hl::after {
+      transition: opacity 0.2s ease;
     }
     .social-list a {
       transition: transform 0.2s ease;
@@ -295,6 +290,28 @@
     .social-list a:hover {
       transform: translateX(2px);
     }
+  }
+
+  /* Pointing at a photo that opens something draws a blue frame inside its edge and brightens the
+     picture a little; nothing zooms. */
+  .hl {
+    position: relative;
+  }
+  .hl::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 0 4px var(--color-blue);
+    opacity: 0;
+    pointer-events: none;
+  }
+  a:hover .hl::after,
+  a.hl:hover::after,
+  a:focus-visible .hl::after {
+    opacity: 1;
+  }
+  a:hover .photo {
+    filter: brightness(1.08);
   }
 
   .skip-link {
@@ -331,6 +348,20 @@
     white-space: nowrap;
     text-align: right;
   }
+  /* The header's three icons beside the phone number, each a 48px target. */
+  .head-social a {
+    display: inline-grid;
+    place-items: center;
+    width: max(48px, 2.75rem);
+    height: max(48px, 2.75rem);
+  }
+  .head-social a:hover {
+    color: var(--color-pencil);
+  }
+  .head-social svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
   .social-list a {
     display: inline-flex;
     align-items: center;
@@ -345,9 +376,9 @@
   .social-list a:hover {
     color: var(--color-pencil);
   }
-  .on-plum .ulink:hover,
-  .on-plum .social-list a:hover {
-    color: var(--color-blush);
+  .on-blue .ulink:hover,
+  .on-blue .social-list a:hover {
+    color: var(--color-blue-pale);
   }
 }
 

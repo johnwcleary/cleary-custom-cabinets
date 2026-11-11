@@ -1,7 +1,7 @@
 ---
 slug: custom-kitchens-baths
 title: "Custom Kitchens and Baths"
-shortName: "Kitchens"
+shortName: "Kitchen and Bath"
 order: 1
 intro: "We design and fabricate custom wood, thermofoil & formica cabinetry for your dream kitchen or bath."
 closing: "We will provide the exact look you want in the dimensions you need with a price that is mindful of your budget."

@@ -1,38 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ContactForm from '../components/ContactForm.astro';
-import Hours from '../components/Hours.astro';
 import { getPage } from '../lib/content';
-import { site } from '../lib/site';
 
 const contact = await getPage('contact');
-const h = (await getPage('home')).data;
 ---
 
 <BaseLayout title={contact.data.seoTitle}>
-  <!-- The same form as the home page, in the same place: on the right of a wide screen. On a narrow one it
-       follows the opening lines, and the ways to reach us come after it. -->
-  <section class="frame section grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_25rem] lg:grid-rows-[auto_1fr] lg:gap-x-10" aria-labelledby="page-title">
-    <div>
-      <h1 id="page-title" class="page-title mb-2">Contact us</h1>
-      <p class="lead">{contact.data.lead}</p>
-    </div>
-    <div id="appointment" class="lg:col-start-2 lg:row-span-2 lg:row-start-1">
-      <ContactForm heading={h.contactHeading} helper={contact.data.formHelper} call={false} />
-    </div>
-    <div class="grid grid-cols-1 gap-x-10 gap-y-4 text-[1.125rem] sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-      <div>
-        <h2 class="font-semibold">Call or email</h2>
-        <p><a href={site.phoneHref} class="ulink tap text-[1.75rem] font-semibold tabular-nums">{site.phone}</a></p>
-        <p><a href={`mailto:${site.email}`} class="ulink tap [overflow-wrap:anywhere]">{site.email}</a></p>
-        <h2 class="mt-4 font-semibold">Visit the showroom</h2>
-        <address class="not-italic">
-          <a href={site.mapsUrl} rel="noopener" class="ulink tap py-2 leading-snug">{site.address.street}<br />{site.address.city}, {site.address.state} {site.address.zip}</a>
-        </address>
-      </div>
-      <div>
-        <h2 class="font-semibold">Showroom hours</h2>
-        <Hours class="hours-table max-w-[21rem] pt-1.5" />
+  <section class="frame section" aria-labelledby="page-title">
+    <!-- Only the form, in the middle of the page: the address, phone, email and hours are in the footer just below. -->
+    <div class="mx-auto max-w-[32rem]">
+      <h1 id="page-title" class="page-title mb-2 text-center">Contact us</h1>
+      <p class="lead mb-5 text-center">{contact.data.lead}</p>
+      <div id="appointment">
+        <ContactForm helper={contact.data.formHelper} />
       </div>
     </div>
   </section>

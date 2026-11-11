@@ -1,9 +1,0 @@
-{
-  "service": "countertops",
-  "order": 11,
-  "caption": "Solid Surface Counter",
-  "image": "../../../assets/gallery/countertops/11-solid-surface-counter.jpg",
-  "width": 480,
-  "height": 360,
-  "featured": false
-}

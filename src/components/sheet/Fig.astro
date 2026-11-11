@@ -8,31 +8,47 @@ interface Props {
   image: ImageMetadata;
   caption: string;
   ratio?: string;
+  /** A different ratio from 1024px up. */
+  ratioLg?: string;
   sizes?: string;
   group?: string;
   eager?: boolean;
   /** Keep the caption as alt text and in the lightbox, but don't print it under the photo. */
   hideCaption?: boolean;
+  /** Fill the cell even when the photo is small, for photos set edge to edge. */
+  fill?: boolean;
   class?: string;
 }
-const { image, caption, ratio = '4 / 3', sizes = '(min-width: 1024px) 30vw, (min-width: 640px) 46vw, 92vw', group, eager = false, hideCaption = false, class: className } = Astro.props;
-const maxWidth = image.width < 1600 ? `max-width: ${Math.round(image.width * 1.35)}px` : undefined;
-const style = `aspect-ratio: ${ratio === 'auto' ? `${image.width} / ${image.height}` : ratio}`;
+const { image, caption, ratio = '4 / 3', ratioLg, sizes = '(min-width: 1024px) 30vw, (min-width: 640px) 46vw, 92vw', group, eager = false, hideCaption = false, fill = false, class: className } = Astro.props;
+const maxWidth = image.width < 1600 && !fill ? `max-width: ${Math.round(image.width * 1.35)}px` : undefined;
+const r = (x: string) => (x === 'auto' ? `${image.width} / ${image.height}` : x);
+const style = `--ratio: ${r(ratio)}${ratioLg ? `; --ratio-lg: ${r(ratioLg)}` : ''}`;
 ---
 
 <figure class={className} style={maxWidth}>
   {
     group ? (
       <LightboxLink image={image} caption={caption} group={group} class="block">
-        <span class="block overflow-hidden" style={style}>
+        <span class="fig__frame hl block overflow-hidden" style={style}>
           <Image src={image} alt={caption} widths={widthsFor(image)} sizes={sizes} class="photo" loading={eager ? 'eager' : 'lazy'} />
         </span>
       </LightboxLink>
     ) : (
-      <span class="block overflow-hidden" style={style}>
+      <span class="fig__frame block overflow-hidden" style={style}>
         <Image src={image} alt={caption} widths={widthsFor(image)} sizes={sizes} class="photo" loading={eager ? 'eager' : 'lazy'} />
       </span>
     )
   }
   {!hideCaption && <figcaption class="mt-2 leading-snug text-muted">{caption}</figcaption>}
 </figure>
+
+<style>
+  .fig__frame {
+    aspect-ratio: var(--ratio);
+  }
+  @media (min-width: 1024px) {
+    .fig__frame {
+      aspect-ratio: var(--ratio-lg, var(--ratio));
+    }
+  }
+</style>

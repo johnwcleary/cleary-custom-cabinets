@@ -5,7 +5,7 @@
     "items": [
       { "name": "Kraftmaid Vantage Cabinetry", "url": "https://www.kraftmaid.com/" },
       { "name": "Merillat Cabinets", "url": "https://www.merillat.com/merillat-classic-collection/" },
-      { "name": "Tedd Wood Cabintery" },
+      { "name": "Tedd Wood Cabinetry", "url": "https://www.teddwood.com/" },
       { "name": "Wolf Classic Cabinets", "url": "https://www.wolfhomeproducts.com/wolfclassic" }
     ]
   },
@@ -42,7 +42,7 @@
     "order": 5,
     "items": [
       { "name": "Caesarstone", "url": "http://www.caesarstoneus.com/" },
-      { "name": "Cambria", "url": "https://www.cambriausa.com/" },
+      { "name": "Cambria" },
       { "name": "Corian Quartz", "url": "https://www.corianquartz.com" },
       { "name": "Emerstone", "url": "https://emerstone.com/" },
       { "name": "MSI Quartz", "url": "https://www.msisurfaces.com/quartz-countertops/" },
