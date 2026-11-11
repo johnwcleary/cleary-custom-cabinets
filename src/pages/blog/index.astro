@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from '../../components/PostList.astro';
+import { getPosts } from '../../lib/content';
+import { site } from '../../lib/site';
+
+const posts = await getPosts();
+const lead = `How cabinets and countertops are made, what they are made of and how to choose between them, from our family shop in ${site.address.city}, Long Island.`;
+---
+
+<BaseLayout title="Cabinet and countertop advice for Long Island homes" description={lead}>
+  <section class="frame section" aria-labelledby="page-title">
+    <h1 id="page-title" class="page-title mb-3">Blog</h1>
+    <p class="lead mb-6">{lead}</p>
+    <PostList posts={posts} />
+  </section>
+</BaseLayout>

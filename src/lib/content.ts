@@ -3,8 +3,10 @@ import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 export type Service = CollectionEntry<'services'>;
 export type GalleryItem = CollectionEntry<'gallery'>;
 export type BrandGroup = CollectionEntry<'brands'>;
+export type Post = CollectionEntry<'blog'>;
 
 export const serviceHref = (slug: string) => `/cabinets/${slug}`;
+export const postHref = (post: Post) => `/blog/${post.id}`;
 
 export async function getServices(): Promise<Service[]> {
   return (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
@@ -47,3 +49,16 @@ export function heroCaption(service: Service, items: GalleryItem[]) {
 export async function getAllGallery(): Promise<GalleryItem[]> {
   return getCollection('gallery');
 }
+
+/** Blog posts, newest first. Drafts are left out of the built site. */
+export async function getPosts(): Promise<Post[]> {
+  const posts = await getCollection('blog', (p) => import.meta.env.DEV || !p.data.draft);
+  return posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf() || a.id.localeCompare(b.id));
+}
+
+/** The posts that name a cabinet page in their `services` list. */
+export async function getPostsFor(service: string): Promise<Post[]> {
+  return (await getPosts()).filter((p) => p.data.services.includes(service));
+}
+
+export const formatDate = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });

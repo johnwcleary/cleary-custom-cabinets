@@ -1,0 +1,30 @@
+---
+import { Image } from 'astro:assets';
+import { postHref, formatDate, type Post } from '../lib/content';
+import { widthsFor } from '../lib/img';
+
+interface Props {
+  posts: Post[];
+  /** Heading level of each post's title: 2 on the blog page, 3 under a section heading. */
+  level?: 2 | 3;
+}
+const { posts, level = 2 } = Astro.props;
+const Title = `h${level}` as const;
+---
+
+<ul class="grid grid-cols-1 gap-x-5 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
+  {
+    posts.map((p) => (
+      <li>
+        <a href={postHref(p)} class="group block">
+          <span class="mb-2.5 block aspect-[3/2] overflow-hidden">
+            <Image src={p.data.image} alt={p.data.imageAlt} widths={widthsFor(p.data.image, [400, 640, 960])} sizes="(min-width: 1024px) 30vw, (min-width: 640px) 46vw, 92vw" class="photo" />
+          </span>
+          <Title class="display text-[1.375rem] underline decoration-transparent decoration-[max(2px,0.07em)] underline-offset-[0.2em] group-hover:decoration-current lg:text-[1.5rem]">{p.data.title}</Title>
+        </a>
+        <p class="mt-1.5 text-muted">{p.data.description}</p>
+        <p class="mt-1 text-muted"><time datetime={p.data.date.toISOString().slice(0, 10)}>{formatDate(p.data.date)}</time></p>
+      </li>
+    ))
+  }
+</ul>

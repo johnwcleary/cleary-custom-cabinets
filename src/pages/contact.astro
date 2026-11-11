@@ -6,7 +6,7 @@ import { getPage } from '../lib/content';
 const contact = await getPage('contact');
 ---
 
-<BaseLayout title={contact.data.seoTitle}>
+<BaseLayout title={contact.data.seoTitle} description={contact.data.lead}>
   <section class="frame section" aria-labelledby="page-title">
     <!-- Only the form, in the middle of the page: the address, phone, email and hours are in the footer just below. -->
     <div class="mx-auto max-w-[32rem]">

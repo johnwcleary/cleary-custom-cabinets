@@ -5,7 +5,8 @@ import Products from '../components/sheet/Products.astro';
 import Slideshow from '../components/sheet/Slideshow.astro';
 import Fig from '../components/sheet/Fig.astro';
 import Drawing from '../components/sheet/Drawing.astro';
-import { getPage } from '../lib/content';
+import PostList from '../components/PostList.astro';
+import { getPage, getPosts } from '../lib/content';
 import { site } from '../lib/site';
 import { widthsFor } from '../lib/img';
 import { swatch } from '../lib/materials';
@@ -16,6 +17,7 @@ const showroom = (about.data.photos ?? []).find((p) => p.caption.startsWith('Our
 const shop = (about.data.photos ?? []).find((p) => p.caption.startsWith('Our Shop'))!;
 // Every section's text is edited on the Home page in Storyblok (pages/home.md).
 const h = home.data;
+const posts = (await getPosts()).slice(0, 3);
 const drawings = ['elevation', 'commercial', 'cabinet'] as const;
 const groups = [
   { heading: h.cabinetryHeading, group: 'cabinet' as const, items: h.cabinetryMaterials ?? [], span: 'xl:col-span-3' },
@@ -91,6 +93,18 @@ const groups = [
       }
     </div>
   </section>
+
+  {
+    posts.length > 0 && (
+      <section class="frame section" aria-labelledby="blog-title">
+        <div class="mb-3 flex flex-wrap items-baseline justify-between gap-x-6">
+          <h2 id="blog-title" class="heading">From the blog</h2>
+          <a href="/blog" class="ulink tap font-semibold">All posts</a>
+        </div>
+        <PostList posts={posts} level={3} />
+      </section>
+    )
+  }
 
   <section class="frame section grid grid-cols-1 items-center gap-5 lg:grid-cols-2 lg:gap-10" aria-labelledby="showroom-title">
     <div class="grid grid-cols-2 items-start gap-3 lg:gap-5">

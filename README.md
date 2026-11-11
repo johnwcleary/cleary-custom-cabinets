@@ -28,6 +28,9 @@ Editor preview and the content model.
 
 Storyblok keys go in `.env` (see `.env.example`); it is never committed.
 
+Blog posts are the exception: they are Markdown files in `src/content/blog/`, one per post, and are not
+in Storyblok. [docs/seo-audit.md](docs/seo-audit.md) describes the fields and lists what to write next.
+
 ## Build and test
 
 ```bash

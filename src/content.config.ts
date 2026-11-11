@@ -93,4 +93,26 @@ const pages = defineCollection({
     }),
 });
 
-export const collections = { services, gallery, brands, pages };
+/**
+ * Blog posts. These are written as Markdown in the repository, not in Storyblok, so `cms:pull`
+ * leaves them alone. The file name is the address: blog/choosing-a-countertop.md → /blog/choosing-a-countertop.
+ */
+const blog = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/blog' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      /** One or two sentences: shown on the blog page and in Google results. */
+      description: z.string().max(170),
+      date: z.coerce.date(),
+      updated: z.coerce.date().optional(),
+      image: image(),
+      imageAlt: z.string().min(1),
+      /** Slugs of the cabinet pages this post belongs with; each of those pages links back to it. */
+      services: z.array(z.string()).default([]),
+      /** A draft shows in `npm run dev` but is left out of the built site. */
+      draft: z.boolean().default(false),
+    }),
+});
+
+export const collections = { services, gallery, brands, pages, blog };

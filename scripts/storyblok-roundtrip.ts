@@ -35,7 +35,8 @@ await writeStories(stories, { root: tmp, fetchAsset: (url) => readFile(path.join
 
 let diff = '';
 try {
-  execFileSync('diff', ['-r', path.join(ROOT, 'src/content'), path.join(tmp, 'src/content')], { encoding: 'utf8' });
+  // src/content/blog is written by hand, not in Storyblok, so it is left out of the comparison.
+  execFileSync('diff', ['-r', '-x', 'blog', path.join(ROOT, 'src/content'), path.join(tmp, 'src/content')], { encoding: 'utf8' });
 } catch (e: any) {
   diff = e.stdout;
 }

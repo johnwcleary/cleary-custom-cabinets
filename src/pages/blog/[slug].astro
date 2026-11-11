@@ -1,0 +1,71 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getImage } from 'astro:assets';
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import PostList from '../../components/PostList.astro';
+import Fig from '../../components/sheet/Fig.astro';
+import { getPosts, getPage, getServices, serviceHref, formatDate, type Post } from '../../lib/content';
+import { postSchema } from '../../lib/seo';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  post: Post;
+}
+const { post } = Astro.props;
+const p = post.data;
+const { Content } = await render(post);
+const h = (await getPage('home')).data;
+const services = (await getServices()).filter((s) => p.services.includes(s.data.slug));
+const others = (await getPosts()).filter((o) => o.id !== post.id).slice(0, 3);
+const shared = await getImage({ src: p.image, width: Math.min(1200, p.image.width), format: 'jpg' });
+const schema = postSchema(Astro.site!, {
+  url: new URL(Astro.url.pathname, Astro.site).href,
+  title: p.title,
+  description: p.description,
+  date: p.date,
+  updated: p.updated,
+  image: new URL(shared.src, Astro.site).href,
+});
+---
+
+<BaseLayout title={p.title} description={p.description} image={p.image} type="article" schema={[schema]}>
+  <!-- The post on the left; on a wide screen the form keeps its usual place on the right and stays in view. -->
+  <div class="frame section grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,1fr)_25rem] lg:gap-x-10 xl:grid-cols-[minmax(0,1fr)_27rem]">
+    <article aria-labelledby="page-title">
+      <p class="mb-2"><a href="/blog" class="ulink tap">Blog</a></p>
+      <h1 id="page-title" class="page-title mb-2">{p.title}</h1>
+      <p class="mb-4 text-muted">
+        <time datetime={p.date.toISOString().slice(0, 10)}>{formatDate(p.date)}</time>
+        {p.updated && <span>, updated <time datetime={p.updated.toISOString().slice(0, 10)}>{formatDate(p.updated)}</time></span>}
+      </p>
+      <Fig image={p.image} caption={p.imageAlt} ratio="3 / 2" eager sizes="(min-width: 1024px) 58vw, 92vw" class="mb-5" />
+      <div class="post"><Content /></div>
+      {
+        services.length > 0 && (
+          <p class="mt-5 flex flex-wrap gap-x-5">
+            <span class="tap font-semibold">See our work:</span>
+            {services.map((s) => <a href={serviceHref(s.data.slug)} class="ulink tap">{s.data.title}</a>)}
+          </p>
+        )
+      }
+    </article>
+    <aside id="appointment" class="lg:sticky lg:top-24" aria-label="Contact us">
+      <ContactForm heading={h.contactHeading} />
+    </aside>
+  </div>
+
+  {
+    others.length > 0 && (
+      <section class="frame section" aria-labelledby="more-title">
+        <h2 id="more-title" class="heading mb-3">More from the blog</h2>
+        <PostList posts={others} level={3} />
+      </section>
+    )
+  }
+</BaseLayout>
