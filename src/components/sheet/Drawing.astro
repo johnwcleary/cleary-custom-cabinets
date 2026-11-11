@@ -140,12 +140,26 @@ const ticks = (...pts: Pt[]) => pts.map(([x, y]) => slash(x, y)).join('');
   .t {
     fill: color-mix(in srgb, var(--color-ink) 9%, var(--color-paper));
   }
+  /* On the blue About panel the drawings read as a blueprint: white line, pale blue dimensions. */
+  :global(.on-blue) .l {
+    stroke: #fff;
+  }
+  :global(.on-blue) .p {
+    stroke: var(--color-blue-pale);
+    stroke-opacity: 0.75;
+  }
+  :global(.on-blue) .t {
+    fill: rgb(255 255 255 / 0.14);
+  }
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
     .l {
       transition: stroke 0.25s ease;
     }
     :global(.svc:hover) .l {
       stroke: var(--color-pencil);
+    }
+    :global(.on-blue .svc:hover) .l {
+      stroke: var(--color-blue-pale);
     }
   }
 </style>
