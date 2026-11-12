@@ -21,4 +21,7 @@ showroomButton: "Come in for a free design consultation"
 contactLabel: "Contact"
 contactHeading: "Come in for a free design consultation."
 contactButton: "Contact us"
+photos:
+  - image: "../../assets/home/02-custom-inset-gray-vanity.jpg"
+    caption: "Custom Inset Gray Vanity"
 ---
