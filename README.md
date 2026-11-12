@@ -17,7 +17,7 @@ npm run dev          # http://localhost:4321
 
 Words, photos, hours and brand lists live in Storyblok. `npm run cms:pull` writes them into
 `src/content/` and `src/assets/` in the format the pages read, so the site builds the same with or
-without a Storyblok connection. See [docs/storyblok.md](docs/storyblok.md) for setup, the Visual
+without a Storyblok connection. See [docs/hosting.md](docs/hosting.md) for Cloudflare Pages and the contact form, and [docs/storyblok.md](docs/storyblok.md) for setup, the Visual
 Editor preview and the content model.
 
 | Command | Does |

@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../lib/site';
+---
+
+<!-- Where the contact form lands when it is sent without JavaScript. With JavaScript the same thanks shows in the form itself. -->
+<BaseLayout title="Message sent" noindex>
+  <section class="frame section" aria-labelledby="page-title">
+    <h1 id="page-title" class="page-title mb-3">Thanks, we got your message</h1>
+    <p class="lead measure mb-4">We’ll be in touch soon. If it can’t wait, call us at <a href={site.phoneHref} class="ulink tap tabular-nums">{site.phone}</a>.</p>
+    <a href="/" class="btn">Go to the home page</a>
+  </section>
+</BaseLayout>
