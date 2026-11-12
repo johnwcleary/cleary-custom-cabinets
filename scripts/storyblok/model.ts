@@ -100,6 +100,7 @@ export async function readLocal(): Promise<StoryDraft[]> {
         hero_subtitle: data.heroSubtitle ?? '',
         hero_image: localRef(f, data.heroImage),
         hero_caption: data.heroCaption ?? '',
+        hero_photos: (data.photos ?? []).map((p: any) => blok('photo', { image: localRef(f, p.image), caption: p.caption })),
         ...homeSectionsToStory(data),
         title: data.title,
         seo_title: data.seoTitle,
@@ -240,6 +241,7 @@ export function planFiles(stories: Story[]): Planned[] {
     }
   };
   add(s.home.content.hero_image, 'src/assets/home');
+  for (const p of s.home.content.hero_photos ?? []) add(p.image, 'src/assets/home');
   for (const p of s.about.content.photos ?? []) add(p.image, 'src/assets/about');
   for (const c of s.cabinets) {
     const dir = `src/assets/gallery/${c.slug}`;
@@ -347,6 +349,7 @@ export function renderFiles(stories: Story[], sizes: Map<string, { width: number
   {
     const f = 'src/content/pages/home.md';
     const c = s.home.content;
+    const heroPhotos = (c.hero_photos ?? []).filter((p: any) => hasImage(p.image)).map((p: any) => ({ image: imageRef(f, p.image, plan), caption: str(p.caption) }));
     out.push({
       path: f,
       content: fm([
@@ -357,6 +360,7 @@ export function renderFiles(stories: Story[], sizes: Map<string, { width: number
         ['heroTitle', str(c.hero_title)],
         ['heroSubtitle', str(c.hero_subtitle)],
         ...HOME_SECTIONS.map(([k, sb]): [string, unknown] => [k, isList(k) ? list(c[sb]) : str(c[sb])]),
+        ['photos', heroPhotos.length ? heroPhotos : undefined],
       ]),
     });
   }

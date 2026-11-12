@@ -21,4 +21,7 @@ showroomButton: "Come in for a free design consultation"
 contactLabel: "Contact"
 contactHeading: "Come in for a free design consultation."
 contactButton: "Contact us"
+photos:
+  - image: "../../assets/home/02-pool-house-kitchen.jpg"
+    caption: "Custom Thermofoil Pool House Kitchen"
 ---

@@ -1,9 +1,9 @@
 {
   "service": "medical-commercial",
-  "order": 3,
+  "order": 2,
   "caption": "Quartz and Laminate Reception",
   "image": "../../../assets/gallery/medical-commercial/01-quartz-and-laminate-reception.jpg",
   "width": 925,
   "height": 694,
-  "featured": false
+  "featured": true
 }

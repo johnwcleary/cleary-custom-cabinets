@@ -1,0 +1,9 @@
+{
+  "service": "medical-commercial",
+  "order": 1,
+  "caption": "Medical Office Entry and Reception Desk",
+  "image": "../../../assets/gallery/medical-commercial/medical-office-entry-and-reception.jpg",
+  "width": 925,
+  "height": 694,
+  "featured": true
+}

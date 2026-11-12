@@ -121,6 +121,7 @@ export const COMPONENTS: Component[] = [
           hero_subtitle: text('Line under the headline'),
           hero_image: image('Main photo', { required: true }),
           hero_caption: text('Photo caption', { description: 'Also read aloud to visitors who cannot see the photo.' }),
+          hero_photos: blocks('More slideshow photos', ['photo'], { description: 'Shown after the main photo, before one photo from each cabinet page.' }),
         },
         'About us': {
           about_label: text('Small heading'),

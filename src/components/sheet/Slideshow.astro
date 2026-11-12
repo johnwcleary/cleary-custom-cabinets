@@ -9,10 +9,10 @@ const services = await getServices();
 const gallery = await getAllGallery();
 const wide = (i: ImageMetadata) => i.width >= 1600 && i.width / i.height >= 1.2;
 
-// The Home hero first, then one photo per product: its hero image if that is large and wide enough,
+// The Home hero and any further Home slideshow photos first, then one photo per product: its hero image if that is large and wide enough,
 // otherwise its first featured photo that is. All of these are chosen in Storyblok.
 type Slide = { image: ImageMetadata; caption: string };
-const slides: Slide[] = [{ image: h.heroImage!, caption: h.heroCaption ?? '' }];
+const slides: Slide[] = [{ image: h.heroImage!, caption: h.heroCaption ?? '' }, ...(h.photos ?? [])];
 for (const s of services) {
   const own = gallery.filter((g) => g.data.service === s.data.slug && g.data.featured).sort((a, b) => a.data.order - b.data.order);
   const pick = wide(s.data.heroImage) ? { image: s.data.heroImage, caption: heroCaption(s, gallery) } : own.map((g) => ({ image: g.data.image, caption: g.data.caption })).find((g) => wide(g.image));

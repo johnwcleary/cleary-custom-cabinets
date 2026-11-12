@@ -1,9 +1,9 @@
 {
   "service": "medical-commercial",
-  "order": 26,
+  "order": 3,
   "caption": "Waiting Room Planters",
   "image": "../../../assets/gallery/medical-commercial/24-waiting-room-planters.jpg",
   "width": 925,
   "height": 694,
-  "featured": false
+  "featured": true
 }

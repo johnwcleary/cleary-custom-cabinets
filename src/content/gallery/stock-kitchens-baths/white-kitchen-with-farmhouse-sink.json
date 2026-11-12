@@ -1,0 +1,9 @@
+{
+  "service": "stock-kitchens-baths",
+  "order": 7,
+  "caption": "White Kitchen with Farmhouse Sink",
+  "image": "../../../assets/gallery/stock-kitchens-baths/white-kitchen-with-farmhouse-sink.jpg",
+  "width": 480,
+  "height": 640,
+  "featured": true
+}
