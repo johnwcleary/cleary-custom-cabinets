@@ -21,4 +21,7 @@ showroomButton: "Come in for a free design consultation"
 contactLabel: "Contact"
 contactHeading: "Come in for a free design consultation."
 contactButton: "Contact us"
+photos:
+  - image: "../../assets/home/01-custom-kitchens-and-baths.jpg"
+    caption: "Custom Kitchens and Baths"
 ---
