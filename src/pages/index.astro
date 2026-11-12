@@ -119,4 +119,25 @@ const groups = [
       {h.showroomButton && <a href="/contact" class="btn">{h.showroomButton}</a>}
     </div>
   </section>
+
+  {
+    h.testimonials && h.testimonials.length > 0 && (
+      <section class="frame section" aria-labelledby="testimonials-title">
+        <h2 id="testimonials-title" class="heading mb-4">{h.testimonialsLabel}</h2>
+        <!-- Each quote under a blue rule, two to a row on a wide screen. A blank line in the quote starts a new paragraph. -->
+        <ul class="grid grid-cols-1 gap-x-10 gap-y-8 lg:grid-cols-2">
+          {h.testimonials.map((t) => (
+            <li class="border-t-2 border-blue pt-4">
+              <figure>
+                <blockquote class="measure space-y-3 text-[1.0625rem] leading-relaxed">
+                  {t.quote.split(/\n\s*\n/).map((para) => <p>{para}</p>)}
+                </blockquote>
+                {t.name && <figcaption class="mt-3 font-semibold">{t.name}</figcaption>}
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
 </BaseLayout>

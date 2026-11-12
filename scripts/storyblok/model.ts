@@ -40,7 +40,7 @@ const blok = (component: string, data: Record<string, unknown>) => ({ component,
 const lines = (xs: string[]) => xs.join('\n');
 
 /** Home page section fields: [content key, Storyblok key]. Lists are one item per line in Storyblok. */
-const HOME_SECTIONS: [string, string][] = [['aboutLabel', 'about_label'], ['aboutHeading', 'about_heading'], ['aboutText', 'about_text'], ['aboutButton', 'about_button'], ['cabinetsLabel', 'cabinets_label'], ['materialsLabel', 'materials_label'], ['cabinetryHeading', 'cabinetry_heading'], ['cabinetryMaterials', 'cabinetry_materials'], ['countertopsHeading', 'countertops_heading'], ['countertopsMaterials', 'countertops_materials'], ['showroomLabel', 'showroom_label'], ['showroomText', 'showroom_text'], ['showroomButton', 'showroom_button'], ['contactLabel', 'contact_label'], ['contactHeading', 'contact_heading'], ['contactButton', 'contact_button']];
+const HOME_SECTIONS: [string, string][] = [['aboutLabel', 'about_label'], ['aboutHeading', 'about_heading'], ['aboutText', 'about_text'], ['aboutButton', 'about_button'], ['cabinetsLabel', 'cabinets_label'], ['materialsLabel', 'materials_label'], ['cabinetryHeading', 'cabinetry_heading'], ['cabinetryMaterials', 'cabinetry_materials'], ['countertopsHeading', 'countertops_heading'], ['countertopsMaterials', 'countertops_materials'], ['showroomLabel', 'showroom_label'], ['showroomText', 'showroom_text'], ['showroomButton', 'showroom_button'], ['testimonialsLabel', 'testimonials_label'], ['contactLabel', 'contact_label'], ['contactHeading', 'contact_heading'], ['contactButton', 'contact_button']];
 const isList = (k: string) => k.endsWith('Materials');
 const homeSectionsToStory = (data: Record<string, any>) =>
   Object.fromEntries(HOME_SECTIONS.map(([k, sb]) => [sb, isList(k) ? lines(data[k] ?? []) : (data[k] ?? '')]));
@@ -101,6 +101,7 @@ export async function readLocal(): Promise<StoryDraft[]> {
         hero_image: localRef(f, data.heroImage),
         hero_caption: data.heroCaption ?? '',
         hero_photos: (data.photos ?? []).map((p: any) => blok('photo', { image: localRef(f, p.image), caption: p.caption })),
+        testimonials: (data.testimonials ?? []).map((t: any) => blok('testimonial', { quote: t.quote, name: t.name })),
         ...homeSectionsToStory(data),
         title: data.title,
         seo_title: data.seoTitle,
@@ -349,6 +350,7 @@ export function renderFiles(stories: Story[], sizes: Map<string, { width: number
   {
     const f = 'src/content/pages/home.md';
     const c = s.home.content;
+    const testimonials = (c.testimonials ?? []).filter((t: any) => str(t.quote)).map((t: any) => ({ quote: str(t.quote), name: str(t.name) }));
     const heroPhotos = (c.hero_photos ?? []).filter((p: any) => hasImage(p.image)).map((p: any) => ({ image: imageRef(f, p.image, plan), caption: str(p.caption) }));
     out.push({
       path: f,
@@ -361,6 +363,7 @@ export function renderFiles(stories: Story[], sizes: Map<string, { width: number
         ['heroSubtitle', str(c.hero_subtitle)],
         ...HOME_SECTIONS.map(([k, sb]): [string, unknown] => [k, isList(k) ? list(c[sb]) : str(c[sb])]),
         ['photos', heroPhotos.length ? heroPhotos : undefined],
+        ['testimonials', testimonials.length ? testimonials : undefined],
       ]),
     });
   }

@@ -144,6 +144,10 @@ export const COMPONENTS: Component[] = [
           showroom_text: textarea('Large sentence', { description: 'Address and hours come from Business details.' }),
           showroom_button: text('Button'),
         },
+        Testimonials: {
+          testimonials_label: text('Small heading'),
+          testimonials: blocks('Testimonials', ['testimonial']),
+        },
         'Contact (bottom of the page)': {
           contact_label: text('Small heading'),
           contact_heading: textarea('Large heading'),
@@ -188,6 +192,17 @@ export const COMPONENTS: Component[] = [
     schema: fields({
       image: image('Photo', { required: true }),
       caption: text('Caption', { required: true, description: 'Also read aloud to visitors who cannot see the photo.' }),
+    }),
+  },
+  {
+    name: 'testimonial',
+    display_name: 'Testimonial',
+    is_root: false,
+    is_nestable: true,
+    preview_field: 'name',
+    schema: fields({
+      quote: textarea('Quote', { required: true, description: 'Leave a blank line between paragraphs.' }),
+      name: text('Name', { required: true, description: 'e.g. Doug C.' }),
     }),
   },
   {

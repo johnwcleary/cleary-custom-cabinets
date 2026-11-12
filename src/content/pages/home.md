@@ -18,10 +18,20 @@ countertopsMaterials: ["Quartz", "Corian", "Granite", "Marble", "Butcher block",
 showroomLabel: "The showroom"
 showroomText: "Our family business always gives you exceptional service and the confidence you need to proceed."
 showroomButton: "Come in for a free design consultation"
+testimonialsLabel: "Testimonials"
 contactLabel: "Contact"
 contactHeading: "Come in for a free design consultation."
 contactButton: "Contact us"
 photos:
   - image: "../../assets/home/02-custom-inset-gray-vanity.jpg"
     caption: "Custom Inset Gray Vanity"
+testimonials:
+  - quote: "We have had the pleasure of working with Cleary Custom Cabinets on several projects and have consistently been impressed with their quality of work, craftsmanship and professionalism.\n\nTheir attention to detail, commitment to delivering a quality product, and ability to work collaboratively with our team make them a valuable trade partner. They understand the importance of meeting expectations and committing to customer satisfaction."
+    name: "Doug C."
+  - quote: "Designing a kitchen from scratch is a daunting process but the team at Cleary made it a joyful, creative collaboration for us. Could not be happier with the attention to detail Jeanne, Lora and Tom brought to the project and the results are amazing! Modern, clean and well made."
+    name: "Dave R."
+  - quote: "The most amazing team to work with! From the start of the project working with Tom and Lora, the ideas and design was wonderful. Lora kept me in the loop with every step of the way. Thank you for my beautiful kitchen!"
+    name: "Melissa G."
+  - quote: "I updated my kitchen by changing the counter, the pulls, and the hinges. It has been 30 years since we did our kitchen and wanted it a little modernized. The problem I had was I could not get the hinges that were on my cabinets. I tried everywhere online. My cousin told me about Cleary. She said go over there they might have it. I did and it was the best experience I've had in a long time."
+    name: "Jeanne M."
 ---
