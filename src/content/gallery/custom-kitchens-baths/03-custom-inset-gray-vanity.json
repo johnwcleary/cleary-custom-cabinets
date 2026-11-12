@@ -1,9 +1,9 @@
 {
   "service": "custom-kitchens-baths",
-  "order": 3,
+  "order": 17,
   "caption": "Custom Inset Gray Vanity",
   "image": "../../../assets/gallery/custom-kitchens-baths/03-custom-inset-gray-vanity.jpg",
-  "width": 1800,
-  "height": 2400,
+  "width": 1728,
+  "height": 2328,
   "featured": true
 }

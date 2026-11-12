@@ -13,7 +13,7 @@ Content, in Storyblok:
 Site:
 
 - [ ] Add the redirects from `docs/redirects.md` in the format the host uses. The old site's sitemap lists ten addresses and the table covers all of them.
-- [ ] Connect the contact form to a backend and send a test enquiry to info@clearycustomcabinets.com.
+- [ ] Give the contact form its Resend key on Cloudflare Pages ([hosting.md](hosting.md)) and send a test enquiry to info@clearycustomcabinets.com.
 - [ ] Choose one form of address, with or without the trailing slash, and have the host redirect the other to it.
 - [ ] Check on the host's preview address that a missing page returns a 404 status, and that each old `/cabinets-products/...` address redirects in one step.
 - [ ] Keep the preview address out of Google, with a password or a `noindex` header, so it is not indexed as a copy of the real site.

@@ -121,6 +121,7 @@ export const COMPONENTS: Component[] = [
           hero_subtitle: text('Line under the headline'),
           hero_image: image('Main photo', { required: true }),
           hero_caption: text('Photo caption', { description: 'Also read aloud to visitors who cannot see the photo.' }),
+          hero_photos: blocks('More slideshow photos', ['photo'], { description: 'Shown after the main photo, before one photo from each cabinet page.' }),
         },
         'About us': {
           about_label: text('Small heading'),
@@ -142,6 +143,10 @@ export const COMPONENTS: Component[] = [
           showroom_label: text('Small heading'),
           showroom_text: textarea('Large sentence', { description: 'Address and hours come from Business details.' }),
           showroom_button: text('Button'),
+        },
+        Testimonials: {
+          testimonials_label: text('Small heading'),
+          testimonials: blocks('Testimonials', ['testimonial']),
         },
         'Contact (bottom of the page)': {
           contact_label: text('Small heading'),
@@ -187,6 +192,17 @@ export const COMPONENTS: Component[] = [
     schema: fields({
       image: image('Photo', { required: true }),
       caption: text('Caption', { required: true, description: 'Also read aloud to visitors who cannot see the photo.' }),
+    }),
+  },
+  {
+    name: 'testimonial',
+    display_name: 'Testimonial',
+    is_root: false,
+    is_nestable: true,
+    preview_field: 'name',
+    schema: fields({
+      quote: textarea('Quote', { required: true, description: 'Leave a blank line between paragraphs.' }),
+      name: text('Name', { required: true, description: 'e.g. Doug C.' }),
     }),
   },
   {

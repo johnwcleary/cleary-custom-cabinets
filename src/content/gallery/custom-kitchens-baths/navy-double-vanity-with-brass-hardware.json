@@ -1,0 +1,9 @@
+{
+  "service": "custom-kitchens-baths",
+  "order": 10,
+  "caption": "Navy Double Vanity with Brass Hardware",
+  "image": "../../../assets/gallery/custom-kitchens-baths/navy-double-vanity-with-brass-hardware.jpg",
+  "width": 2400,
+  "height": 1800,
+  "featured": true
+}

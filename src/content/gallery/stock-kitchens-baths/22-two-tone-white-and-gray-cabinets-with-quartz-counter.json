@@ -1,9 +1,9 @@
 {
   "service": "stock-kitchens-baths",
-  "order": 22,
+  "order": 38,
   "caption": "Two Tone White and Gray Cabinets with Quartz Counter",
   "image": "../../../assets/gallery/stock-kitchens-baths/22-two-tone-white-and-gray-cabinets-with-quartz-counter.jpg",
   "width": 1800,
   "height": 2400,
-  "featured": true
+  "featured": false
 }

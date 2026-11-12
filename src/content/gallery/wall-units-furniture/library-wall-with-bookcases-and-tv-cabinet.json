@@ -1,0 +1,9 @@
+{
+  "service": "wall-units-furniture",
+  "order": 5,
+  "caption": "Library Wall with Bookcases and TV Cabinet",
+  "image": "../../../assets/gallery/wall-units-furniture/library-wall-with-bookcases-and-tv-cabinet.jpg",
+  "width": 2400,
+  "height": 1800,
+  "featured": true
+}

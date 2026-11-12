@@ -122,6 +122,20 @@
       padding: 2rem 2.25rem 2.25rem;
     }
   }
+  /* The About panel on the home page: the header blue, with a ruled border inset from the edge as on a drawing sheet. */
+  .blueprint {
+    position: relative;
+    padding: clamp(1.5rem, 3.5vw, 3rem) clamp(1.25rem, 3.5vw, 3rem);
+    background: var(--color-blue);
+    color: #fff;
+  }
+  .blueprint::before {
+    content: "";
+    position: absolute;
+    inset: 0.5rem;
+    border: 1px solid rgb(255 255 255 / 0.45);
+    pointer-events: none;
+  }
   .hero-title {
     font-size: clamp(2rem, 3.4vw, 3.25rem);
     line-height: 1.08;

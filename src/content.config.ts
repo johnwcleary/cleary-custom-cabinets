@@ -85,6 +85,8 @@ const pages = defineCollection({
       showroomLabel: z.string().optional(),
       showroomText: z.string().optional(),
       showroomButton: z.string().optional(),
+      testimonialsLabel: z.string().optional(),
+      testimonials: z.array(z.object({ quote: z.string().min(1), name: z.string() })).optional(),
       contactLabel: z.string().optional(),
       contactHeading: z.string().optional(),
       contactButton: z.string().optional(),
