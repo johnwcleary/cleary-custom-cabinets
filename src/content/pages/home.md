@@ -1,8 +1,8 @@
 ---
 title: "Home"
 seoTitle: "Stock and Custom Cabinets for the quality and service you deserve"
-heroImage: "../../assets/home/01-cream-shaker-kitchen-with-brass-banded-hood.jpg"
-heroCaption: "Cream Shaker Kitchen with Brass-Banded Hood"
+heroImage: "../../assets/home/01-custom-kitchens-and-baths.jpg"
+heroCaption: "Custom Kitchens and Baths"
 heroTitle: "Custom & Stock Cabinetry"
 heroSubtitle: "Family owned and operated since 1993"
 aboutLabel: "About us"
@@ -21,7 +21,4 @@ showroomButton: "Come in for a free design consultation"
 contactLabel: "Contact"
 contactHeading: "Come in for a free design consultation."
 contactButton: "Contact us"
-photos:
-  - image: "../../assets/home/01-custom-kitchens-and-baths.jpg"
-    caption: "Custom Kitchens and Baths"
 ---
