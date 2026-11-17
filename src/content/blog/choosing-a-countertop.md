@@ -1,6 +1,6 @@
 ---
 title: "Quartz, granite, Corian or butcher block: choosing a countertop"
-description: "How quartz, granite, marble, solid surface, wood and laminate countertops compare on upkeep, heat and wear, from our showroom in Hicksville, Long Island."
+description: "How quartz, granite, marble, Solid Surface, wood and laminate countertops compare on upkeep, heat and wear, from our showroom in Hicksville, Long Island."
 date: 2026-11-10
 image: "../../assets/gallery/countertops/10-marble-counter.jpg"
 imageAlt: "Marble counter"
@@ -11,7 +11,7 @@ A countertop gets more daily wear than anything else in the kitchen, so it pays 
 
 ## Quartz
 
-Quartz counters are engineered: ground quartz mixed with resin and pigment and pressed into slabs. The pattern is consistent from one end to the other. The surface is nonporous, so it resists stains and never needs sealing. The resin is the weak spot. A pan straight off the burner can scorch it, so use a trivet. The brands we carry include Caesarstone, Cambria and Silestone.
+Quartz counters are engineered: ground quartz mixed with resin and pigment and pressed into slabs. The pattern is consistent from one end to the other. The surface is nonporous, so it resists stains and never needs sealing. The resin is the weak spot. A pan straight off the burner can scorch it, so use a trivet. The twelve brands we carry include Caesarstone, Cambria and Silestone.
 
 ## Granite
 
@@ -21,11 +21,11 @@ Granite is natural stone cut from a quarry, and no two slabs match. It takes hea
 
 Marble is softer than granite and it reacts with acid. Lemon juice or vinegar left on a polished marble top leaves a dull spot called an etch, and marble stains more easily too. Some people love the worn look a marble counter takes on after a few years. If you want a counter that stays looking new, put marble on a vanity or a baking area and use something tougher by the stove.
 
-## Solid surface
+## Solid Surface
 
-Solid surface is an acrylic-based material, and Corian is the best-known brand. Seams between pieces are nearly invisible, and the sink can be made of the same material and joined to the counter with no rim to catch crumbs. It scratches more easily than stone, but the scratches can be sanded out. Keep hot pans off it.
+Solid Surface is made up of mostly natural minerals. Resins, fillers and color pigments are added making the material non-porous, flexible enough to shape, and seamless to join. Colorants and small particulate chips are mixed in during manufacturing to create various solid colors, patterns, or looks that mimic granite and marble. Corian is the best-known brand. Seams between pieces are nearly invisible, and the sink can be made of the same material and joined to the counter with no rim to catch crumbs. It scratches more easily than stone, but the scratches can be sanded out. Keep hot pans off it.
 
-Our shop is certified to fabricate solid surface, so we make these counters ourselves in Hicksville.
+Our shop is certified to fabricate Solid Surface, so we make these counters ourselves in Hicksville.
 
 ## Butcher block and wood
 
@@ -42,7 +42,7 @@ Laminate, which many people call Formica after the best-known brand, costs the l
 | Quartz | Cleaning only | Hot pans |
 | Granite | Seal from time to time | Oil stains if left unsealed |
 | Marble | Seal, and wipe spills quickly | Etching from acid, stains |
-| Solid surface | Cleaning only; scratches sand out | Hot pans, knife marks |
+| Solid Surface | Cleaning only; scratches sand out | Hot pans, knife marks |
 | Wood | Oil or refinish | Standing water |
 | Laminate | Cleaning only | Hot pans, chips |
 

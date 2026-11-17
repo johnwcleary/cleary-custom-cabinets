@@ -14,7 +14,7 @@ brands:
     about: "Real wood and laminate cabinets in twelve door styles, with soft-close hinges as standard. It ships in two weeks or less."
   - name: "Tedd Wood Cabinetry"
     url: "https://www.teddwood.com/"
-    about: "Made by hand in central Pennsylvania, framed or full access, in two semi-custom lines and a fully custom one. Face frames are mortise and tenon, and drawer boxes are dovetailed maple or birch."
+    about: "Made by hand in central Pennsylvania, inset, framed or frameless, in two semi-custom lines and a fully custom one. Face frames are mortise and tenon, and drawer boxes are dovetailed."
   - name: "Wolf Classic Cabinets"
     url: "https://www.wolfhomeproducts.com/wolfclassic"
     about: "Plywood sides and shelves, solid wood dovetail drawers and soft-close doors and drawers, in eight door styles. Priced for value and quick to ship."
