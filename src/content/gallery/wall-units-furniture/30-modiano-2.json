@@ -1,9 +1,9 @@
 {
   "service": "wall-units-furniture",
-  "order": 30,
+  "order": 36,
   "caption": "Custom Cherry Wood Bar Unit",
   "image": "../../../assets/gallery/wall-units-furniture/30-modiano-2.jpg",
   "width": 2400,
   "height": 1800,
-  "featured": true
+  "featured": false
 }

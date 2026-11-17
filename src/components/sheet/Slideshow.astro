@@ -7,20 +7,24 @@ import { widthsFor } from '../../lib/img';
 const h = (await getPage('home')).data;
 const services = await getServices();
 const gallery = await getAllGallery();
-const wide = (i: ImageMetadata) => i.width >= 1600 && i.width / i.height >= 1.2;
+const wide = (i: ImageMetadata, min = 1600) => i.width >= min && i.width / i.height >= 1.2;
 
-// The Home hero first, then one photo per product: its hero image if that is large and wide enough,
-// otherwise its first featured photo that is. All of these are chosen in Storyblok.
+// The Home hero and any further Home slideshow photos first, then one photo per product: its hero image if that is wide and
+// at least 900px across, otherwise its first featured photo that is wide and at least 1600px across.
+// All of these are chosen in Storyblok. Custom kitchens and baths gets no photo of its own here: the Home hero and the
+// gray vanity already show that work.
 type Slide = { image: ImageMetadata; caption: string };
-const slides: Slide[] = [{ image: h.heroImage!, caption: h.heroCaption ?? '' }];
+const slides: Slide[] = [{ image: h.heroImage!, caption: h.heroCaption ?? '' }, ...(h.photos ?? [])];
+const shownOnHome = new Set(['custom-kitchens-baths']);
 for (const s of services) {
+  if (shownOnHome.has(s.data.slug)) continue;
   const own = gallery.filter((g) => g.data.service === s.data.slug && g.data.featured).sort((a, b) => a.data.order - b.data.order);
-  const pick = wide(s.data.heroImage) ? { image: s.data.heroImage, caption: heroCaption(s, gallery) } : own.map((g) => ({ image: g.data.image, caption: g.data.caption })).find((g) => wide(g.image));
+  const pick = wide(s.data.heroImage, 900) ? { image: s.data.heroImage, caption: heroCaption(s, gallery) } : own.map((g) => ({ image: g.data.image, caption: g.data.caption })).find((g) => wide(g.image));
   if (pick && !slides.some((x) => x.image.src === pick.image.src)) slides.push(pick);
 }
 ---
 
-<div class="show relative aspect-square w-full min-[400px]:aspect-[5/4] overflow-hidden sm:aspect-[16/10] lg:aspect-auto lg:h-full lg:min-h-[26rem]" data-show role="group" aria-roledescription="carousel" aria-label="Photographs of our work">
+<div class="show absolute inset-0 overflow-hidden" data-show role="group" aria-roledescription="carousel" aria-label="Photographs of our work">
   {
     slides.map((s, i) => (
       <div class:list={['show__slide', i === 0 && 'is-active']} role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${slides.length}`} data-slide>
@@ -49,25 +53,38 @@ for (const s of services) {
     visibility: hidden;
     /* Only the current and next slides are laid out, so the others' photos are not downloaded. */
     display: none;
-    transition: opacity 0.9s ease, visibility 0s linear 0.9s;
+  }
+  .show {
+    background: var(--color-ink);
   }
   .show__slide:global(.is-ready),
   .show__slide:global(.is-active) {
     display: block;
   }
+  /* Straight from one photo to the next, with no fade. */
   .show__slide:global(.is-active) {
+    z-index: 1;
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.9s ease;
+  }
+  /* A slow push in on each photo while it is showing, for a little movement behind the title. */
+  @media (prefers-reduced-motion: no-preference) {
+    .show__slide :global(img) {
+      transform-origin: 50% 60%;
+    }
+    .show:global(.is-moving) .show__slide:global(.is-active) :global(img) {
+      transform: scale(1.08);
+      transition: transform 9s ease-out;
+    }
   }
   /* One short rule per photo along the foot of the frame, in line with the title above it; the current one is solid.
      The foot of the picture darkens a little behind them, so white shows on any photo. */
   .show__marks {
     position: absolute;
     inset: auto 0 0;
-    z-index: 1;
+    z-index: 2;
     padding-top: 2rem;
-    background: linear-gradient(to top, rgb(0 0 0 / 0.45), rgb(0 0 0 / 0));
+    background: linear-gradient(to top, rgb(0 0 0 / 0.3), rgb(0 0 0 / 0));
     pointer-events: none;
   }
   .show__row {
@@ -88,7 +105,7 @@ for (const s of services) {
   .show__mark::before {
     content: '';
     flex: 1;
-    height: 4px;
+    height: 2px;
     background: rgb(255 255 255 / 0.5);
   }
   .show__mark:hover::before {
@@ -107,17 +124,13 @@ for (const s of services) {
       transition: background-color 0.2s ease;
     }
   }
-  @media (prefers-reduced-motion: reduce) {
-    .show__slide,
-    .show__slide:global(.is-active) {
-      transition: none;
-    }
-  }
 </style>
 
 <script>
   const INTERVAL = 5500;
   document.querySelectorAll<HTMLElement>('[data-show]').forEach((root) => {
+    // Start the first photo's slow push in once it is on screen (a class set in the HTML would not animate).
+    requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-moving')));
     const slides = [...root.querySelectorAll<HTMLElement>('[data-slide]')];
     if (slides.length < 2) return;
     const marks = [...root.querySelectorAll<HTMLButtonElement>('[data-show-mark]')];
@@ -127,7 +140,7 @@ for (const s of services) {
     let stopped = matchMedia('(prefers-reduced-motion: reduce)').matches; // the visitor chose a photo, or their settings ask for no motion
 
     const at = (n: number) => (n + slides.length) % slides.length;
-    // Fetch the next photo ahead of time, so a slide never fades in half loaded.
+    // Fetch the next photo ahead of time, so a slide never shows half loaded.
     const prepare = (n: number) => slides[at(n)].classList.add('is-ready');
 
     async function go(n: number) {

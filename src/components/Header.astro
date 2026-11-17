@@ -14,15 +14,17 @@ const brands = (await getBrandGroups()).flatMap((g) => g.data.items.map((b) => b
 const announcement = sentenceCase(site.announcement || site.serviceArea, brands);
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const current = (href: string) => (path === href ? 'page' : undefined);
+// On the home page the header lies over the opening photos, see-through with white words, until the page is scrolled.
+const over = path === '/';
 ---
 
 <div class="on-blue bg-blue text-white">
   <p class="frame py-2 text-center font-medium leading-snug">{announcement}</p>
 </div>
-<header class="sticky top-0 z-40 border-b border-line bg-paper">
+<header class:list={['head sticky top-0 z-40 border-b border-line bg-paper', over && 'head-over']} data-head>
   <div class="frame flex h-16 items-center gap-4 lg:h-[4.5rem] lg:gap-8">
     <a href="/" class="tap shrink-0" aria-label={`${site.name}, home`}>
-      <Logo variant="mark" width={92} class="h-auto w-14 min-[360px]:w-16 lg:w-[5.25rem]" />
+      <Logo variant="mark" width={92} class="head-logo h-auto w-14 min-[360px]:w-16 lg:w-[5.25rem]" />
     </a>
     <nav aria-label="Main" class="hidden lg:block">
       <ul class="flex items-center gap-7">
@@ -49,12 +51,13 @@ const current = (href: string) => (path === href ? 'page' : undefined);
           </div>
         </li>
         <li><a href="/about" class="nav-link tap" aria-current={current('/about')}>About</a></li>
+        <li><a href="/blog" class="nav-link tap" aria-current={current('/blog')}>Blog</a></li>
         <li><a href="/contact" class="nav-link tap" aria-current={current('/contact')}>Contact</a></li>
       </ul>
     </nav>
     <SocialLinks class="head-social ml-auto hidden lg:flex" />
     <a href={site.phoneHref} class="plain-link tap ml-auto text-[1.125rem] font-semibold tabular-nums lg:ml-0 lg:text-[1.375rem]">{site.phone}</a>
-    <button type="button" class="tap cursor-pointer border-2 border-ink px-3 font-semibold lg:hidden" aria-expanded="false" aria-controls="mobile-menu" data-disclosure>Menu</button>
+    <button type="button" class="head-menu tap cursor-pointer border-2 border-ink px-3 font-semibold lg:hidden" aria-expanded="false" aria-controls="mobile-menu" data-disclosure>Menu</button>
   </div>
 
   <div id="mobile-menu" class="absolute inset-x-0 top-full h-[calc(100dvh-4rem)] overflow-y-auto bg-paper lg:hidden" hidden>
@@ -62,6 +65,7 @@ const current = (href: string) => (path === href ? 'page' : undefined);
       <ul class="text-[1.375rem] font-medium">
         {services.map((s) => <li><a href={serviceHref(s.data.slug)} class="nav-link tap w-full" aria-current={current(serviceHref(s.data.slug))}>{s.data.shortName ?? s.data.title}</a></li>)}
         <li class="mt-4"><a href="/about" class="nav-link tap w-full" aria-current={current('/about')}>About</a></li>
+        <li><a href="/blog" class="nav-link tap w-full" aria-current={current('/blog')}>Blog</a></li>
         <li><a href="/contact" class="nav-link tap w-full" aria-current={current('/contact')}>Contact</a></li>
       </ul>
       <SocialLinks labels class="social-list mt-4 flex flex-col text-[1.125rem]" />
@@ -73,10 +77,18 @@ const current = (href: string) => (path === href ? 'page' : undefined);
   // Disclosure buttons: toggle the controlled panel; Esc or an outside click closes it.
   const buttons = [...document.querySelectorAll<HTMLButtonElement>('[data-disclosure]')];
   const panelOf = (b: HTMLButtonElement) => document.getElementById(b.getAttribute('aria-controls')!)!;
+  // The see-through header on the home page turns solid once the page scrolls or a menu opens.
+  const head = document.querySelector<HTMLElement>('[data-head].head-over');
+  const solidify = () => head?.classList.toggle('is-solid', scrollY > 8 || buttons.some((b) => b.getAttribute('aria-expanded') === 'true'));
+  if (head) {
+    addEventListener('scroll', solidify, { passive: true });
+    solidify();
+  }
   const close = (b: HTMLButtonElement, focus = false) => {
     if (b.getAttribute('aria-expanded') !== 'true') return;
     b.setAttribute('aria-expanded', 'false');
     panelOf(b).hidden = true;
+    solidify();
     if (focus) b.focus();
   };
   buttons.forEach((b) =>
@@ -85,6 +97,7 @@ const current = (href: string) => (path === href ? 'page' : undefined);
       buttons.forEach((o) => o !== b && close(o));
       b.setAttribute('aria-expanded', String(open));
       panelOf(b).hidden = !open;
+      solidify();
     }),
   );
   document.addEventListener('keydown', (e) => {

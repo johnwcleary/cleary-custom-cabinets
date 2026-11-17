@@ -1,0 +1,9 @@
+{
+  "service": "hardware-plumbing",
+  "order": 2,
+  "caption": "Stainless workstation sink with a cutting board and colander by Kohler",
+  "image": "../../../assets/gallery/hardware-plumbing/stainless-workstation-sink-kohler.jpg",
+  "width": 1800,
+  "height": 1201,
+  "featured": true
+}

@@ -13,5 +13,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  integrations: [sitemap()],
+  // The contact form's thank-you page is not one to list.
+  integrations: [sitemap({ filter: (page) => !page.includes('/thanks') })],
 });

@@ -6,7 +6,7 @@ order: 3
 intro: "When you can’t find exactly what you’re looking for, look to us. We will custom make the exact piece to suit your needs and exceed your expectations."
 closing: "Whether you choose wood, thermofoil or formica, the design options are endless for any room in your home. Let us design just what you have in mind."
 closingAside: "Bring us your design idea and we will bring it to life…"
-heroImage: "../../assets/gallery/wall-units-furniture/07-custom-wood-banquette.jpg"
+heroImage: "../../assets/gallery/wall-units-furniture/navy-wall-unit-with-built-in-desk.jpg"
 seoTitle: "Custom Cabinetry in wood, thermofoil or formica for any room in your home or business."
 legacyPath: "/cabinets-products/wall-units-furniture"
 video:

@@ -4,7 +4,7 @@
     "order": 1,
     "items": [
       { "name": "Kraftmaid Vantage Cabinetry", "url": "https://www.kraftmaid.com/" },
-      { "name": "Merillat Cabinets", "url": "https://www.merillat.com/merillat-classic-collection/" },
+      { "name": "Merillat Cabinets", "url": "https://www.merillat.com/merillat-classic/" },
       { "name": "Tedd Wood Cabinetry", "url": "https://www.teddwood.com/" },
       { "name": "Wolf Classic Cabinets", "url": "https://www.wolfhomeproducts.com/wolfclassic" }
     ]
@@ -73,7 +73,8 @@
       { "name": "Hafele", "url": "https://www.hafele.com/us/en/" },
       { "name": "Hardware Resources", "url": "https://www.hardwareresources.com" },
       { "name": "Amerock", "url": "https://www.amerock.com/" },
-      { "name": "Belwith Keeler", "url": "https://www.belwith.com/" }
+      { "name": "Belwith Keeler", "url": "https://www.belwith.com/" },
+      { "name": "Kohler", "url": "https://www.kohler.com/en" }
     ]
   }
 }

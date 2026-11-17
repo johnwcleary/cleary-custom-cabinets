@@ -110,7 +110,7 @@ test('keyboard: gallery lightbox opens, steps, closes and returns focus', async 
 
 test('keyboard: contact form fields are reachable and labelled', async ({ page }) => {
   await page.goto('/contact');
-  const form = page.locator('form[data-form-backend="todo-phase-2"]');
+  const form = page.locator('form[data-cform][action="/api/contact"]');
   await expect(form).toHaveCount(1);
   for (const name of ['name', 'contact', 'message']) {
     const field = form.locator(`[name="${name}"]`);

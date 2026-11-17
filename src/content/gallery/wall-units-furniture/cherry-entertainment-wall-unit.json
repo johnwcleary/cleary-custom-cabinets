@@ -1,0 +1,9 @@
+{
+  "service": "wall-units-furniture",
+  "order": 6,
+  "caption": "Cherry Entertainment Wall Unit",
+  "image": "../../../assets/gallery/wall-units-furniture/cherry-entertainment-wall-unit.jpg",
+  "width": 2400,
+  "height": 1800,
+  "featured": false
+}

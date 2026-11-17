@@ -21,9 +21,11 @@ interface Props {
   type?: 'website' | 'article';
   /** Extra structured data for this page (a blog post's own entry). */
   schema?: Record<string, unknown>[];
+  /** Keep the page out of search results (the form's thank-you page). */
+  noindex?: boolean;
 }
 
-const { title, footerMap = true, type = 'website', schema = [] } = Astro.props;
+const { title, footerMap = true, type = 'website', schema = [], noindex = false } = Astro.props;
 // A page with no description of its own (or an empty one) uses the site's.
 const description = Astro.props.description || site.metaDescription;
 const fullTitle = `${title} — ${site.name}`;
@@ -43,6 +45,7 @@ const structured = [businessSchema(Astro.site!, ogUrl.href), ...schema];
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta property="og:type" content={type} />

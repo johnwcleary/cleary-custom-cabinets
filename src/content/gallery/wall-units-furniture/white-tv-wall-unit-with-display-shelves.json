@@ -1,0 +1,9 @@
+{
+  "service": "wall-units-furniture",
+  "order": 4,
+  "caption": "White TV Wall Unit with Display Shelves",
+  "image": "../../../assets/gallery/wall-units-furniture/white-tv-wall-unit-with-display-shelves.jpg",
+  "width": 1800,
+  "height": 2400,
+  "featured": true
+}
