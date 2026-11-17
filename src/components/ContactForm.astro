@@ -12,8 +12,8 @@ const { heading, helper, call = true, class: className } = Astro.props;
 ---
 
 <!--
-  One form, the same three questions on every page that has it. It posts to the Cloudflare Pages Function in
-  functions/api/contact.ts, which emails the shop. The script below sends it without leaving the page; without
+  One form, the same three questions on every page that has it. It posts to the site's Cloudflare Worker in
+  worker/contact.ts, which emails the shop. The script below sends it without leaving the page; without
   JavaScript the browser posts it and lands on /thanks/. The honeypot field ("company") must stay empty.
 -->
 <form class:list={['cform', className]} action="/api/contact" method="post" data-cform>
@@ -42,7 +42,7 @@ const { heading, helper, call = true, class: className } = Astro.props;
 
 <script>
   // Send the form in the background and answer in place: a thank-you in the form's spot, or the reason it
-  // did not go. The Pages Function answers in JSON when asked to.
+  // did not go. The Worker answers in JSON when asked to.
   document.querySelectorAll<HTMLFormElement>('[data-cform]').forEach((form) => {
     const status = form.querySelector<HTMLElement>('[data-cform-status]')!;
     const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;

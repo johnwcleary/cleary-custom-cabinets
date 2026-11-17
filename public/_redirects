@@ -1,4 +1,4 @@
-# Old Squarespace addresses → the new pages, permanent (Cloudflare Pages). See docs/redirects.md; each cabinet page
+# Old Squarespace addresses → the new pages, permanent (served by Cloudflare with the static files). See docs/redirects.md; each cabinet page
 # records its old address as legacyPath in src/content/services/*.md.
 /cabinets-products                                 /#services                         301
 /cabinets-products/custom-kitchens-baths           /cabinets/custom-kitchens-baths    301

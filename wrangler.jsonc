@@ -1,0 +1,22 @@
+// Cloudflare Workers settings. Cloudflare builds with `npm run build` and deploys with `npx wrangler deploy`;
+// with this file in place it uses these settings rather than setting the project up by itself. See docs/hosting.md.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cleary-custom-cabinets",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-11-01",
+  // The static site Astro builds. The Worker runs only for /api/* (the contact form); every other address is served
+  // straight from these files, with public/_redirects and public/_headers applied and 404.html for a missing page.
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
+  },
+  // The form's settings (RESEND_API_KEY and the optional CONTACT_TO / CONTACT_FROM) are set in the dashboard;
+  // keep them when deploying.
+  "keep_vars": true,
+  // The workers.dev address stays on for testing before the domain moves; public/_headers keeps it out of Google.
+  "workers_dev": true,
+  "preview_urls": false
+}

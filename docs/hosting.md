@@ -1,22 +1,25 @@
-# Hosting on Cloudflare Pages
+# Hosting on Cloudflare Workers
 
-The site is static files in `dist/` plus one small server-side piece: the contact form's handler in
-`functions/api/contact.ts`, which Cloudflare Pages runs at `/api/contact`. It emails each enquiry to
-the shop through [Resend](https://resend.com).
+The site is static files in `dist/` plus one small server-side piece: a Cloudflare Worker
+(`worker/index.ts`) that answers the contact form at `/api/contact` (`worker/contact.ts`) and emails each
+enquiry to the shop through [Resend](https://resend.com). Every other address is served straight from the
+static files. `wrangler.jsonc` holds the settings; with it in the repository Cloudflare deploys exactly that,
+rather than setting the project up on its own.
 
-## 1. Create the Pages project
+## 1. The Worker project
 
-1. In the Cloudflare dashboard, go to **Workers & Pages → Create → Pages → Connect to Git** and pick
-   `johnwcleary/cleary-custom-cabinets`.
-2. Production branch: `main`.
-3. Build settings:
-   - Framework preset: **Astro**
-   - Build command: `npm run build`
-   - Build output directory: `dist`
-4. Under **Environment variables**, add `NODE_VERSION` = `22`.
-5. Save and deploy. Cloudflare picks up the `functions/` folder by itself; there is nothing to switch on.
+The project is `cleary-custom-cabinets` under **Workers & Pages**, connected to
+`johnwcleary/cleary-custom-cabinets` on GitHub.
 
-Every push to `main` deploys the live site, and every other branch gets its own preview address.
+- Production branch: `main`. Every push to `main` builds and deploys the live site.
+- Build command: `npm run build`
+- Deploy command: `npx wrangler deploy`
+
+The `workers.dev` address (`cleary-custom-cabinets.johnwilliamcleary.workers.dev`) works for testing and is
+kept out of Google by `public/_headers`. Old Squarespace addresses redirect through `public/_redirects`.
+
+To run the Worker on your own machine, with the real form handler: `npm run build`, then
+`npx wrangler dev`, with the settings below in a `.dev.vars` file (git ignores it).
 
 ## 2. Set up sending in Resend
 
@@ -27,9 +30,9 @@ Every push to `main` deploys the live site, and every other branch gets its own 
 
 The free plan covers 3,000 emails a month (100 a day), far more than the form needs.
 
-## 3. Give the function its settings
+## 3. Give the Worker its settings
 
-In the Pages project: **Settings → Variables and Secrets**, for Production (and Preview, to test there):
+In the Worker: **Settings → Variables and Secrets**:
 
 | Name | Value | |
 |---|---|---|
@@ -37,20 +40,20 @@ In the Pages project: **Settings → Variables and Secrets**, for Production (an
 | `CONTACT_TO` | where enquiries go | Optional. Defaults to `info@clearycustomcabinets.com` |
 | `CONTACT_FROM` | the sender shown in the inbox | Optional. Defaults to `Cleary Custom Cabinets website <website@clearycustomcabinets.com>`; must be on the verified domain |
 
-Then redeploy (**Deployments → … → Retry deployment**) so the function sees them.
+Secrets take effect straight away; `keep_vars` in `wrangler.jsonc` keeps them when the site redeploys.
 
 ## 4. Test it
 
-On the preview or live address, send an enquiry from the contact page with your own email and check that:
+On the `workers.dev` or live address, send an enquiry from the contact page with your own email and check that:
 
 - the form shows "Thanks, we got your message" in place of the fields;
 - the email arrives at `CONTACT_TO`, with the subject "Website enquiry from …";
 - pressing Reply addresses the email you typed.
 
-If it does not arrive, **Workers & Pages → the project → Functions → Real-time logs** shows the reason
+If it does not arrive, **Workers & Pages → the project → Logs** (turn on real-time logs) shows the reason
 (lines starting `contact:`). Visitors see a message asking them to call instead.
 
-## What the function does
+## What the form handler does
 
 - Accepts posts only from the site itself.
 - Requires a name and a phone number or email; the project description is optional.
@@ -59,5 +62,3 @@ If it does not arrive, **Workers & Pages → the project → Functions → Real-
 - Answers in JSON for the form's script. A visitor without JavaScript goes to `/thanks/` (kept out of
   search results and the sitemap), or to a short page explaining what went wrong.
 
-To run it on your own machine with the real function: `npm run build`, then
-`npx wrangler pages dev dist`, with the settings above in a `.dev.vars` file (git ignores it).

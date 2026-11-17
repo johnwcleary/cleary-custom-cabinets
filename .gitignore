@@ -27,3 +27,6 @@ npm-debug.log*
 
 # Storyblok: per-space upload record (the pull manifest .storyblok/assets.json is committed)
 .storyblok/uploaded.json
+
+# Cloudflare wrangler local state
+.wrangler/
