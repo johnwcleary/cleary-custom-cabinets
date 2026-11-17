@@ -512,7 +512,7 @@
 /* On the home page, until it is scrolled: no white behind the header, white words and a white mark over the photos.
    Outside the layers, so it wins over the header's own utility classes (bg-paper, border-line, border-ink). */
 .head-over:not(.is-solid) {
-  border-color: rgb(255 255 255 / 0.3);
+  border-color: transparent;
   background: transparent;
   color: #fff;
 }
