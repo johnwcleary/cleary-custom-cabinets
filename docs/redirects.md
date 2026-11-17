@@ -1,6 +1,6 @@
 # Redirects
 
-Old Squarespace URLs → new Astro routes. To be added as a `public/_redirects` file (301s) at launch. The new site uses `/cabinets/<slug>` for product pages.
+Old Squarespace URLs → new Astro routes. Live in `public/_redirects` (301s on Cloudflare Pages). The new site uses `/cabinets/<slug>` for product pages.
 
 | Old (Squarespace) | New | Note |
 |---|---|---|
