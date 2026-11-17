@@ -19,9 +19,9 @@ const year = new Date().getFullYear();
        and the map filling the height of the row. A line of small print closes the page. -->
   <div class="frame pt-[clamp(1.75rem,3vw,2.5rem)]">
     <div class:list={['grid grid-cols-1 gap-x-10 gap-y-6 sm:grid-cols-2', map ? 'lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)_minmax(0,1.1fr)_minmax(0,1.25fr)]' : 'lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)_minmax(0,1.1fr)]']}>
-      <div>
-        <Logo variant="reverse" width={240} decorative={false} class="h-auto w-[11.5rem] lg:w-[12.5rem]" />
-        <p class="foot-motto mt-3">{motto}</p>
+      <div class="w-[11.5rem] text-center lg:w-[12.5rem]">
+        <Logo variant="reverse" width={240} decorative={false} class="h-auto w-full" />
+        <p class="foot-motto mx-auto mt-3">{motto}</p>
       </div>
       <address class="not-italic">
         <p><a href={site.phoneHref} class="plain-link tap -mt-2.5 text-[1.375rem] font-semibold tabular-nums">{site.phone}</a></p>
