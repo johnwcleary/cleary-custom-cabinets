@@ -17,7 +17,7 @@ const others = photos.filter((p) => p !== exterior);
 ---
 
 <!-- This page has its own large map, so the footer leaves out its small one. -->
-<BaseLayout title={about.data.seoTitle} image={exterior?.image} footerMap={false}>
+<BaseLayout title={about.data.seoTitle} footerMap={false}>
   <section class="frame section grid grid-cols-1 gap-5 lg:grid-cols-2 lg:gap-10" aria-labelledby="page-title">
     <div>
       <h1 id="page-title" class="page-title mb-3">About {site.name}</h1>
