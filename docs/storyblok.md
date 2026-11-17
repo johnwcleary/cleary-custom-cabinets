@@ -69,10 +69,40 @@ The preview runs on port 4322 so it can sit beside the normal `npm run dev` on 4
 Once Storyblok is in use, **content is edited there, not in `src/content/`**: the next pull overwrites
 hand edits. Code and design changes are unaffected.
 
-## Not set up yet
+## Publishing
 
-- **Publishing:** the host builds with `npm run cms:pull && npm run build` using the *Public* token, and a
-  Storyblok webhook ("Story published") calls the host's build hook, so Publish updates the site in a minute or two.
+Pressing **Publish** in Storyblok updates the live site in a few minutes:
+
+```
+Storyblok ──webhook──▶ Worker /api/storyblok ──▶ GitHub job "Storyblok publish" ──commit──▶ main ──▶ Cloudflare deploy
+```
+
+The Worker (`worker/storyblok.ts`) checks the webhook's signature and starts the GitHub job
+(`.github/workflows/storyblok-publish.yml`). The job runs `cms:pull`, checks the site still builds, and commits the
+changes to `main` as "Storyblok: content published …". If the build fails nothing is committed and the live site keeps
+its last version; GitHub emails the repository owner. The job can also be run by hand: GitHub → Actions → Storyblok
+publish → Run workflow.
+
+One-time setup, three secrets:
+
+1. **GitHub token for the Worker.** GitHub → Settings → Developer settings → Personal access tokens → Fine-grained
+   tokens → Generate. Repository access: only `johnwcleary/cleary-custom-cabinets`. Permissions: **Actions: Read and
+   write** (nothing else). Add it to the Worker as a secret named `GITHUB_DISPATCH_TOKEN` (Workers & Pages →
+   cleary-custom-cabinets → Settings → Variables and Secrets).
+2. **Storyblok token for the job.** Storyblok → Settings → Access Tokens: the *Public* token (or the Preview token).
+   Add it to GitHub as a repository secret named `STORYBLOK_TOKEN` (repository → Settings → Secrets and variables →
+   Actions → New repository secret).
+3. **The webhook.** Make up a long random secret (`openssl rand -hex 32`) and add it to the Worker as a secret named
+   `STORYBLOK_WEBHOOK_SECRET`. Then Storyblok → Settings → Webhooks → New webhook: endpoint
+   `https://www.clearycustomcabinets.com/api/storyblok`, the same secret, and the story triggers *published*,
+   *unpublished*, *deleted* and *moved*.
+
+Publish any page to test it; a run appears under GitHub → Actions within a few seconds.
+
+Code changes and Storyblok publishes both land on `main`, so pull before committing code
+(`git pull`) to pick up content commits made by the job.
+
+## Not set up yet
 - **The customer's preview:** `cms:preview` runs on your Mac, so only you can use it. For the customer
   the Visual Editor needs a preview address on the internet: either an always-on preview server
   running the same code, or a preview build that refreshes on save (slower, about a minute per change).

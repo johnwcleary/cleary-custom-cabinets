@@ -1,0 +1,51 @@
+# Publishing in Storyblok updates the live site. Storyblok calls the site's Worker (worker/storyblok.ts), which starts
+# this job; it pulls the published content into src/content and src/assets, checks that the site still builds, and
+# commits to main. Cloudflare deploys every push to main. It can also be run by hand from the Actions tab.
+# Secrets (Settings → Secrets and variables → Actions): STORYBLOK_TOKEN, the Public or Preview token from Storyblok.
+name: Storyblok publish
+
+on:
+  workflow_dispatch:
+
+# One run at a time; a publish that arrives during a run waits, and each run pulls whatever is published by then.
+concurrency:
+  group: storyblok-publish
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      STORYBLOK_TOKEN: ${{ secrets.STORYBLOK_TOKEN }}
+      STORYBLOK_REGION: eu
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Pull the published content
+        run: npm run cms:pull
+      - name: Anything new?
+        id: diff
+        run: |
+          git add -A src/content src/assets .storyblok/assets.json
+          if git diff --cached --quiet; then echo "changed=false" >> "$GITHUB_OUTPUT"; echo "Storyblok matches the site; nothing to publish."; else echo "changed=true" >> "$GITHUB_OUTPUT"; git diff --cached --stat; fi
+      # A build that fails stops here, so the live site keeps its last good version.
+      - name: Check the site builds
+        if: steps.diff.outputs.changed == 'true'
+        run: npm run build
+      - name: Commit to main
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "Storyblok publish"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Storyblok: content published $(date -u +'%Y-%m-%d %H:%M') UTC"
+          git push origin HEAD:main

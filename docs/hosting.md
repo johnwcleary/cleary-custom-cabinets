@@ -15,6 +15,9 @@ The project is `cleary-custom-cabinets` under **Workers & Pages**, connected to
 - Build command: `npm run build`
 - Deploy command: `npx wrangler deploy`
 
+The Worker also answers Storyblok's publish webhook at `/api/storyblok`; see [storyblok.md](storyblok.md#publishing)
+for its two secrets.
+
 The `workers.dev` address (`cleary-custom-cabinets.johnwilliamcleary.workers.dev`) works for testing and is
 kept out of Google by `public/_headers`. Old Squarespace addresses redirect through `public/_redirects`.
 
