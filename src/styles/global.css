@@ -38,6 +38,13 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     scroll-padding-top: 6rem;
+    /* The header's height with its rule, so the home page's photos can run up under it. */
+    --head-h: calc(4rem + 1px);
+  }
+  @media (min-width: 1024px) {
+    html {
+      --head-h: calc(4.5rem + 1px);
+    }
   }
   @media (prefers-reduced-motion: no-preference) {
     html {
@@ -98,29 +105,53 @@
   .display {
     line-height: 1.15;
   }
-  /* The home page's opening photo, as wide as the screen. On a wide screen the title and button sit on a
-     solid blue panel set on its lower left, in line with the page's margin; on a narrower one the panel
-     follows the photo, full width. */
+  /* The home page's opening photos, the full width and nearly the full height of the window. The page pulls them up
+     under the header (see .head-over), and they are darkened a little at the top, behind the menu, and in the middle,
+     behind the white title. */
   .hero {
-    --hero-gut: max(clamp(0.875rem, 2.5vw, 2.25rem), (100vw - 84rem) / 2);
-  }
-  .hero-panel {
-    padding: 1.5rem var(--hero-gut) 1.75rem;
-    background: var(--color-blue);
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: clamp(30rem, 100svh - 2.75rem, 64rem);
+    margin-top: calc(-1 * var(--head-h));
+    padding: calc(var(--head-h) + 2rem) 0 5rem;
     color: #fff;
+    text-align: center;
   }
-  @media (min-width: 1024px) {
-    /* About as tall as the window allows, and taller on a very wide screen so the photo is not cut to a strip. */
-    .hero-photo {
-      min-height: clamp(34rem, 100svh - 12rem, max(42rem, 36vw));
-    }
-    .hero-panel {
-      position: absolute;
-      left: var(--hero-gut);
-      bottom: 4rem;
-      width: min(33rem, 45vw);
-      padding: 2rem 2.25rem 2.25rem;
-    }
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to bottom, rgb(0 0 0 / 0.5), rgb(0 0 0 / 0) 10rem),
+      radial-gradient(ellipse 70% 55% at 50% 50%, rgb(0 0 0 / 0.42), rgb(0 0 0 / 0.16));
+    pointer-events: none;
+  }
+  .hero-copy {
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 1px 18px rgb(0 0 0 / 0.35);
+  }
+  .hero .hero-title {
+    max-width: 16ch;
+    margin-inline: auto;
+    font-size: clamp(2.25rem, 6vw, 5rem);
+    line-height: 1.05;
+  }
+  .hero .hero-sub {
+    font-size: clamp(1.125rem, 1.9vw, 1.5rem);
+  }
+  /* A plain white link, underlined, as the site's call to come in. */
+  .hero-link {
+    font-size: clamp(1.0625rem, 1.4vw, 1.25rem);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.4em;
+  }
+  .hero-link:hover {
+    text-decoration-color: var(--color-blue-pale);
+    color: var(--color-blue-pale);
   }
   /* The About panel on the home page: the header blue, with a ruled border inset from the edge as on a drawing sheet. */
   .blueprint {
@@ -474,5 +505,32 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* On the home page, until it is scrolled: no white behind the header, white words and a white mark over the photos.
+   Outside the layers, so it wins over the header's own utility classes (bg-paper, border-line, border-ink). */
+.head-over:not(.is-solid) {
+  border-color: rgb(255 255 255 / 0.3);
+  background: transparent;
+  color: #fff;
+}
+.head-over:not(.is-solid) .head-logo {
+  filter: brightness(0) invert(1);
+}
+.head-over:not(.is-solid) .head-menu {
+  border-color: #fff;
+}
+.head-over:not(.is-solid) .plain-link:hover,
+.head-over:not(.is-solid) .head-social a:hover {
+  color: var(--color-blue-pale);
+}
+.head-over:not(.is-solid) :focus-visible {
+  outline-color: #fff;
+  box-shadow: 0 0 0 3px var(--color-ink);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .head-over {
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
   }
 }

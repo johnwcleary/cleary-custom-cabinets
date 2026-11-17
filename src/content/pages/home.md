@@ -25,6 +25,8 @@ contactButton: "Contact us"
 photos:
   - image: "../../assets/home/02-custom-inset-gray-vanity.jpg"
     caption: "Custom Inset Gray Vanity"
+  - image: "../../assets/home/03-white-solid-surface-island-counter.jpg"
+    caption: "White Solid Surface Island Counter"
 testimonials:
   - quote: "We have had the pleasure of working with Cleary Custom Cabinets on several projects and have consistently been impressed with their quality of work, craftsmanship and professionalism.\n\nTheir attention to detail, commitment to delivering a quality product, and ability to work collaboratively with our team make them a valuable trade partner. They understand the importance of meeting expectations and committing to customer satisfaction."
     name: "Doug C."
