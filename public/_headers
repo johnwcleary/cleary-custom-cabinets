@@ -1,3 +1,3 @@
-# Keep Cloudflare's own address for the site (….pages.dev) out of search results, so Google indexes only the real domain.
-https://:project.pages.dev/*
+# Keep Cloudflare's own address for the site (….workers.dev) out of search results, so Google indexes only the real domain.
+https://cleary-custom-cabinets.johnwilliamcleary.workers.dev/*
   X-Robots-Tag: noindex

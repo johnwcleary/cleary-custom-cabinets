@@ -1,30 +1,29 @@
 /**
- * The contact form's backend: a Cloudflare Pages Function at /api/contact. It checks the three
+ * The contact form's backend, answering POST /api/contact for the site's Worker (worker/index.ts). It checks the three
  * questions, drops anything that filled in the hidden "company" field (only bots see it), and emails
  * the enquiry to the shop through Resend (https://resend.com).
  *
  * The form sends with JavaScript and asks for JSON, so the visitor stays on the page. Without
  * JavaScript the browser posts normally and is sent on to /thanks/, or shown a short error page.
  *
- * Settings, in Cloudflare Pages → Settings → Variables and Secrets (see docs/hosting.md):
+ * Settings, in the Worker's Settings → Variables and Secrets on Cloudflare (see docs/hosting.md):
  *   RESEND_API_KEY  required, a secret
  *   CONTACT_TO      where enquiries go; defaults to the shop's address
  *   CONTACT_FROM    the sender, on a domain verified in Resend
  */
 
-interface Env {
+export interface ContactEnv {
   RESEND_API_KEY?: string;
   CONTACT_TO?: string;
   CONTACT_FROM?: string;
 }
-type Context = { request: Request; env: Env };
 
 const TO = 'info@clearycustomcabinets.com';
 const FROM = 'Cleary Custom Cabinets website <website@clearycustomcabinets.com>';
 const PHONE = '516.939.2475';
 const LIMITS = { name: 200, contact: 200, message: 5000 };
 
-export async function onRequestPost({ request, env }: Context): Promise<Response> {
+export async function handleContact(request: Request, env: ContactEnv): Promise<Response> {
   const wantsJson = (request.headers.get('accept') ?? '').includes('application/json');
   const reply = (ok: boolean, error = '') =>
     wantsJson
