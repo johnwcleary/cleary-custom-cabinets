@@ -16,9 +16,10 @@ const year = new Date().getFullYear();
 
 <footer class="on-blue bg-blue text-white">
   <!-- One short row on a wide screen: the logo; the phone, email and address, which need no label; the hours;
-       and the map filling the height of the row. A line of small print closes the page. -->
+       and the map filling the height of the row. Below that width, two rows of two, so nothing is squeezed: the logo
+       beside the contact details, then the hours beside the map. A line of small print closes the page. -->
   <div class="frame pt-[clamp(1.75rem,3vw,2.5rem)]">
-    <div class:list={['grid grid-cols-1 gap-x-10 gap-y-6 sm:grid-cols-2', map ? 'lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)_minmax(0,1.1fr)_minmax(0,1.25fr)]' : 'lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)_minmax(0,1.1fr)]']}>
+    <div class:list={['grid grid-cols-1 gap-x-10 gap-y-6 sm:grid-cols-2', map ? 'xl:grid-cols-[max-content_max-content_max-content_minmax(0,1fr)]' : 'xl:grid-cols-[max-content_max-content_max-content] xl:justify-between']}>
       <div class="w-[11.5rem] text-center lg:w-[12.5rem]">
         <Logo variant="reverse" width={240} decorative={false} class="h-auto w-full" />
         <p class="foot-motto mx-auto mt-3">{motto}</p>
@@ -32,7 +33,7 @@ const year = new Date().getFullYear();
         <h2 class="foot-label">Showroom hours</h2>
         <Hours class="hours-table max-w-[21rem] pt-1" />
       </div>
-      {map && <Map class="aspect-[2/1] lg:aspect-auto lg:min-h-[11rem]" />}
+      {map && <Map class="aspect-[2/1] xl:aspect-auto xl:min-h-[11rem]" />}
     </div>
     <p class="foot-print mt-[clamp(1.5rem,3vw,2rem)] border-t border-white/30 py-3">&copy; {year} {site.name} &middot; {site.address.city}, {site.address.state} &middot; Serving {site.serviceArea}</p>
   </div>
