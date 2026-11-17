@@ -20,7 +20,7 @@ brands:
     about: "Engineered quartz designed to look like natural stone, at a price that suits most projects."
   - name: "Wilsonart Solid Surface"
     url: "https://www.wilsonart.com/solid-surfaces"
-    about: "Solid surface that joins with nearly invisible seams and can be shaped into sinks, for counters and vanities that read as one piece."
+    about: "Solid Surface that joins with nearly invisible seams and can be shaped into sinks, for counters and vanities that read as one piece."
 heroImage: "../../assets/gallery/countertops/gray-veined-quartz-island-and-backsplash-msi.jpg"
 seoTitle: "Countertops in Quartz, Granite, Corian, Formica or Butcher Block for any application."
 legacyPath: "/cabinets-products/countertops"
